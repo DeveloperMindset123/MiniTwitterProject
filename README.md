@@ -46,4 +46,14 @@ Dependancies Installed:
 - React
 - React-Dom
 - next
+- Express.js, axios, nodemon
+
+You can use `npm install` to install all the components on frontend and backend independently, once installation is successful, start the frontend and backend servers.
+- To start the frontend: `npm run dev`
+- To start the backend: `node server.cjs`
+
+The underlying backend of next.js is express.js, for the sake of simplification, simply can:
+`cd backend`
+Then...
+`npm install express nodemon axios`
 In progress: 3 Month Project
