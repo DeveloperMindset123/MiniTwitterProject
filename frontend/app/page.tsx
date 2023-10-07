@@ -1,5 +1,12 @@
-import Image from 'next/image'
+//The pages in in Next.js are similar to components in React. Both pages and components are reusable pieces of code that can be rendered to the DOM. However, there are some key differences between the two:
+/**
+ * Pages are used to define the structure of your application, while components are used to build the individual pieces of your application
+ * Pages can contain other pages and components, while components can only contian other components
+ * Pages are rendered by next.js at runtime, while components can be rendered by Next.js or React.
+ */
 
+//This is the "Homepage" displayed once the appropriate user logs in
+import Image from 'next/image';
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
