@@ -1,4 +1,6 @@
-import router, { useRouter } from "next/router";
+'use client'
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface LoginButton {
     label: string;
@@ -21,17 +23,12 @@ const LoginButton: LoginButton[] = [
 ];
 
 //note: React.FC is a type that ships with React's typescript types. It represents the type of a functional component, which is the building block of most modern React apps
+
 const Homepage: React.FC = () => {
-    const router = useRouter(); //an useful React hook that allows for modification of href to direct pages dynamically based on certain interactions, in this case, upon the button being clciked, user is to be redirected to the appropriate homepage --> think of this as a double linked list
-
-    const handleClick = {loginButtonIndex: number} => {
-        router.push(LoginButton[loginButtonIndex].route);
+    const router = useRouter();
+    const handleClick = (Index: number) => {  //note: needed to change the parameter values from {Index:number}
+        router.push(LoginButton[Index].route);
     };
-
-function handleClick(index: number): void {
-    throw new Error("Function not implemented.");
-}
-
     return (  //this is where the HTML rendering occurs
         <div>
             <h1>Homepage</h1>
@@ -39,12 +36,16 @@ function handleClick(index: number): void {
                 {LoginButton.map((loginButton, index) => (
                     <li key={loginButton.label}>
                         <button onClick={() => handleClick(index)}>
-                            {/**Continue here */}
+                            {loginButton.label}
                         </button>
                     </li>
-                )}
+                ))}
             </ul>
         </div>
-    )
-}
+    );
+};
+
+export default Homepage;
+
+//look into the following tutorial for button animation using next.js and tailwindcss: https://markustripp.medium.com/animations-with-tailwind-css-c47534e57a18
 

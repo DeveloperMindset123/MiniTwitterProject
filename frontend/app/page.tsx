@@ -1,15 +1,14 @@
 //The pages in in Next.js are similar to components in React. Both pages and components are reusable pieces of code that can be rendered to the DOM. However, there are some key differences between the two:
-/**
- * Pages are used to define the structure of your application, while components are used to build the individual pieces of your application
- * Pages can contain other pages and components, while components can only contian other components
- * Pages are rendered by next.js at runtime, while components can be rendered by Next.js or React.
- */
-
-//This is the "Homepage" displayed once the appropriate user logs in
+'use client'
 import Image from 'next/image';
+import Homepage from './pages/Home/homePage';  //import the homepage component that we defined within the pages section
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Homepage />
+      {/* --> note (from ayan): this is the default code, feel free to uncomment and check how the homepage looks like by default, nextjs takes care of development servers so we don't need to worry about seperate development servers like Vite, for framework regarding css, we are using tailwindcss, look into the documentation to better understand how to style the pages
+
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;
@@ -114,7 +113,7 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
-      </div>
+  </div> */}
     </main>
   )
 }
