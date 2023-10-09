@@ -2,6 +2,31 @@
 A project with collaboration with two three other people to develop the functionalities listed below:
 The following are the required as part of this project:
 
+# How to Set Up
+You can use `npm install` to install all the components on frontend and backend independently, once installation is successful, start the frontend and backend servers.
+- To start the frontend:
+    - `cd frontend`
+    - `npm run dev`
+- To start the backend:
+    - `cd backend`
+    - `node server.cjs`
+
+Dependancies Installed:
+- React
+- React-Dom
+- next
+- Express.js, axios, nodemon
+
+
+The underlying backend of next.js is express.js, for the sake of simplification, simply can:
+`cd backend`
+Then...
+`npm install express nodemon axios`
+
+# Desc
+
+In progress: 3 Month Project
+
 <b>Requirement Items for a messaging system (draft)</b>
 Open for suggestions until 9/29 (F)
 
@@ -39,22 +64,3 @@ Notes:
 Technology Stack:
 - Since this a fullstack project, for the sake of simplification, we will be working solely using <b><i>Next.js</b></i> framework, which is built for fullstack development. (The starter bundle of next.js comes with TypeScript, Eslint Support, Tailwind CSS as well). Additionally, Express.js, Nodemon and Axios may be utilized as backup for server-side rendering.
 
-How to create the application:
-1. npx create-next-app@latest
-
-Dependancies Installed:
-- React
-- React-Dom
-- next
-- Express.js, axios, nodemon
-
-You can use `npm install` to install all the components on frontend and backend independently, once installation is successful, start the frontend and backend servers.
-- To start the frontend: `npm run dev`
-- To start the backend: `node server.cjs`
-
-The underlying backend of next.js is express.js, for the sake of simplification, simply can:
-`cd backend`
-Then...
-`npm install express nodemon axios`
-
-In progress: 3 Month Project
