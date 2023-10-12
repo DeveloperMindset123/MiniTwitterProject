@@ -3,13 +3,8 @@ A project with collaboration with two three other people to develop the function
 The following are the required as part of this project:
 
 # How to Set Up
-You can use `npm install` to install all the components on frontend and backend independently, once installation is successful, start the frontend and backend servers.
-- To start the frontend:
-    - `cd frontend`
-    - `npm run dev`
-- To start the backend:
-    - `cd backend`
-    - `node server.cjs`
+You can use `npm install` to install all the components on the site, once installation is successful, start the app!
+- `npm run dev`
 
 Dependancies Installed:
 - React
