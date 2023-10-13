@@ -3,7 +3,7 @@ import { unminify } from './unMinify.js';
 import { error } from 'console';
 const POSTPATH = './postsMin.json';
 
-class post{
+class Post{
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null, time = performance.now()){
         this.userId = userId;
         this.bodyText = bodyText;
@@ -11,7 +11,7 @@ class post{
         this.videoId = videoId;
         this.imageId = imageId;
         this.time = time;
-        this.postId = getUniqueId();
+        this.postId = GetUniqueId();
         this.likes = 0;
         this.reports = 0;
         this.views = 0;
@@ -43,7 +43,7 @@ function UpdatePostCounter(postId, type) {
     postsJsonObject[postObject.postId] = postObject;
     fs.writeFileSync(POSTPATH, JSON.stringify(postsJsonObject, null, 2), 'utf8');
 }
-function getUniqueId() {
+function GetUniqueId() {
     const postsJsonObject = JSON.parse(fs.readFileSync('postsMin.json', 'utf8'));
 
     // Create a set of all the existing post IDs.
@@ -60,7 +60,7 @@ function getUniqueId() {
 
     return uniqueId;
 }
-function saveNewPost(unqiuePost){
+function SaveNewPost(unqiuePost){
     const jsonFileContents = fs.readFileSync(POSTPATH, 'utf8');
 
     const jsonObject = JSON.parse(jsonFileContents);
@@ -69,5 +69,5 @@ function saveNewPost(unqiuePost){
 
     fs.writeFileSync(POSTPATH, jsonString, 'utf8');
 }
-// saveNewPost(new post('1', "Fahad's first post", ['firstpost', '1', '2']));
-UpdatePostCounter(2, 'view');
+// SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
+// UpdatePostCounter(2, 'view');

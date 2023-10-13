@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Data
-src/backend/posts.json
+src/backend/postsMin.json
