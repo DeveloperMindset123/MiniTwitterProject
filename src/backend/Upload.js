@@ -27,9 +27,25 @@ class post{
 }
 
 // needs to check if the id doesnt exist and create a new one
-function getUniqueId(){
-    return 2;
+function getUniqueId() {
+    const postsJsonObject = JSON.parse(fs.readFileSync('postsMin.json', 'utf8'));
+
+    // Create a set of all the existing post IDs.
+    const existingPostIds = new Set();
+    for (const post of postsJsonObject) {
+        existingPostIds.add(post.postId);
+    }
+
+    // Generate a random integer until we find a unique one.
+    let uniqueId;
+    do {
+        uniqueId = Math.floor(Math.random() * 100000);
+    } while (existingPostIds.has(uniqueId));
+
+    // Return the unique ID.
+    return uniqueId;
 }
+
 
 function saveNewPost(unqiuePost){
     const jsonFilepath = './postsMin.json';
