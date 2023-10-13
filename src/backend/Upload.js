@@ -16,16 +16,8 @@ class post{
         this.reports = 0;
         this.views = 0;
     }
-
-    // the following functions need to be able to update the existing post.json value
-    view(){
-        this.views ++;
-    }
-    report(){
-        this.reports ++;
-    }
 }
-function like(postId) {
+function UpdatePostCounter(postId, type) {
     const postsJsonObject = JSON.parse(fs.readFileSync(POSTPATH, 'utf8'));
     const postObject = postsJsonObject.find(post => post.postId === postId);
 
@@ -33,14 +25,24 @@ function like(postId) {
         console.error('Post not found!');
         return;
     }
+    switch(type){
+        case 'like':
+            postObject.like++;
+            break;
+        case 'report':
+            postObject.reports++;
+            break;
+        case 'view':
+            postObject.views++;
+            break;
+        default:
+            console.error("Invalid Update Command Type!");
+    }
     console.log(postObject);
-    //saves to a new object, not the old json
-    postObject.like++;
-    postsJsonObject[postObject.postId] = postObject;
 
+    postsJsonObject[postObject.postId] = postObject;
     fs.writeFileSync(POSTPATH, JSON.stringify(postsJsonObject, null, 2), 'utf8');
 }
-
 function getUniqueId() {
     const postsJsonObject = JSON.parse(fs.readFileSync('postsMin.json', 'utf8'));
 
@@ -68,4 +70,4 @@ function saveNewPost(unqiuePost){
     fs.writeFileSync(POSTPATH, jsonString, 'utf8');
 }
 // saveNewPost(new post('1', "Fahad's first post", ['firstpost', '1', '2']));
-// like(2);
+UpdatePostCounter(2, 'view');
