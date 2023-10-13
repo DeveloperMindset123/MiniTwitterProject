@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 //AppRouter.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -7,18 +8,17 @@ import Upload from './Upload';
 import User from './User';
 
 const App = () => {
-    //simulate userlogin status (replace later with actual logic)
 
+    //simulate userlogin status (replace later with actual logic)
     const isUserLoggedIn = true;
 
     return (
       <BrowserRouter>
         <Routes>
-          {/**Note: had to specify MiniTwitterProject/component name */}
-            <Route path='/MiniTwitterProject/Home' element={<Home />} />
-            <Route path='/MiniTwitterProject/Landing' element={<Landing />} />
-            <Route path='/MiniTwitterProject/Upload' element={<Upload />} />
-            <Route path='/MiniTwitterProject/User' element={<User />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/Landing' element={<Landing />} />
+            <Route path='/Upload' element={<Upload />} />
+            <Route path='/User' element={<User />} />
         </Routes>
       </BrowserRouter>
     );

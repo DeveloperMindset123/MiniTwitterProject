@@ -18,6 +18,19 @@ The underlying backend of next.js is express.js, for the sake of simplification,
 Then...
 `npm install express nodemon axios`
 
+# Documentation
+## How Pages Are Routed
+using `react-route-dom`, we're able to manually define the behavior needed to route inbetween pages. This way we can navigate between pages from the url.
+### How It's Done:
+- in `App.jsx`, we import all pages we want to include, as well as `react-route-dom`
+- we replaced the default value of the page (since vite automatically sets the default page to be App.jsx) with `<BroweserRouter></BroweserRouter>`
+- `<Route></Route>` allows us to set the url path and page element to route the user to 
+- the order of the routes is important
+    - react Router will match the current URL to the first route that matches
+    - if the current URL does not match any of the defined routes, React Router will render a 404 Not Found page (so far we don't have one)
+
+
+
 # Desc
 
 In progress: 3 Month Project
