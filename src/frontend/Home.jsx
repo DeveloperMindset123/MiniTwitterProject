@@ -1,10 +1,9 @@
-function App() {
+import React from 'react'
 
+const Home = () => {
   return (
-    <div className="App">
-      <h1>Home</h1>
-    </div>
+    <div>Home</div>
   )
 }
 
-export default App
+export default Home;

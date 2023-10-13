@@ -1,10 +1,10 @@
-function App() {
+import React from 'react';
 
+//generated component code
+const User = () => {
   return (
-    <div className="App">
-      <h1>Users</h1>
-    </div>
+    <div>User</div>
   )
 }
 
-export default App
+export default User;

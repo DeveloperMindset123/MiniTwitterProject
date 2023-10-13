@@ -1,4 +1,4 @@
-function App() {
+function Landing() {
 
   return (
     <div className="App">
@@ -7,4 +7,4 @@ function App() {
   )
 }
 
-export default App
+export default Landing;
