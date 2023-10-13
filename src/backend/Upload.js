@@ -27,7 +27,7 @@ function UpdatePostCounter(postId, type) {
     }
     switch(type){
         case 'like':
-            postObject.like++;
+            postObject.likes++;
             break;
         case 'report':
             postObject.reports++;
@@ -38,7 +38,7 @@ function UpdatePostCounter(postId, type) {
         default:
             console.error("Invalid Update Command Type!");
     }
-    console.log(postObject);
+    // console.log(postObject);
 
     postsJsonObject[postObject.postId] = postObject;
     fs.writeFileSync(POSTPATH, JSON.stringify(postsJsonObject, null, 2), 'utf8');
@@ -70,4 +70,4 @@ function SaveNewPost(unqiuePost){
     fs.writeFileSync(POSTPATH, jsonString, 'utf8');
 }
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
-// UpdatePostCounter(2, 'view');
+// UpdatePostCounter(2, 'like');
