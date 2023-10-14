@@ -334,5 +334,21 @@
     "likes": 0,
     "reports": 0,
     "views": 0
+  },
+  {
+    "userId": "1",
+    "bodyText": "Fahad's first post",
+    "hashTags": [
+      "firstpost",
+      "1",
+      "2"
+    ],
+    "videoId": null,
+    "imageId": null,
+    "time": 87.94150018692017,
+    "postId": 2752,
+    "likes": 0,
+    "reports": 0,
+    "views": 0
   }
 ]

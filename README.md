@@ -29,6 +29,30 @@ using `react-route-dom`, we're able to manually define the behavior needed to ro
     - react Router will match the current URL to the first route that matches
     - if the current URL does not match any of the defined routes, React Router will render a 404 Not Found page (so far we don't have one)
 
+## Uploading New Posts 
+File `Upload.js` exports the following:
+- class `Post`
+    - constructor takes in: 
+        - `userId`
+        - `bodyText`
+        - `hashTags`
+        - `videoId(null)`
+        - `imageId(null)`
+        - `time(performance.now())`
+- function `UpdatePostCounter(postId, type)`
+    - function uses `postId` to sort through `posts.json` and increment (by one) whichever field `type` is
+    - ex: `postId` = 2 and `type` = 'Like'
+        - increments the `like` value of `postId` 2 from 0 -> 1.
+- function `GetUniqueId()`
+    - generates a random `postId` integer that doesn't already exist
+    - checks file `posts.json` to see if the int already exists. 
+- function `SaveNewPost(uniquePost)`
+    - first it copies the contents of the file to a list `jsonObject`
+    - the list is appended with our new post `uniquePost`
+    - the list is stringified by `JSON.stringify(jsonObject, null, 2)`
+        - the parameters allow us to save it in a pretty format
+    - the `jsonString` is saved to the files
+    - in order for the function to work, `posts.json` **must exist**
 
 
 # Desc

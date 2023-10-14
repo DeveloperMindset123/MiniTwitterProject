@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import fs from 'fs';
 import { unminify } from './unMinify.js';
 import { error } from 'console';
-const POSTPATH = './postsMin.json';
+const POSTPATH = './posts.json';
 
-class Post{
+export class Post{
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null, time = performance.now()){
         this.userId = userId;
         this.bodyText = bodyText;
@@ -17,7 +18,7 @@ class Post{
         this.views = 0;
     }
 }
-function UpdatePostCounter(postId, type) {
+export function UpdatePostCounter(postId, type) {
     const postsJsonObject = JSON.parse(fs.readFileSync(POSTPATH, 'utf8'));
     const postObject = postsJsonObject.find(post => post.postId === postId);
 
@@ -43,8 +44,8 @@ function UpdatePostCounter(postId, type) {
     postsJsonObject[postObject.postId] = postObject;
     fs.writeFileSync(POSTPATH, JSON.stringify(postsJsonObject, null, 2), 'utf8');
 }
-function GetUniqueId() {
-    const postsJsonObject = JSON.parse(fs.readFileSync('postsMin.json', 'utf8'));
+export function GetUniqueId() {
+    const postsJsonObject = JSON.parse(fs.readFileSync(POSTPATH, 'utf8'));
 
     // Create a set of all the existing post IDs.
     const existingPostIds = new Set();
