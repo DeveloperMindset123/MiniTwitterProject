@@ -2,7 +2,7 @@
 import fs from 'fs';
 import { unminify } from './unMinify.js';
 import { error } from 'console';
-const POSTPATH = './posts.json';
+const POSTPATH = 'src/backend/posts.json';
 
 export class Post{
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null, time = performance.now()){
@@ -71,4 +71,4 @@ function SaveNewPost(unqiuePost){
     fs.writeFileSync(POSTPATH, jsonString, 'utf8');
 }
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
-// UpdatePostCounter(2, 'like');
+UpdatePostCounter(2, 'like');
