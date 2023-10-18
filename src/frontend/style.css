@@ -1,0 +1,33 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+  
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+  
+.button-container {
+    display: flex;
+    justify-content: center; /* Buttons will be side by side at the bottom center*/
+    align-items: center;
+    margin: 20px 0; /* Add margin for spacing */
+    width: 100%; /* Make sure the buttons span the width */
+}
+
+.main-button, .trending-button {
+  padding: 10px 20px; /* Adjust the padding to control button size */
+  font-size: 16px; /* Adjust the font size */
+  background-color: #51aaf7; /* Change background color */
+  color: white; /* Change text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
