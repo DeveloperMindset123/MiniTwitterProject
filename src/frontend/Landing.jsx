@@ -1,13 +1,9 @@
-import React from 'react';
-import Login from './components/login';
-
 function Landing() {
-//we will be creating the user registration or login here
+
   return (
-    <>
-      <Registration />
-      <Login />
-    </>
+    <div className="App">
+      <h1>Landing</h1>
+    </div>
   )
 }
 
