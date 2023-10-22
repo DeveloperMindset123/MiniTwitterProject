@@ -12,10 +12,7 @@ const Home = () => {
       <div className="content">
         <h1>Home</h1>
       </div>
-      <div>
-        <Login />
-        <Registration />
-      </div>
+      <div>Include the functionality for homepage here</div>
       <div className="button-container">
         <button className="main-button">Main</button>
         <button className="trending-button">Trending</button>

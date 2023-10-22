@@ -1,0 +1,101 @@
+/*Page styling for login*/
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppings", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #3e65fe;
+}
+
+.logo-box {
+    background: #fff;
+    padding: 30px 120px;
+    width: 550px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    border-radius: 10px;
+}
+
+.logo {
+    width: 30px;
+    margin-bottom: 20px;
+}
+
+.logo-box h2 {
+    margin-bottom: 20px;
+}
+
+.logo-box button img {
+    width: 18px;
+    margin-right: 10px;
+}
+
+.logo-box button {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0px;
+    border-radius: 30px;
+    background: transparent;
+    border: 1px solid #999;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.logo-box hr {
+    border:0;
+    height:1px;
+    background: #c2c2c2;
+    margin: 5px;
+}
+
+.logo-box span {
+    display: block;
+    width: 40px;
+    margin: auto;
+    background: #fff;
+    font-size: 14px;
+    margin-top: -16px;
+}
+
+.logo-box input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #999;
+    outline: 0;
+    padding: 15px 10px;
+    border-radius: 4px;
+}
+
+::placeholder {
+    font-weight: 500;
+    color: #333;
+}
+
+.logo-box form button {
+    background: #000;
+    color: #fff;
+    border: 0;
+    margin-bottom: 15px;
+}
+
+.logo-box p {
+    /*Test-align: left*/
+    font-size: 14px;
+    color: #555;
+    margin: 40px 0 50px;
+}
+
+.login-box p a {
+    text-decoration: none;
+    color: #359cf0;
+    margin-left: 100px;
+}

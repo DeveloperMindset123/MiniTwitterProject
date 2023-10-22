@@ -15,10 +15,10 @@ export default function (props) {
             <div className="Auth-form-container">
                 <form className='Auth-form'>
                     <div className='Auth-form-content'>
-                        <h3 className=''>Sign In</h3>
+                        <h3 className='Auth-form-title'>Sign In</h3>
                         <div className='text-center'>
                             Not Registered Yet?{" "}
-                            <span className='link-primary' onClick={changeAuthMode}>
+                            <span className='link-primary cursor' onClick={changeAuthMode}>
                                 Sign Up
                             </span>
                         </div>
@@ -53,38 +53,65 @@ export default function (props) {
     }
 
     return (
-        <div className='App Auth-form-container'>
+        <div className='Auth-form-container'>
             <form className='Auth-form'>
                 <div className='Auth-form-content'>
                     <h3 className='Auth-form-title'>Sign In</h3>
+                    <div className='text-center'>
+                        Already Registered?{" "}
+                        <span className='link-primary cursor' onClick={changeAuthMode}>
+                            Sign In
+                        </span>
+                    </div>
+                    {/**Create the input section for entering full name */}
                     <div className='form-group mt-3'>
-                        <label>Email address</label>
-                        <input
+                        <label>Full Name</label>
+                        <input 
                             type='email'
                             className='form-control mt-1'
-                            placeholder='Enter email'
+                            placeholder='e.g. Hans Zimmer'
                         />
                     </div>
+                    {/**Create the placeholder for entering password */}
+                    <div className='form-group mt-3'>
+                        <label>Email Address</label>
+                        <input 
+                            type='email'
+                            className='form-control mt-1'
+                            placeholder='Email Address'
+                        />
+                    </div>
+                    {/**Create the input section for inputting password */}
                     <div className='form-group mt-3'>
                         <label>Password</label>
                         <input 
                             type='password'
                             className='form-control mt-1'
-                            placeholder='Enter password'
+                            placeholder='Enter Password'
+                        />
+                    </div>
+                    {/**Create the input section for confirming password */}
+                    <div className='form-group mt-3'>
+                        <label>Confirm Password</label>
+                        <input 
+                            type='password'
+                            className='form-control mt-1'
+                            placeholder='Retype Password'
                         />
                     </div>
                     <div className='d-grid gap-2 mt-3'>
-                        <button type='submit' className='btn btn-primary'>
+                        <button type='Submit' className='btn btn-primary'>
                             Submit
                         </button>
                     </div>
-                    <p className='forgot-password text-right mt-2'>
-                        Forgot <a href='#'>password</a>
+                    <p className='text-center mt-2'>
+                        Forgot <a href='#'>Password?</a>
                     </p>
                 </div>
             </form>
         </div>
+
     )
 }
 
-//note: continue here --> https://www.codementor.io/@supertokens/building-a-login-screen-with-react-and-bootstrap-1sqpm1iszf
+//note: continue here --> https://www.codementor.io/@supertokens/building-a-login-screen-with-react-and-bootstrap-1sqpm1iszfx

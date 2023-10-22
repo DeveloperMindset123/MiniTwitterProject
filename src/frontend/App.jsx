@@ -6,6 +6,7 @@ import Home from './Home';
 import Landing from './Landing';
 import Upload from './Upload';
 import User from './User';
+import Auth from './components/Auth';
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
             <Route path='/Landing' element={<Landing />} />
             <Route path='/Upload' element={<Upload />} />
             <Route path='/User' element={<User />} />
+            <Route path='/Auth' element={<Auth/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
         </Routes>
       </BrowserRouter>
     );

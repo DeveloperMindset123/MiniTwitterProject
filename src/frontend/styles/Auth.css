@@ -4,6 +4,10 @@
     background-color: white;
 }
 
+.cursor {
+    cursor: pointer;
+}
+
 .Auth-form-container {
     display: flex;
     justify-content: center;
@@ -39,3 +43,4 @@ label {
     font-weight: 600;
     color: rgb(34,34,34);
 }
+
