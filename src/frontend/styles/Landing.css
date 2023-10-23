@@ -1,0 +1,83 @@
+/*Styling page for Landing.jsx*/
+/*
+body {
+    align-items: center;
+}
+.logo {
+    width: 300px;
+    height: 300px;
+}
+
+.logo-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.login-buttons {
+    max-width: 300px;
+}
+
+.logo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .logo-box {
+        flex-direction: row;
+    }
+}
+
+.GoogleLogo .AppleLogo .GithubLogo {
+    width: 100px;
+    height: 100px;
+} */
+
+.logo-box {
+    display: flex;
+    justify-content: center; /**centers everything in the middle */
+}
+
+.login-buttons {
+    justify-content: center; /*This is so that the buttons will be centered at the middle of the screen*/
+}
+.logo {
+    width: 70%;
+    height: auto;
+    margin: auto;
+    margin-top: 12%;
+    border-radius: 100%;
+}
+
+/*add the proper styling for the header content title*/
+.header {
+    margin-top: 25%;
+    margin-bottom: 5%;
+}
+
+.title-content {
+    font-size: 50px;
+}
+
+/*make changes for the button, farily simple and similar code applies for them all, with some minor modifications*/
+
+.google-button {
+    width: 40%;
+    margin-bottom: 3%;
+}
+
+.apple-button {
+    width: 40%;
+    margin-bottom: 3%;
+}
+
+.github-button {
+    width: 40%;
+    margin-bottom: 3%;
+}
+
+.Authentication {
+    width: 40%;
+    margin-bottom: 3%;
+}
