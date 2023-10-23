@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 //set up the authentication
 import React, { useState } from 'react';
 import '../styles/Auth.css';
 
-export default function (props) {
+export default function Auth(props) {
 
     let [authMode, setAuthMode] = useState("signin");
 
