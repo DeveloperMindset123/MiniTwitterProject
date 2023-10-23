@@ -31,3 +31,31 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.sidebar {
+    background-color: #333;
+    width: 200px;
+    height: 100vh; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column; /* Display menu items vertically */
+    justify-content: flex-start; /* Start items at the top */
+    align-items: center; /* Center items horizontally */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    text-align: center; /* Center text within list items */
+}
+  
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px; /* Increase font size */
+    display: block;
+}
+  
