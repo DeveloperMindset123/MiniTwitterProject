@@ -3,20 +3,24 @@ A project with collaboration with two three other people to develop the function
 The following are the required as part of this project:
 
 # How to Set Up
-You can use `npm install` to install all the components on the site, once installation is successful, start the app!
+We set up a server and client end functionality to our site. 
+To run the website, do the following:
+- `cd client`
 - `npm run dev`
 
+In order to access the db, the server must be initalized.
+Do the following:
+- `cd server`
+- `node server.mjs`
+
 Dependancies Installed:
-- React
-- React-Dom
-- next
-- Express.js, axios, nodemon
-
-
-The underlying backend of next.js is express.js, for the sake of simplification, simply can:
-`cd backend`
-Then...
-`npm install express nodemon axios`
+- `React`
+- `React-Dom`
+- `next`
+- `express`
+- `axios`
+- `nodemon`
+- `mongodb`
 
 # Documentation
 ## How Pages Are Routed
@@ -54,6 +58,8 @@ File `Upload.js` exports the following:
     - the `jsonString` is saved to the files
     - in order for the function to work, `posts.json` **must exist**
 
+## How the DB Works
+In order to access a database, we set up a server first with `express` and our database with `mongodb`. The only reason we're using mongodb is because it looks nice on my resume.
 
 # Desc
 
