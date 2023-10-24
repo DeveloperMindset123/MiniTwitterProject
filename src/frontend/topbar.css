@@ -1,0 +1,53 @@
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+  
+.slogan {
+    font-family: cursive;
+    font-size: 26px;
+    font-weight: bold; /* Make it bold */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    margin-right: 20px;
+    flex-grow: 1; /* Stretch the slogan to fill available space */
+    text-align: center;
+} 
+   
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex-grow: 0.8
+    ; /* Stretch the search bar to fill available space */
+}
+  
+.search-bar input {
+    padding: 10px;
+    flex-grow: 1;
+    border: none; /* Remove the border */
+    border-radius: 25px; /* Add a rounded border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  }
+  
+  .search-bar button {
+    padding: 10px 20px;
+    background-color: #0074d9;
+    color: white;
+    border: none;
+    border-radius: 50px; /* Increase border-radius for a rounder appearance */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-image: linear-gradient(to bottom, #0074d9, #0056b3);
+    text-transform: uppercase;
+    font-weight: bold;
+  
+    /* Add box-shadow for a fancy effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .search-bar button:hover {
+    background-image: linear-gradient(to bottom, #0056b3, #003e8c);
+  }

@@ -1,34 +1,34 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
-import './style.css'; 
-import Registration from './components/registration';
-import Login from './components/login';
-import "bootstrap/dist/css/bootstrap.min.css";
-
-//this will serve as our App.jsx file
+import './style.css';
+import './sidebar.css';
+import './topbar.css';
 
 const Home = () => {
   return (
-    <div className="home-container">
-      <div className="sidebar">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Notifications</a></li>
-          <li><a href="#">Community</a></li>
-          <li><a href="#">Bookmarks</a></li>
-          <li><a href="#">Profile</a></li>
-          <li><a href="#">Settings</a></li>
-          <li><a href="#">Lists</a></li>
-          <li><a href="#">More</a></li>
-        </ul>
+    <div>
+      <div className="top-bar">
+        <div className="slogan">Connect More</div>
+        <div className="search-bar">
+          <input type="text" placeholder="Search..." />
+          <button>Search</button>
+        </div>
       </div>
-      <div className="content">
-        <h1>Home</h1>
-      </div>
-      <div>Include the functionality for homepage here</div>
-      <div className="button-container">
-        <button className="main-button">Main</button>
-        <button className="trending-button">Trending</button>
+      <div className="home-container">
+        <div className="sidebar">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Bookmarks</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Lists</a></li>
+            <li><a href="#">More</a></li>
+          </ul>
+          <div className="sign-out">
+            <button>Sign Out</button>
+          </div>
+        </div>
       </div>
     </div>
   );
