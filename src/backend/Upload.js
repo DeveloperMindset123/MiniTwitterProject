@@ -71,4 +71,4 @@ function SaveNewPost(unqiuePost){
     fs.writeFileSync(POSTPATH, jsonString, 'utf8');
 }
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
-UpdatePostCounter(2, 'like');
+// UpdatePostCounter(2, 'like');
