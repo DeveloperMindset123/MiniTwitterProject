@@ -25,4 +25,4 @@ dist-ssr
 
 # Data
 src/backend/postsMin.json
-server/server.mjs
+server/mongoUri.json
