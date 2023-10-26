@@ -101,4 +101,10 @@ Notes:
 
 Technology Stack:
 - Since this a fullstack project, for the sake of simplification, we will be working solely using <b><i>Next.js</b></i> framework, which is built for fullstack development. (The starter bundle of next.js comes with TypeScript, Eslint Support, Tailwind CSS as well). Additionally, Express.js, Nodemon and Axios may be utilized as backup for server-side rendering.
+ 
+Note regarding styling: (delete this later)
+
+- In order for bootstrap to render, we need to import the following statement:
+1. __import 'bootstrap/dist/css/bootstrap.min.css';__  
+Once you have imported the bootstrap statement, you should import the appropriate stylesheet that your using, in order for the changes to synchronize properly.
 

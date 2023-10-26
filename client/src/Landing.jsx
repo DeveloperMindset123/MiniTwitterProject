@@ -1,11 +1,16 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import {useNavigate} from 'react-router-dom';
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
+//import { Container, Row, Col, Button } from "react-bootstrap"; --> import them individually instead
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { faGoogle, faApple, faGithub } from "@fortawesome/free-brands-svg-icons";
-import './styles/Landing.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import 'bootstrap/dist/css/bootstrap.min.css';  //NOTE: YOU MUST IMPORT THIS FOR BOOTSTRAP TO RENDER
+import '../src/styles/Landing.css';  //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
 
 //this part of the website will have the typical landing page of twitter, but instead with our logo
 
@@ -25,14 +30,13 @@ function Landing() {
   }
 
   return (
-    /**Note: Logo needs to be displayed on the left hand side whereas the login information should be displayed on the right hand side */
-    <> {/**For simplicity, we will use an empty react tag for central tag */}
+    
+    <div> 
       <Container fluid>
-        {/**Div to display the logo on the left side */}
         <Row>
           {/**We will be displaying the content within nested rows/columns */}
           <Col className="logo-box"> {/**Column 1 that will simply contain the logo of the landing page */}
-            <img src="public\logo.jpeg" className="logo" />
+            <img src="/logo.jpeg" className="logo" />
           </Col>
           <Col className="button-box"> {/**Column 2 that will simply contain the various options for logging in */}
             {/**Div to display the prompt for user to login in the landing page */}
@@ -65,7 +69,7 @@ function Landing() {
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   )
 }
 
