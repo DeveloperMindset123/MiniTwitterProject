@@ -1,7 +1,7 @@
 import React from 'react';
-import './style.css';
-import './sidebar.css';
-import './topbar.css';
+import '../src/styles/style.css';
+import '../src/styles/sidebar.css';
+import '../src/styles/topbar.css';
 
 const Home = () => {
   return (
