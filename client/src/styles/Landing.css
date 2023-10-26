@@ -52,7 +52,7 @@ body {
 
 /*add the proper styling for the header content title*/
 .header {
-    margin-top: 25%;
+    margin-top: 20%;
     margin-bottom: 5%;
 }
 
@@ -80,4 +80,9 @@ body {
 .Authentication {
     width: 40%;
     margin-bottom: 3%;
+}
+
+.guest-button {
+    width: 40%;
+    margin-left: 30%;
 }
