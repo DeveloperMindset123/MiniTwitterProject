@@ -5,15 +5,17 @@
   "main": "server.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
+    "start": "nodemon server.cjs",
     "dev": "nodemon server"
   },
-  "type": "module",
+  "type": "commonjs",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongodb": "^6.2.0",
     "mongoose": "^7.6.3"
   },
   "devDependencies": {

@@ -77,6 +77,11 @@ body {
     margin-bottom: 3%;
 }
 
+.guest {
+    width: 40%;
+
+}
+
 .Authentication {
     width: 40%;
     margin-bottom: 3%;

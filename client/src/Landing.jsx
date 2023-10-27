@@ -26,7 +26,7 @@ function Landing() {
 
   const navigateHome = () => {
     //navigate to home
-    navigate('/Landing'); //this will allow the user to navigate back to the landing page
+    navigate('/'); //this will allow the user to navigate back to the landing page
   }
 
   return (
@@ -66,8 +66,11 @@ function Landing() {
               {/**Div containing the option to login or sign up, user will be redirected to the authentication page */}
               <Button className="Authentication" variant="outline-info" size="lg" onClick={navigateToAuthentication}>Login/Register</Button>
             </Row>
+            <Row>
+              <<Button className="guest" variant="outline-warning" size="lg" onClick={navigateHome}>Continue As Guest</Button>
+            </Row>
           </Col>
-        </Row>
+        </Row>>
       </Container>
     </div>
   )
