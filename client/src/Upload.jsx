@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import post from './dataTypes/UploadDB.js';
+import {Post} from './dataTypes/UploadDB.js';
 
 const Upload = () => {
   const [userId, setUserId] = useState('');
@@ -10,7 +10,7 @@ const Upload = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const uniquePost = new post(
+    const uniquePost = new Post(
       userId,
       bodyText,
       hashTags
