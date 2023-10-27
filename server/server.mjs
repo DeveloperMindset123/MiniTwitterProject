@@ -39,9 +39,18 @@ app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
 // api for saving a brand new post
 app.post('/api/save-new-post', async (req, res) => {
   const uniquePost = req.body;
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
   try {
     await SaveNewPost(uniquePost);
+
+    const requiredFields = ['userId', 'bodyText', 'hashTags'];
+
+    if (!uniquePost || requiredFields.some(field => !uniquePost[field])) {
+      res.status(400).json({ message: 'Missing required fields' });
+      return;
+    }
 
     res.status(201).json({ message: 'Post saved successfully!' });
   } catch (err) {
