@@ -50,9 +50,9 @@ app.post('/api/save-new-post', async (req, res) => {
 // api for fetching all posts
 app.get('/api/fetch-posts', async (req, res) => {
   try {
-    console.log('Getting new posts');
+    // console.log('Getting new posts');
     const posts = await FetchPosts();
-    
+
     res.status(200).json(posts);
   } catch (err) {
     console.error('Error getting all posts', err);
