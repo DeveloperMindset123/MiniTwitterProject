@@ -2,7 +2,7 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter } from './database.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
 const app = express();
 const port = 4000;
 app.use(express.json());
@@ -45,6 +45,18 @@ app.post('/api/save-new-post', async (req, res) => {
     res.status(201).json({ message: 'Post saved successfully!' });
   } catch (err) {
     res.status(500).json({ message: 'Error saving new post:', err });
+  }
+});
+// api for fetching all posts
+app.get('/api/fetch-posts', async (req, res) => {
+  try {
+    console.log('Getting new posts');
+    const posts = await FetchPosts();
+    
+    res.status(200).json(posts);
+  } catch (err) {
+    console.error('Error getting all posts', err);
+    res.status(500).json({ error: 'Failed to fetch posts' });
   }
 });
 
