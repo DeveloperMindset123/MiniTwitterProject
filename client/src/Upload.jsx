@@ -17,11 +17,10 @@ const Upload = () => {
     );
 
     try {
-      const response = await axios.post('/api/save-new-post', uniquePost);
+      const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost);
 
       if (response.status === 201) {
-        alert('Post saved successfully!');
-
+        alert('Post saved successfully!', response);
         setUserId('');
         setBodyText('');
         setHashTags('');

@@ -20,9 +20,6 @@ export function mongoUri(){
   }
 }
 
-app.get('/api', (req, res) => {
-  res.json({"users": ["ur so skibbidi", "youre so fanum tax", "but im adin ross"]});
-});
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
   const postId = req.params.postId;
@@ -41,6 +38,7 @@ app.post('/api/save-new-post', async (req, res) => {
   const uniquePost = req.body;
 
   try {
+    console.log('New Post: ' + uniquePost);
     await SaveNewPost(uniquePost);
 
     res.status(201).json({ message: 'Post saved successfully!' });
