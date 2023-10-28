@@ -5,6 +5,7 @@ import express, { json } from 'express';
 import { SaveNewPost, UpdatePostCounter } from './database.mjs';
 const app = express();
 const port = 4000;
+app.use(express.json());
 
 // Get Mongo URI
 import fs from 'fs';
