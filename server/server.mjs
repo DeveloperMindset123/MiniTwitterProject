@@ -25,7 +25,7 @@ export function mongoUri(){
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
   const postId = req.params.postId;
   const type = req.params.type;
-
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     await UpdatePostCounter(postId, type);
 
@@ -40,6 +40,7 @@ app.post('/api/save-new-post', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers','Content-Type');
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     console.log('New Post: ' + uniquePost);
     await SaveNewPost(uniquePost);
@@ -58,6 +59,7 @@ app.post('/api/save-new-post', async (req, res) => {
 });
 // api for fetching all posts
 app.get('/api/fetch-posts', async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     // console.log('Getting new posts');
     const posts = await FetchPosts();

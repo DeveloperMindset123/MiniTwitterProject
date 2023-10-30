@@ -66,17 +66,12 @@ function Landing() {
               {/**Div containing the option to login or sign up, user will be redirected to the authentication page */}
               <Button className="Authentication" variant="outline-info" size="lg" onClick={navigateToAuthentication}>Login/Register</Button>
             </Row>
-<<<<<<< HEAD
-            <Row>
-              <<Button className="guest" variant="outline-warning" size="lg" onClick={navigateHome}>Continue As Guest</Button>
-=======
             <Row className="login-button">
               <Button className="guest-button" variant="outline-warning" size="lg" onClick={navigateHome}>Continue As Guest
               </Button>
->>>>>>> acfaf6e1dc3fbcb632105f6711cdead071b9a4e7
             </Row>
           </Col>
-        </Row>>
+        </Row>
       </Container>
     </div>
   )
