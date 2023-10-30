@@ -10,29 +10,34 @@ const Upload = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const uniquePost = new Post(
-      userId,
-      bodyText,
-      hashTags
-    );
+    const uniquePost = new Post(userId, bodyText, hashTags);
 
     try {
+      //save-new-post
       const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
+      console.log(uniquePost);
+      const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost);
+      //main
+
       if (response.status === 201) {
         alert('Post saved successfully!', response);
         setUserId('');
         setBodyText('');
         setHashTags('');
-      } else {
+      }
+      if(response.status === 400){
+        alert('Bad Request: ' + response.data.error);
+      }
+      else {
         alert('Error saving new post: ' + response.data.error);
       }
     } catch (err) {
-      alert('Error saving new post: ' + err.message);
+      alert('Error saving new post or making connection: ' + err.message);
     }
   };
 
