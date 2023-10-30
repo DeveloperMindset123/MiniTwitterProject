@@ -2,9 +2,10 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter } from './database.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
 const app = express();
 const port = 4000;
+app.use(express.json());
 
 // Get Mongo URI
 import fs from 'fs';
@@ -20,9 +21,6 @@ export function mongoUri(){
   }
 }
 
-app.get('/api', (req, res) => {
-  res.json({"users": ["ur so skibbidi", "youre so fanum tax", "but im adin ross"]});
-});
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
   const postId = req.params.postId;
@@ -43,6 +41,7 @@ app.post('/api/save-new-post', async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers','Content-Type');
   try {
+    console.log('New Post: ' + uniquePost);
     await SaveNewPost(uniquePost);
 
     const requiredFields = ['userId', 'bodyText', 'hashTags'];
@@ -55,6 +54,18 @@ app.post('/api/save-new-post', async (req, res) => {
     res.status(201).json({ message: 'Post saved successfully!' });
   } catch (err) {
     res.status(500).json({ message: 'Error saving new post:', err });
+  }
+});
+// api for fetching all posts
+app.get('/api/fetch-posts', async (req, res) => {
+  try {
+    // console.log('Getting new posts');
+    const posts = await FetchPosts();
+
+    res.status(200).json(posts);
+  } catch (err) {
+    console.error('Error getting all posts', err);
+    res.status(500).json({ error: 'Failed to fetch posts' });
   }
 });
 

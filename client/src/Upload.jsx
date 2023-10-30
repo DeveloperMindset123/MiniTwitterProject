@@ -13,12 +13,19 @@ const Upload = () => {
     const uniquePost = new Post(userId, bodyText, hashTags);
 
     try {
+      //save-new-post
+      const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       console.log(uniquePost);
       const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost);
+      //main
 
       if (response.status === 201) {
-        alert('Post saved successfully!');
-
+        alert('Post saved successfully!', response);
         setUserId('');
         setBodyText('');
         setHashTags('');

@@ -35,7 +35,7 @@ export async function SaveNewPost(uniquePost) {
         const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
         await client.connect();
 
-        const db = client.db(DBNAME); // Replace with your database name
+        const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
         await collection.insertOne(uniquePost);
@@ -45,13 +45,12 @@ export async function SaveNewPost(uniquePost) {
         console.error('Error saving new post:', err);
     }
 }
-
 export async function UpdatePostCounter(postId, type) {
     try {
         const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
         await client.connect();
 
-        const db = client.db(DBNAME); // Replace with your database name
+        const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
         const postObject = await collection.findOne({ postId });
@@ -82,6 +81,28 @@ export async function UpdatePostCounter(postId, type) {
         console.error('Error updating post counter:', err);
     }
 }
+export async function FetchPosts(){
+    try {
+        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+
+        const posts = await collection.find({}).toArray();
+
+        if (!posts) {
+            console.error('Post not found!');
+            return;
+        }
+
+        await client.close();
+        return posts;
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+    }
+}
 'Usage examples:'
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
 // UpdatePostCounter(2, 'like');
+// console.log(await FetchPosts());
