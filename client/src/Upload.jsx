@@ -20,10 +20,6 @@ const Upload = () => {
         },
       });
 
-      console.log(uniquePost);
-      const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost);
-      //main
-
       if (response.status === 201) {
         alert('Post saved successfully!', response);
         setUserId('');
