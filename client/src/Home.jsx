@@ -50,7 +50,6 @@ function FetchPosts() {
   );
 }
 
-
 const Home = () => {
   return (
     <div>
@@ -65,31 +64,46 @@ const Home = () => {
       <div className="home-container">
         <Row>
           <Col lg={2}> {/* Sidebar */}
-          <div className="sidebar">
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">Bookmarks</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Lists</a></li>
-            <li><a href="#">More</a></li>
-            <li><a href='./upload'>Upload</a></li>
-          </ul>
-          <div className="sign-out">
-            <button>Sign Out</button>
-          </div>
-        </div>
-
+            <div className="sidebar">
+              <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Bookmarks</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Lists</a></li>
+                <li><a href="#">More</a></li>
+                <li><a href='./upload'>Upload</a></li>
+              </ul>
+              <div className="sign-out">
+                <button>Sign Out</button>
+              </div>
+            </div>
           </Col>
-          <Col>
-            <FetchPosts></FetchPosts>
+          <Col lg={7}> {/* Content */}
+            <FetchPosts />
+          </Col>
+          <Col lg={3}> {/* Messages Section */}
+            <div className="messages-section">
+              <h2>Messages</h2>
+              <div className="chat-box">
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                <div className="chat-message">Name</div>
+                {/* Add more chat messages here */}
+              </div>
+            </div>
           </Col>
         </Row>
       </div>
     </div>
   );
 }
+
 
 export default Home;

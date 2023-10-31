@@ -6,3 +6,54 @@
     height: 100vh;
     position: relative;
 }
+
+.messages-section {
+    background-color: #333;
+    width: 300px;
+    height: 100vh;
+    position: fixed;
+    top: 64px;
+    right: 0;
+    display: flex;
+    flex-direction: column; /* Display vertically */
+    justify-content: flex-start; /* Start items at the top */
+    align-items: center;
+    padding: 10px 20px 20px 20px; /* Add extra padding-top (40px) */
+    box-sizing: border-box;
+}
+  
+.messages-section ul {
+    list-style: none;
+    padding: 0;
+    text-align: center; /* Center text within list items */
+}
+  
+.messages-section h2 {
+    color: white;
+    font-family: cursive;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 32px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: block;
+}
+  
+.chat-box {
+    background-color: #333; /* Match the background color */
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-top: 2px solid #555; /* Add a border on top of the chat box */
+}
+  
+.chat-message {
+    background-color: #444; /* Background color for chat messages */
+    color: white;
+    padding: 15px; /* Increase padding for a fancier look */
+    border-radius: 15px; /* Round the corners of chat messages */
+    margin: 5px 0; /* Add spacing between chat messages */
+    margin-bottom: 25px; /* Adjust the margin-bottom */
+    text-align: center;
+}
+  
