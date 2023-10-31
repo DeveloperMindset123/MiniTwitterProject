@@ -44,3 +44,8 @@ label {
     color: rgb(34,34,34);
 }
 
+
+  .interest-image {
+    max-width: 100%; 
+    max-height: 100px; 
+  }
