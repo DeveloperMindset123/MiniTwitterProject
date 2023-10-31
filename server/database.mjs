@@ -1,5 +1,4 @@
 import { MongoClient } from 'mongodb';
-import { performance } from 'perf_hooks';
 import fs from 'fs';
 const DATE = new Date(); // uses UTC time - ooordinated universal time
 const POSTS = 'posts';
