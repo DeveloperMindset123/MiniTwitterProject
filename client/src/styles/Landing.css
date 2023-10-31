@@ -52,7 +52,7 @@ body {
 
 /*add the proper styling for the header content title*/
 .header {
-    margin-top: 25%;
+    margin-top: 20%;
     margin-bottom: 5%;
 }
 
@@ -77,7 +77,20 @@ body {
     margin-bottom: 3%;
 }
 
+.guest {
+    width: 40%;
+
+}
+
 .Authentication {
     width: 40%;
     margin-bottom: 3%;
 }
+<<<<<<< HEAD
+=======
+
+.guest-button {
+    width: 40%;
+    margin-left: 30%;
+}
+>>>>>>> acfaf6e1dc3fbcb632105f6711cdead071b9a4e7

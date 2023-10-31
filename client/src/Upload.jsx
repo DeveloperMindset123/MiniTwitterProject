@@ -1,9 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import {Post} from './dataTypes/UploadDB.js';
 
 const Upload = () => {
+  const [userId, setUserId] = useState('');
+  const [bodyText, setBodyText] = useState('');
+  const [hashTags, setHashTags] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const uniquePost = new Post(userId, bodyText, hashTags);
+
+    try {
+      //save-new-post
+      const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log(uniquePost);   
+      //main
+
+      if (response.status === 201) {
+        alert('Post saved successfully!', response);
+        setUserId('');
+        setBodyText('');
+        setHashTags('');
+      }
+      if(response.status === 400){
+        alert('Bad Request: ' + response.data.error);
+      }
+      else {
+        alert('Error saving new post: ' + response.data.error);
+      }
+    } catch (err) {
+      alert('Error saving new post or making connection: ' + err.message);
+    }
+  };
+
   return (
-    <div>Upload</div>
-  )
-}
+    <form onSubmit={handleSubmit}>
+      <label>UserId:</label>
+      <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} />
+
+      <label>BodyText:</label>
+      <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} />
+
+      <label>HashTags:</label>
+      <textarea value={hashTags} onChange={(event) => setHashTags(event.target.value)} />
+
+      <button type="submit">Save Post</button>
+    </form>
+  );
+};
 
 export default Upload;

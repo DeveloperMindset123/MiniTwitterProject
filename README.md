@@ -1,6 +1,5 @@
 # MiniTwitterProject
 A project with collaboration with two three other people to develop the functionalities listed below:
-The following are the required as part of this project:
 
 # How to Set Up
 We set up a server and client end functionality to our site. 
@@ -34,32 +33,15 @@ using `react-route-dom`, we're able to manually define the behavior needed to ro
     - if the current URL does not match any of the defined routes, React Router will render a 404 Not Found page (so far we don't have one)
 
 ## Uploading New Posts 
-File `Upload.js` exports the following:
-- class `Post`
-    - constructor takes in: 
-        - `userId`
-        - `bodyText`
-        - `hashTags`
-        - `videoId(null)`
-        - `imageId(null)`
-        - `time(performance.now())`
-- function `UpdatePostCounter(postId, type)`
-    - function uses `postId` to sort through `posts.json` and increment (by one) whichever field `type` is
-    - ex: `postId` = 2 and `type` = 'Like'
-        - increments the `like` value of `postId` 2 from 0 -> 1.
-- function `GetUniqueId()`
-    - generates a random `postId` integer that doesn't already exist
-    - checks file `posts.json` to see if the int already exists. 
-- function `SaveNewPost(uniquePost)`
-    - first it copies the contents of the file to a list `jsonObject`
-    - the list is appended with our new post `uniquePost`
-    - the list is stringified by `JSON.stringify(jsonObject, null, 2)`
-        - the parameters allow us to save it in a pretty format
-    - the `jsonString` is saved to the files
-    - in order for the function to work, `posts.json` **must exist**
+Page `Upload.jsx` does the following:
+- Take in the user input for postId, bodyText and hashTags. 
+- It then calls the api in `server.mjs` and sends the body as JSON data to the backend
+- The backend, in `database.mjs` sends the data to the mongoDB database. 
 
 ## How the DB Works
 In order to access a database, we set up a server first with `express` and our database with `mongodb`. The only reason we're using mongodb is because it looks nice on my resume.
+- We set up functions in `database.mjs` that interface with the mongoDB database and save/fetch data
+- The this interacted with by the api that the front end calls on, which is defined in `server.mjs`
 
 # Desc
 

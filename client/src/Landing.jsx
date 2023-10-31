@@ -3,14 +3,14 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 //import { Container, Row, Col, Button } from "react-bootstrap"; --> import them individually instead
+import { faApple, faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import 'bootstrap/dist/css/bootstrap.min.css'; //NOTE: YOU MUST IMPORT THIS FOR BOOTSTRAP TO RENDER
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { faGoogle, faApple, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import 'bootstrap/dist/css/bootstrap.min.css';  //NOTE: YOU MUST IMPORT THIS FOR BOOTSTRAP TO RENDER
-import '../src/styles/Landing.css';  //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
+import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
 
 //this part of the website will have the typical landing page of twitter, but instead with our logo
 
@@ -26,7 +26,7 @@ function Landing() {
 
   const navigateHome = () => {
     //navigate to home
-    navigate('/Landing'); //this will allow the user to navigate back to the landing page
+    navigate('/'); //this will allow the user to navigate back to the landing page
   }
 
   return (
@@ -65,6 +65,10 @@ function Landing() {
             <Row className="login-buttons">
               {/**Div containing the option to login or sign up, user will be redirected to the authentication page */}
               <Button className="Authentication" variant="outline-info" size="lg" onClick={navigateToAuthentication}>Login/Register</Button>
+            </Row>
+            <Row className="login-button">
+              <Button className="guest-button" variant="outline-warning" size="lg" onClick={navigateHome}>Continue As Guest
+              </Button>
             </Row>
           </Col>
         </Row>
