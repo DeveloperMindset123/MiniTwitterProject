@@ -39,13 +39,17 @@
 }
 
 label {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 600;
     color: rgb(34,34,34);
 }
 
 
   .interest-image {
-    max-width: 100%; 
+    border: 2px solid #c3389e;
+    cursor: pointer;
+    max-width: 150px; 
     max-height: 100px; 
+    position: relative;
+
   }
