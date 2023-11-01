@@ -62,7 +62,7 @@ export default function Auth(props) {
         <div className='Auth-form-container'>
             <form className='Auth-form'>
                 <div className='Auth-form-content'>
-                    <h3 className='Auth-form-title'>Sign In</h3>
+                    <h3 className='Auth-form-title'>Sign Up</h3>
                     <div className='text-center'>
                         Already Registered?{" "}
                         <span className='link-primary cursor' onClick={changeAuthMode}>
@@ -174,10 +174,10 @@ function Selection() {
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Select 3 feilds You Are Interesting In</Modal.Title>
+            <Modal.Title>Select at least 3 interests to personalize your experience.</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <div>
+          <div className='Image-container'>
             {interests.map((interest,index) => (
                 <label key={index}>
                     <img className="interest-image" src={interest.image} alt={interest.name} />
@@ -194,10 +194,10 @@ function Selection() {
           </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button  onClick={handleClose}>
               Back
             </Button>
-            <Button variant="primary">Next</Button>
+            <Button >Next</Button>
           </Modal.Footer>
         </Modal>
       </>
