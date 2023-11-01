@@ -3,13 +3,14 @@
 import mongoose from 'mongoose';
 import express, { json } from 'express';
 import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
+import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
+import fs from 'fs';
+
 const app = express();
 const port = 4000;
 app.use(express.json());
 
 // Get Mongo URI
-import fs from 'fs';
-import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 export function mongoUri(){
   const filePath = 'mongoUri.json';
   try {
