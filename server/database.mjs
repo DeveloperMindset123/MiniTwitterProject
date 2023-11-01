@@ -28,7 +28,6 @@ export class Post {
         this.views = 0;
     }
 }
-
 export async function SaveNewPost(uniquePost) {
     try {
         const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
@@ -101,7 +100,35 @@ export async function FetchPosts(){
         console.error('Error fetching posts:', err);
     }
 }
+export async function DeletePost(postId){
+    try {
+        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+
+        const query = { postId: postId };
+        const post = await collection.findOne(query);
+
+        if (!post) {
+            console.error('Post not found!');
+            await client.close();
+            return;
+        }
+
+        // delete logic
+        await collection.deleteOne(query);
+
+        await client.close();
+        return;
+    }catch(err){
+        console.error('Error deleting post' + err);
+        return false;
+    }
+}
 'Usage examples:'
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
 // UpdatePostCounter(2, 'like');
 // console.log(await FetchPosts());
+// DeletePost(65306);
