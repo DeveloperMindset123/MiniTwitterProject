@@ -2,7 +2,7 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import fs from 'fs';
 
