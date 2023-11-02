@@ -41,6 +41,7 @@ function FetchPosts() {
                 <p><i>User ID: {post.userId}</i></p>
                 <h5 className="card-title">{post.bodyText}</h5>
                 <p className="card-text">Hashtags: {post.hashTags}</p>
+                <p className='timestamp'>{post.time}</p>
               </div>
             </div>
           </div>
