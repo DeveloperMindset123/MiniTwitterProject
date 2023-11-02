@@ -20,9 +20,6 @@ const Upload = () => {
         },
       });
 
-      console.log(uniquePost);   
-      //main
-
       if (response.status === 201) {
         alert('Post saved successfully!', response);
         setUserId('');
