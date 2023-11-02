@@ -13,11 +13,11 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
 }
 
 .Auth-form {
-    width: 420px;
+    width: 400px;
     box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
     padding-top: 30px;
     padding-bottom: 20px;
@@ -39,7 +39,7 @@
 }
 
 label {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
     color: rgb(34,34,34);
 }
@@ -53,3 +53,66 @@ label {
     position: relative;
 
   }
+  
+  .corporateInformation .corporate{
+    text-align: left;
+    text-indent: 35px;
+    
+  }
+
+  .corporateInformation .corporate label{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+.corporateInformation .corporate input[type="text"],
+.corporateInformation .corporate input[type="address"],
+.corporateInformation .corporate input[type="password"] {
+  width: 80%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  margin-left: 35px;
+ 
+}
+.CorporateModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 90vh;
+    
+}
+
+.custom-button {
+    background-color: #007bff;
+    color: #fff; 
+    margin-bottom: 20px;
+    width:150px;
+    margin-left:150px;
+}
+
+.custom-checkbox {
+    margin-bottom: 10px;
+    font-size: 16px;
+    margin-left:40px;
+}
+.custom-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.custom-modal{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 90vh;
+    
+}
