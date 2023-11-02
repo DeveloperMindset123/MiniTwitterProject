@@ -15,6 +15,17 @@ export function mongoUri(){
         console.error('Error reading or parsing the JSON file:', err);
     }
 }
+function getBannedWords(){
+    const filePath = 'bannedWords.json';
+    try {
+        const jsonContent = fs.readFileSync(filePath, 'utf8');
+        const config = JSON.parse(jsonContent);
+
+        return config.banned;
+    } catch (err) {
+        console.error('Error reading or parsing the JSON file:', err);
+    }
+}
 export class Post {
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null) {
         this.userId = userId;
@@ -29,6 +40,27 @@ export class Post {
     }
 }
 export async function SaveNewPost(uniquePost) {
+    const BANNEDWORDS = getBannedWords();
+    // fitler
+    function filterText(text) {
+        let counter = 0;
+        const filteredText = text.replace(/\b\w+\b/g, (match) => {
+            if (BANNEDWORDS.includes(match.toLowerCase())) {
+                counter++;
+                return '*'.repeat(match.length);
+            }
+            return match;
+        });
+
+        return { counter, filteredText };
+    }
+    if(filterText(uniquePost.bodyText).counter >2){
+        console.log("Too many banned words!");
+        return false;
+    } else{
+        uniquePost.bodyText = filterText(uniquePost.bodyText).filteredText;
+    }
+
     try {
         const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
         await client.connect();

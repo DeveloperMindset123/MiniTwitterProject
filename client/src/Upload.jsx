@@ -33,7 +33,11 @@ const Upload = () => {
         alert('Error saving new post: ' + response.data.error);
       }
     } catch (err) {
-      alert('Error saving new post or making connection: ' + err.message);
+      if(err.response.status === 403){
+        alert(err.response.data.message);
+      } else{
+        alert('Error saving post or making connection: ' + err.message);
+      }
     }
   };
 
