@@ -13,7 +13,7 @@ export default function Auth(props) {
     const [isCorporateUser, setIsCorporateUser] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
-
+    const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);
 
     const changeAuthMode = () => { //set the logic for whether to sign in or register
         setAuthMode(authMode == "signin" ? "signup" : "signin")
@@ -22,7 +22,7 @@ export default function Auth(props) {
 	const handleSubmit = (event) => {
         event.preventDefault(); 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
-        isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(!isSelectionModalOpen);
+        isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
     };
    
     if (authMode == 'signin') {
@@ -141,13 +141,23 @@ export default function Auth(props) {
                 // only click submit, the pop up can be opened, either Corporate User or normal user
             )}
             {isSelectionModalOpen &&
-             <Selection isSelectionModalOpen= {isSelectionModalOpen} setIsSelectionModalOpen={setIsSelectionModalOpen} />
+             <Selection isSelectionModalOpen= {isSelectionModalOpen} 
+             setIsSelectionModalOpen={setIsSelectionModalOpen} 
+             setIsTrendyUserOpen ={setIsTrendyUserOpen}
+             />
             }
+
+            {isTrendyUserOpen && !isSelectionModalOpen && (<TrendyUser
+                    isTrendyUserOpen={isTrendyUserOpen}
+                    setIsTrendyUserOpen={setIsTrendyUserOpen}
+                    />
+            )}
 
         </div>
 
     )
 }
+
 function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
 
@@ -162,7 +172,7 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
     
     return (
     <div>
-        <Modal show={isModalOpen} onHide={closePopup} className="CorporateModal">
+        <Modal show={isModalOpen} onHide={closePopup} className="CorporateModal" backdrop="static">
             <Modal.Header closeButton>
                 <Modal.Title>Corporate Information</Modal.Title>
             </Modal.Header>
@@ -193,12 +203,12 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
                         <input type="address" placeholder="Enter the Zip Code" />
                     </div>
                     <div className="d-grid gap-2 mt-3">
-                        <button
+                        <Button
                             className="custom-button"
                             onClick={OnClickContinueHandler}
                         >
                         Continue
-                        </button>
+                        </Button>
                 </div>
                 </div>
             </Modal.Body>
@@ -208,7 +218,6 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
                 <CustomerTarget
                     isCustomerTargetModalOpen={isCustomerTargetModalOpen}
                     setIsCustomerTargetModalOpen={setIsCustomerTargetModalOpen}
-                    setIsModalOpen ={setIsModalOpen}
                 />
             )}
         </div>
@@ -218,103 +227,63 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
 
 function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
 
+    const [selectedInterests, setSelectedInterests] = useState([]);
+
+    const interests = [
+        'Influencer',
+        'Gamer',
+        'Business Professional',
+        'Parent',
+        'Student',
+        'Tech Enthusiast',
+        'Fitness Enthusiast',
+        'Pet Owner',
+        'Homeowner',
+        'Traveler',
+        'Fashionistas',
+        'Foodie',
+        'Outdoor Adventurer',
+        'Shopper',
+      ];
+
+    const handleCheckboxChange = (event) => {
+        const { value } = event.target;
+        if (selectedInterests.includes(value)) {
+          setSelectedInterests(selectedInterests.filter((interest) => interest !== value));
+        } else {
+          setSelectedInterests([...selectedInterests, value]);
+        }
+      };
+
+
     const closeCustomerTargetModal = () => {
         setIsCustomerTargetModalOpen(false);
     }
 
     const doneHandler =() =>{
-        setIsCustomerTargetModalOpen(false);
+        closeCustomerTargetModal();
+        //console.log('Selected interests:', selectedInterests);
     }
    
     return (
-        <Modal show={isCustomerTargetModalOpen} onHide={closeCustomerTargetModal} className="custom-modal">
+        <Modal show={isCustomerTargetModalOpen} onHide={closeCustomerTargetModal} className="custom-modal" backdrop="static">
             <Modal.Header closeButton>
                 <Modal.Title>Customer Target</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                        <Form.Group>
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Influencer"
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Gamer"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Business Professional"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Parent"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Student"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Tech Enthusiast"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Fitness Enthusiast"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Pet Owner"
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Homeowner"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Traveler"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Fashionistas"
-                                
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Foodie"
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Outdoor Adventurer"
-                            />
-                            <Form.Check
-                                className="custom-checkbox"
-                                type="checkbox"
-                                label="Shopper"
-                            />
-                        </Form.Group>
-                    </Form>
+                    {interests.map((interest) => (
+                        <Form.Check
+                        key={interest}
+                        className="custom-checkbox"
+                        type="checkbox"
+                        label={interest}
+                        name={interest}
+                        value={interest}
+                        onChange={handleCheckboxChange}
+                        />
+                    ))}
+                </Form>
                 <div className="d-grid gap-2 mt-3">
                     <Button className="custom-button"variant="primary" onClick={doneHandler}>
                         Done
@@ -325,11 +294,21 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
     );
 }
 
-function Selection({isSelectionModalOpen,setIsSelectionModalOpen}) {
+function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen}) {
 
     const closeSelectionModal = () => {
         setIsSelectionModalOpen(false);
     };
+
+
+    const OnClickContinueHandler = () =>{
+        if(selectedInterests.length >= 3){
+            setIsTrendyUserOpen(true)
+            closeSelectionModal()
+        }else{
+            alert("pick at least 3")
+        }
+    }
  
     const [selectedInterests, setSelectedInterests] = useState([]);
     
@@ -359,14 +338,8 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen}) {
         }
       };
 
-      const handleSubmit = () => {
-
-      };
-
-
-  
     return (
-      <>
+      <div>
         <Modal
           show={isSelectionModalOpen}
           onHide={closeSelectionModal}
@@ -393,17 +366,88 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen}) {
             ))}
           </div>
             <div className="d-grid gap-2 mt-3">
-                    <Button className="custom-button"variant="primary" onClick={handleSubmit}>
-                        Next
+                    <Button className="custom-button"variant="primary" onClick={OnClickContinueHandler}>
+                        Continue
                     </Button>
             </div>
           </Modal.Body>
         </Modal>
-      </>
+
+        
+      </div>
     );
   }
 
-  
+function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
+   
+    const closePopup = () => {
+        setIsTrendyUserOpen(false);
+    }
+
+
+    const [users, setUsers] = useState([
+        { id: 1, name: 'User 1', isFollowing: false },
+        { id: 2, name: 'User 2', isFollowing: false },
+        { id: 3, name: 'User 3', isFollowing: false },
+        { id: 4, name: 'User 4', isFollowing: false },
+        { id: 5, name: 'User 5', isFollowing: false },
+      ]);
+
+      const toggleFollow = (userId) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === userId
+              ? { ...user, isFollowing: !user.isFollowing }
+              : user
+          )
+        );
+      };
+
+
+      const doneHandler = () => {
+        closePopup()
+      }
+ 
+
+    
+    return (
+        <Modal show={isTrendyUserOpen} onHide={closePopup}  backdrop="static" >
+            <Modal.Header closeButton>
+                <Modal.Title>You might like to follow</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="suggested-box">
+                 <div className="card-body">
+                <ul className="list-group suggestions-list">
+                {users.map((user) => (
+                <li key={user.id} className="list-group-item d-flex align-items-center">
+                  <img
+                    src="\public\Art.jpg"
+                    alt={user.name}
+                    style={{ width: '48px', height: '48px', borderRadius: '50%', marginRight: '10px' }}
+                  />
+                  <p className="mb-0">{user.name}</p>
+                  <button className="btn btn-primary ml-auto follow-button" onClick={() => toggleFollow(user.id)}>
+                    {user.isFollowing ? 'Unfollow' : 'Follow'}
+                  </button>
+                </li>
+                ))}
+                </ul>
+                </div> 
+            </div>
+            <div className="d-grid gap-2 mt-3">
+                <Button
+                    className="custom-button"
+                    onClick={doneHandler}    
+                        >
+                        Done
+                </Button>
+            </div>
+            </Modal.Body>
+        </Modal>
+
+    );
+}
 
 
 
