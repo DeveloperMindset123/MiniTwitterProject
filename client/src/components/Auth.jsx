@@ -19,33 +19,12 @@ export default function Auth(props) {
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
 
-    const handleCorporateUserChange = () => {
-    	setIsCorporateUser(!isCorporateUser);
-	};
-    const openCorporateModal = () => {
-        setIsModalOpen(true);
-    };
-    const closeCorporateModal = () => {
-        setIsModalOpen(false);
-    };
-    const openSelectionModal = () => {
-        setIsSelectionModalOpen(true);
-    };
-
-    const closeSelectionModal = () => {
-        setIsSelectionModalOpen(false);
-    };
 	const handleSubmit = (event) => {
         event.preventDefault(); 
-        if (isCorporateUser) {
-            openCorporateModal();
-        } else{
-            openSelectionModal();
-        }
+        // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
+        isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(!isSelectionModalOpen);
     };
    
-
- 
     if (authMode == 'signin') {
         return (
             <div className="Auth-form-container">
@@ -141,7 +120,7 @@ export default function Auth(props) {
                                 type="checkbox"
                                 className="form-check-input"
                                 checked={isCorporateUser}
-                                onChange={handleCorporateUserChange}
+                                onChange={()=>setIsCorporateUser(!isCorporateUser)}
                                 style={{ marginRight: "10px" }}
                             />
                             <label>Corporate User</label>
@@ -158,25 +137,28 @@ export default function Auth(props) {
                 </div>
             </form>
             {isCorporateUser && (
-                <Corporate isModalOpen={isModalOpen} closePopup={closeCorporateModal} />
+                <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                // only click submit, the pop up can be opened, either Corporate User or normal user
             )}
-            {isSelectionModalOpen && <Selection closeSelectionModal={closeSelectionModal} />}
+            {isSelectionModalOpen &&
+             <Selection isSelectionModalOpen= {isSelectionModalOpen} setIsSelectionModalOpen={setIsSelectionModalOpen} />
+            }
 
         </div>
 
     )
 }
-function Corporate({ isModalOpen, closePopup }) {
+function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
 
- 
-    const openCustomerTargetModal = () => {
-        setIsCustomerTargetModalOpen(true);
-    };
+    const closePopup = () => {
+        setIsModalOpen(false);
+    }
 
-    const closeCustomerTargetModal = () => {
-        setIsCustomerTargetModalOpen(false);
-    };
+    const OnClickContinueHandler =() =>{
+        setIsCustomerTargetModalOpen(true);
+        closePopup()
+    }
     
     return (
     <div>
@@ -213,7 +195,7 @@ function Corporate({ isModalOpen, closePopup }) {
                     <div className="d-grid gap-2 mt-3">
                         <button
                             className="custom-button"
-                            onClick={openCustomerTargetModal} 
+                            onClick={OnClickContinueHandler}
                         >
                         Continue
                         </button>
@@ -225,7 +207,8 @@ function Corporate({ isModalOpen, closePopup }) {
         {isCustomerTargetModalOpen && (
                 <CustomerTarget
                     isCustomerTargetModalOpen={isCustomerTargetModalOpen}
-                    closeCustomerTargetModal={closeCustomerTargetModal}
+                    setIsCustomerTargetModalOpen={setIsCustomerTargetModalOpen}
+                    setIsModalOpen ={setIsModalOpen}
                 />
             )}
         </div>
@@ -233,7 +216,15 @@ function Corporate({ isModalOpen, closePopup }) {
     );
 }
 
-function CustomerTarget({isCustomerTargetModalOpen, closeCustomerTargetModal }) {
+function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
+
+    const closeCustomerTargetModal = () => {
+        setIsCustomerTargetModalOpen(false);
+    }
+
+    const doneHandler =() =>{
+        setIsCustomerTargetModalOpen(false);
+    }
    
     return (
         <Modal show={isCustomerTargetModalOpen} onHide={closeCustomerTargetModal} className="custom-modal">
@@ -324,9 +315,9 @@ function CustomerTarget({isCustomerTargetModalOpen, closeCustomerTargetModal }) 
                             />
                         </Form.Group>
                     </Form>
-                    <div className="d-grid gap-2 mt-3">
-                    <Button className="custom-button"variant="primary">
-                        Next
+                <div className="d-grid gap-2 mt-3">
+                    <Button className="custom-button"variant="primary" onClick={doneHandler}>
+                        Done
                     </Button>
                 </div>
             </Modal.Body>
@@ -334,12 +325,12 @@ function CustomerTarget({isCustomerTargetModalOpen, closeCustomerTargetModal }) 
     );
 }
 
-function Selection() {
-    const [show, setShow] = useState(false);
+function Selection({isSelectionModalOpen,setIsSelectionModalOpen}) {
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    const closeSelectionModal = () => {
+        setIsSelectionModalOpen(false);
+    };
+ 
     const [selectedInterests, setSelectedInterests] = useState([]);
     
     const interests = [
@@ -368,29 +359,22 @@ function Selection() {
         }
       };
 
-      const handleSubmit = (e) => {
-        e.preventDefault()
-            handleShow();
+      const handleSubmit = () => {
+
       };
 
 
   
     return (
       <>
-        <div className='d-grid gap-2 mt-3'>
-                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
-                            Submit
-                        </button>
-                    </div>
-  
         <Modal
-          show={show}
-          onHide={handleClose}
+          show={isSelectionModalOpen}
+          onHide={closeSelectionModal}
           backdrop="static"
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Select at least 3 interests to personalize your experience.</Modal.Title>
+            <Modal.Title>Personalization (Select at least 3) </Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <div className='Image-container'>
@@ -408,17 +392,18 @@ function Selection() {
                 </label>
             ))}
           </div>
+            <div className="d-grid gap-2 mt-3">
+                    <Button className="custom-button"variant="primary" onClick={handleSubmit}>
+                        Next
+                    </Button>
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button  onClick={handleClose}>
-              Back
-            </Button>
-            <Button >Next</Button>
-          </Modal.Footer>
         </Modal>
       </>
     );
   }
+
+  
 
 
 
