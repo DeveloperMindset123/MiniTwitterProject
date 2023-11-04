@@ -2,7 +2,7 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
@@ -50,7 +50,13 @@ app.post('/api/save-new-post', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   try {
     console.log('New Post: ' + uniquePost);
-    await SaveNewPost(uniquePost);
+    const response = await SaveNewPost(uniquePost);
+    
+    //if too many curses
+    if(response === false){
+      res.status(403).json({message:"Too many banned words detected, you have been warned."});
+      return;
+    }
 
     const requiredFields = ['userId', 'bodyText', 'hashTags'];
 
