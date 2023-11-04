@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
+import GoogleLogin from "react-google-login";
 
 //this part of the website will have the typical landing page of twitter, but instead with our logo
 
@@ -29,6 +30,28 @@ function Landing() {
     navigate('/'); //this will allow the user to navigate back to the landing page
   }
 
+  const responseGoogle = (response) => {
+    //Handle the response from google login
+    //You can send the reponse to the backend using an API call
+    //Example: send the response to the backend using fetch
+    fetch('/auth/google/callback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'applications/json'
+      },
+
+      body: JSON.stringify(response)
+    })
+    .then((res) => res.json())
+    .then((data)=> {
+      //Handle the response from the backend
+      //You can redirect the user or perform any other action
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);  //print out the error message
+    });
+  };
   return (
     
     <div> 
@@ -44,10 +67,20 @@ function Landing() {
               <center><h1 className="title-content">Bored? Join Now!</h1></center>
             </Row>
             <Row className="login-buttons">
-              <Button className="google-button" variant="outline-primary" size="lg">
+              
+              <Button clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com" className="google-button" variant="outline-primary" size="lg" onSuccess={responseGoogle} onFailure={responseGoogle} cookiePolicy={'single_host_origin'}> 
+
               <FontAwesomeIcon icon={faGoogle} size="sm" />
                 <span style={{margin: '10px' }}>Sign in with Google</span>
-              </Button>
+  </Button>
+  {/*}  
+              <GoogleLogin 
+                className="google-button"
+                clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com"
+                buttonText="Sign in with Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+  cookiePolicy={'single_host_origin'}/> */}
             </Row>
             <Row className="login-buttons">
               <Button className="apple-button" variant="outline-secondary" size="lg">

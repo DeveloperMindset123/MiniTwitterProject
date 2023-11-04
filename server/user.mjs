@@ -4,7 +4,7 @@ const USERS = 'userData';
 const DBNAME = 'deadBird';
 const POSTS = 'posts';
 
-export function mongoUri(){
+export function mongoUri(){  //extracts the mongoUri from the JSON file
     const filePath = 'mongoUri.json';
     try {
         const jsonContent = fs.readFileSync(filePath, 'utf8');
