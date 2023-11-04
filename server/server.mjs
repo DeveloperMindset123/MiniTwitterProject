@@ -6,11 +6,17 @@ import { SaveNewPost, UpdatePostCounter, FetchPosts } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
-import { OAuth2Client } from 'google-auth-library'; //imported by Ayan
+
 import jwt from 'jsonwebtoken'; //imported by Ayan
+//import { passport, app } from './passport.js';
+import pkg from './GoogleOAuth.cjs';
+const { passport: googlePassport, app: googleApp } = pkg;
+
+
 
 
 const app = express();
+//const app = express(); --> this shouldn't be neccessary
 const port = 4000;
 app.use(express.json());
 
@@ -193,107 +199,5 @@ async function connectDB(){
   }
 };
 connectDB();
-
-//the following is the code for Google Authentication
-//const session = require('express-session');
-//const passport = require('passport');
-
-//const GoogleStrategy = require('passport-google-oauth2');
-
-import session from 'express-session';
-import passport from 'passport';
-import GoogleStrategy  from 'passport-google-oauth2';
-
-//middleware
-app.use(session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: true,
-}))
-
-app.use(passport.initialize())  //init passport on every route call
-app.use(passport.session())  //allow passport to use "express-session"
-
-//Get the GOOGLE _CLIENT_ID and GOOGLE_CLIENT_SECRET from google developer console, which I have already done
-const GOOGLE_CLIENT_ID = "1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com"  //this is my unique ID
-const GOOGLE_CLIENT_SECRET = "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"  //this is my unique secret string
-
-const authUser = (request, accessToken, refreshToken, profile, done) => {
-    return done(null, profile);
-}
-
-//use "Google Strategy" as the Authentication strategy
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://localhost:4000/auth/google/callback",
-    passReqToCallback: true
-}, authUser));
-
-passport.serializeUser( (user, done) => {
-    console.log(`\n-----> Serialize User:`)
-    console.log(user);
-
-    //The user object is the "authenticated user" from the done() in authUser function
-    // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session
-    done(null, user);
-} )
-
-passport.deserializeUser((user, done) => {
-    console.log("\n-----Deserialized User:")
-    console.log(user);
-
-    //This is the {user} that was saved in req.session.passport.user.{user} in the serializationUser()
-    //deserializeUser will attach this {user} to the "req.user.{user}", so that it will be used anywhere in the App.
-    
-    done(null, user)
-})
-
-//no need to start the nodejs server since it's already running
-//console.log() values of "req.session" and "req.user" so that we can see what is happening during Google Authentication
-let count = 1;
-const showlogs = (req, res, next) => {
-  console.log("\n========================");
-  console.log(`----------->$(count++)`)
-
-  console.log(`\n req.session.passport ----------> `);
-  console.log(req.session.passport);
-
-  console.log(`\n req.user --------->`);
-  console.log(req.user);
-
-  console.log("\n Session and Cookie");
-  console.log(`req.session.id ---------->${req.session.id}`);  //this will display the id of the user
-  console.log(`req.session.cookie ---------> `);  
-  console.log(req.session.cookie);  //this will display the cookie of the user
-
-  console.log("=====================================\n");
-
-  next();
-}
-
-app.use(showlogs);  //this will display all the 
-
-app.get('/auth/google/callback',
-  passport.authenticate( 'google', {
-    successRedirect: 'http://localhost:5173', //redirect the user to the home page if login using google is successful
-    failureRedirect: 'http://localhost:5173/Landing',  //redirect the user back to the landing page if login isn't successful
-  })
-);
-
-//define the login route
-app.get("/login", (req, res) => {
-  res.render("http://localhost:5173/Landing");  //this may need adjustment
-});
-
-//define the protected route, by using the "checkAuthenticated" function defined above as middleware
-app.get("/dashboard", checkAuthenticated, (req, res) => {
-  res.render("client/src/components/dashboard.ejs", {name: req.user.displayName});
-})
-
-//define the logout functionality
-app.post("/logout", (req, res) => {
-  req.logOut();
-  res.redirect("http://localhost:5173/Landing");
-  console.log(`----------> User Logged out`);
-})
+googlePassport.authenticate();
+app.use(googleApp);
