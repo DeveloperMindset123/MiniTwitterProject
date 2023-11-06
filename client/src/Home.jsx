@@ -3,7 +3,6 @@ import { Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
-import '../src/styles/topbar.css';
 
 function FetchPosts() {
   const [posts, setPosts] = useState([]);
@@ -53,20 +52,13 @@ function FetchPosts() {
 
 const Home = () => {
   return (
-    <div>
-      <div className="top-bar">
-        <div className="slogan">Connect More</div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
-          <button>Search</button>
-        </div>
-      </div>
-      
+    <div> 
       <div className="home-container">
         <Row>
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
               <ul>
+              <div className="slogan">Connect More</div>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Notifications</a></li>
                 <li><a href="#">Community</a></li>
@@ -85,19 +77,12 @@ const Home = () => {
           <Col lg={7}> {/* Content */}
             <FetchPosts />
           </Col>
-          <Col lg={3}> {/* Messages Section */}
-            <div className="messages-section">
-              <h2>Messages</h2>
-              <div className="chat-box">
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                <div className="chat-message">Name</div>
-                {/* Add more chat messages here */}
+          <Col lg={3}> {/* AI Chat Bot */}
+            <div className="chat-bot">
+            <div className="search-bar">
+                <input type="text" placeholder="Search..." />
               </div>
+              <h2>AI Chat Bot</h2>
             </div>
           </Col>
         </Row>
