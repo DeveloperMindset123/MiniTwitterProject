@@ -2,7 +2,7 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts } from './posts.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
@@ -46,7 +46,6 @@ app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
     res.status(500).json({ message: 'Error updating post counter:', err });
   }
 });
-// apis for USER POST related functions
 // api for saving a brand new post
 app.post('/api/save-new-post', async (req, res) => {
   const uniquePost = req.body;
@@ -76,19 +75,6 @@ app.post('/api/save-new-post', async (req, res) => {
     res.status(500).json({ message: 'Error saving new post:', err });
   }
 });
-// api for updating post-counter (likes, reports, etc.)
-app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
-  const postId = req.params.postId;
-  const type = req.params.type;
-
-  try {
-    await UpdatePostCounter(postId, type);
-
-    res.status(200).json({ message: 'Post counter updated successfully!' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating post counter:', err });
-  }
-});
 // api for fetching all posts
 app.get('/api/fetch-posts', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -101,6 +87,19 @@ app.get('/api/fetch-posts', async (req, res) => {
     console.error('Error getting all posts', err);
     res.status(500).json({ error: 'Failed to fetch posts' });
   }
+});
+// api for deleting posts
+app.delete('/api/delete-post/:postId', async (req, res) => {
+    const postId = req.params.postId;
+    const result = await DeletePost(postId);
+
+    if (result === false) {
+        res.status(500).send('Internal Server Error');
+    } else if (result === 'Post not found') {
+        res.status(404).send('Post not found');
+    } else {
+        res.status(200).send('Post deleted successfully');
+    }
 });
 
 // apis for USER related functions
