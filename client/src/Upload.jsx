@@ -56,28 +56,11 @@ const Upload = () => {
       else {
         alert('Error saving new post: ' + response.data.error);
       }
+
       // charge account if overflow
-      if(textOverflow>0){ // replace with update user api
-        const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 201) {
-        alert('Post saved successfully!', response);
-        setUserId('');
-        setBodyText('');
-      }
-      if(response.status === 400){
-        alert('Bad Request: ' + response.data.error);
-      }
-      else {
-        alert('Error saving new post: ' + response.data.error);
-      }
-
-      }
-    } catch (err) {
+      // first GET the user -> create new updated user with money reducted
+      // need to set up user session first
+      } catch (err) {
       if(err.response.status === 403){
         alert(err.response.data.message);
       } else{
