@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
+import Upload from './Upload';
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -114,6 +115,7 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
+            <Upload></Upload>
             <FetchPosts />
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
