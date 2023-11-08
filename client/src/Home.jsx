@@ -40,7 +40,6 @@ async function UpdatePostCounter(postId, type){
     throw error; // Re-throw the error to be handled by the caller
   }
 }
-
 function FetchPosts() {
   const [posts, setPosts] = useState([]);
 
@@ -78,7 +77,7 @@ function FetchPosts() {
                 <p className="card-text">Hashtags: {post.hashTags}</p>
                 <p className='timestamp'>{post.time}</p>
                 <p className='likes, posts, reviews'>Likes:{post.likes} Reports:{post.reports} Views:{post.views}</p>
-                <button className="delete" onClick={() => Delete(post._id)}>Delete</button>
+                <button className="delete" onClick={() => Delete(post._id)}>Delete</button> {/* add condition to only allow user who posted and SU to change */}
                 <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}>Report</button>
                 <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}>Like</button>
               </div>
