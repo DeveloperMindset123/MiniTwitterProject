@@ -221,7 +221,6 @@ function Corporate({ isModalOpen, closePopup }) {
                 </div>
             </Modal.Body>
         </Modal>
-
         {isCustomerTargetModalOpen && (
                 <CustomerTarget
                     isCustomerTargetModalOpen={isCustomerTargetModalOpen}
@@ -381,7 +380,7 @@ function Selection() {
                         <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
                             Submit
                         </button>
-                    </div>
+    </div>
   
         <Modal
           show={show}
