@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 //set up the authentication
 import React, { useState } from 'react';
@@ -215,6 +213,7 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
                 </div>
             </Modal.Body>
         </Modal>
+
         {isCustomerTargetModalOpen && (
                 <CustomerTarget
                     isCustomerTargetModalOpen={isCustomerTargetModalOpen}
@@ -340,13 +339,7 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
       };
 
     return (
-      <>
-        <div className='d-grid gap-2 mt-3'>
-                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
-                            Submit
-                        </button>
-    </div>
-  
+      <div>
         <Modal
           show={isSelectionModalOpen}
           onHide={closeSelectionModal}
@@ -379,7 +372,9 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
             </div>
           </Modal.Body>
         </Modal>
-        </>
+
+        
+      </div>
     );
   }
 
