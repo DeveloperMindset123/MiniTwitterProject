@@ -215,7 +215,6 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
                 </div>
             </Modal.Body>
         </Modal>
-
         {isCustomerTargetModalOpen && (
                 <CustomerTarget
                     isCustomerTargetModalOpen={isCustomerTargetModalOpen}
@@ -341,7 +340,13 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
       };
 
     return (
-      <div>
+      <>
+        <div className='d-grid gap-2 mt-3'>
+                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
+                            Submit
+                        </button>
+    </div>
+  
         <Modal
           show={isSelectionModalOpen}
           onHide={closeSelectionModal}
@@ -374,9 +379,7 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
             </div>
           </Modal.Body>
         </Modal>
-
-        
-      </div>
+        </>
     );
   }
 
