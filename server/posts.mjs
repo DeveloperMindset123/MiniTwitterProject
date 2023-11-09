@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'fs';
 const DATE = new Date(); // uses UTC time - ooordinated universal time
 const POSTS = 'posts';
@@ -11,6 +11,17 @@ export function mongoUri(){
         const config = JSON.parse(jsonContent);
 
         return config.uri;
+    } catch (err) {
+        console.error('Error reading or parsing the JSON file:', err);
+    }
+}
+function getBannedWords(){
+    const filePath = 'bannedWords.json';
+    try {
+        const jsonContent = fs.readFileSync(filePath, 'utf8');
+        const config = JSON.parse(jsonContent);
+
+        return config.banned;
     } catch (err) {
         console.error('Error reading or parsing the JSON file:', err);
     }
@@ -29,8 +40,29 @@ export class Post {
     }
 }
 export async function SaveNewPost(uniquePost) {
+    const BANNEDWORDS = getBannedWords();
+    // fitler
+    function filterText(text) {
+        let counter = 0;
+        const filteredText = text.replace(/\b\w+\b/g, (match) => {
+            if (BANNEDWORDS.includes(match.toLowerCase())) {
+                counter++;
+                return '*'.repeat(match.length);
+            }
+            return match;
+        });
+
+        return { counter, filteredText };
+    }
+    if(filterText(uniquePost.bodyText).counter >2){
+        console.log("Too many banned words!");
+        return false;
+    } else{
+        uniquePost.bodyText = filterText(uniquePost.bodyText).filteredText;
+    }
+
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(mongoUri());
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -45,13 +77,13 @@ export async function SaveNewPost(uniquePost) {
 }
 export async function UpdatePostCounter(postId, type) {
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(mongoUri());
         await client.connect();
 
         const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
-        const postObject = await collection.findOne({ postId });
+        const postObject = await collection.findOne({ '_id': new ObjectId(postId) });
 
         if (!postObject) {
             console.error('Post not found!');
@@ -72,7 +104,7 @@ export async function UpdatePostCounter(postId, type) {
             console.error('Invalid Update Command Type!');
         }
 
-        await collection.updateOne({ postId }, { $set: postObject });
+        await collection.updateOne({ '_id': new ObjectId(postId) }, { $set: postObject });
 
         await client.close();
     } catch (err) {
@@ -81,7 +113,7 @@ export async function UpdatePostCounter(postId, type) {
 }
 export async function FetchPosts(){
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(mongoUri());
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -102,19 +134,19 @@ export async function FetchPosts(){
 }
 export async function DeletePost(postId){
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(mongoUri());
         await client.connect();
 
         const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
-        const query = { postId: postId };
+        const query = { '_id': new ObjectId(postId) };
         const post = await collection.findOne(query);
 
         if (!post) {
             console.error('Post not found!');
             await client.close();
-            return;
+            return false;
         }
 
         // delete logic

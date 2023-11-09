@@ -2,11 +2,21 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts } from './database.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import fs from 'fs';
+import cors from 'cors';  //imported by Ayan
+
+import jwt from 'jsonwebtoken'; //imported by Ayan
+//import { passport, app } from './passport.js';
+import pkg from './GoogleOAuth.cjs';
+const { passport: googlePassport, app: googleApp } = pkg;
+
+
+
 
 const app = express();
+//const app = express(); --> this shouldn't be neccessary
 const port = 4000;
 app.use(express.json());
 
@@ -36,7 +46,6 @@ app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
     res.status(500).json({ message: 'Error updating post counter:', err });
   }
 });
-// apis for USER POST related functions
 // api for saving a brand new post
 app.post('/api/save-new-post', async (req, res) => {
   const uniquePost = req.body;
@@ -46,7 +55,13 @@ app.post('/api/save-new-post', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   try {
     console.log('New Post: ' + uniquePost);
-    await SaveNewPost(uniquePost);
+    const response = await SaveNewPost(uniquePost);
+    
+    //if too many curses
+    if(response === false){
+      res.status(403).json({message:"Too many banned words detected, you have been warned."});
+      return;
+    }
 
     const requiredFields = ['userId', 'bodyText', 'hashTags'];
 
@@ -58,19 +73,6 @@ app.post('/api/save-new-post', async (req, res) => {
     res.status(201).json({ message: 'Post saved successfully!' });
   } catch (err) {
     res.status(500).json({ message: 'Error saving new post:', err });
-  }
-});
-// api for updating post-counter (likes, reports, etc.)
-app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
-  const postId = req.params.postId;
-  const type = req.params.type;
-
-  try {
-    await UpdatePostCounter(postId, type);
-
-    res.status(200).json({ message: 'Post counter updated successfully!' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating post counter:', err });
   }
 });
 // api for fetching all posts
@@ -85,6 +87,19 @@ app.get('/api/fetch-posts', async (req, res) => {
     console.error('Error getting all posts', err);
     res.status(500).json({ error: 'Failed to fetch posts' });
   }
+});
+// api for deleting posts
+app.delete('/api/delete-post/:postId', async (req, res) => {
+    const postId = req.params.postId;
+    const result = await DeletePost(postId);
+
+    if (result === false) {
+        res.status(500).send('Internal Server Error');
+    } else if (result === 'Post not found') {
+        res.status(404).send('Post not found');
+    } else {
+        res.status(200).send('Post deleted successfully');
+    }
 });
 
 // apis for USER related functions
@@ -183,3 +198,5 @@ async function connectDB(){
   }
 };
 connectDB();
+googlePassport.authenticate();
+app.use(googleApp);
