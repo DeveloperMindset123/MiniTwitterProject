@@ -7,6 +7,7 @@ import Landing from './Landing';
 import Upload from './Upload';
 import User from './User';
 import Auth from './components/Auth';
+import Terms from './components/Terms';
 
 const App = () => {
 
@@ -15,12 +16,13 @@ const App = () => {
 
     return (
       <BrowserRouter>
-        <Routes>
+        <Routes> 
             <Route path='/' element={<Home />} />
             <Route path='/Landing' element={<Landing />} />
             <Route path='/Upload' element={<Upload />} />
             <Route path='/User' element={<User />} />
             <Route path='/Auth' element={<Auth/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
+            {/*<Route path='/Terms' element={<Terms />} />  *Link pointing to a random terms and condition that was generated  */}
         </Routes>
       </BrowserRouter>
     );

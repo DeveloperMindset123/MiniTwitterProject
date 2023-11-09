@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState }  from "react";
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 //import { Container, Row, Col, Button } from "react-bootstrap"; --> import them individually instead
 import { faApple, faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -13,7 +14,7 @@ import Row from 'react-bootstrap/Row';
 import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
 
 //this part of the website will have the typical landing page of twitter, but instead with our logo
-
+//just follow this tutorial: https://www.sitepoint.com/google-auth-react-express/
 function Landing() {
 
   //define the useNavigate function
@@ -28,6 +29,23 @@ function Landing() {
     //navigate to home
     navigate('/'); //this will allow the user to navigate back to the landing page
   }
+
+  const [user, setUser] = useState(null);
+  const handleGoogleLogin = async () => {
+    try {
+      //Make a post request to the backend endpoint for Google Authentication
+      const response = await axios.post("http://localhost:5173/auth/google/callback");  //update this to have the correct api endpoint connected to the backend
+
+      //handle the response from the backend
+      const userData = response.data;
+
+      //update the state of the user's information
+      setUser(userData);
+    } catch(error) {
+      console.error("Error during google login: ", error);
+    }
+  }
+
 
   return (
     
@@ -44,10 +62,19 @@ function Landing() {
               <center><h1 className="title-content">Bored? Join Now!</h1></center>
             </Row>
             <Row className="login-buttons">
-              <Button className="google-button" variant="outline-primary" size="lg">
+              <Button  className="google-button" variant="outline-primary" size="lg" onClick={handleGoogleLogin}> 
+
               <FontAwesomeIcon icon={faGoogle} size="sm" />
                 <span style={{margin: '10px' }}>Sign in with Google</span>
-              </Button>
+  </Button>
+  {/*}  
+              <GoogleLogin 
+                className="google-button"
+                clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com"
+                buttonText="Sign in with Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+  cookiePolicy={'single_host_origin'}/> */}
             </Row>
             <Row className="login-buttons">
               <Button className="apple-button" variant="outline-secondary" size="lg">

@@ -26,3 +26,4 @@ dist-ssr
 # Data
 src/backend/postsMin.json
 server/mongoUri.json
+server/apiKey.json
