@@ -46,7 +46,7 @@ label {
 
 
   .interest-image {
-    border: 2px solid #c3389e;
+/*     border: 2px solid #c3389e; */
     cursor: pointer;
     max-width: 150px; 
     max-height: 100px; 

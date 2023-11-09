@@ -5,7 +5,7 @@ import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-//import Selection from './Selection'
+
 
 export default function Auth(props) {
 
@@ -285,7 +285,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
                     ))}
                 </Form>
                 <div className="d-grid gap-2 mt-3">
-                    <Button className="custom-button"variant="primary" onClick={doneHandler}>
+                    <Button  className="custom-button"variant="primary" onClick={doneHandler}>
                         Done
                     </Button>
                 </div>
