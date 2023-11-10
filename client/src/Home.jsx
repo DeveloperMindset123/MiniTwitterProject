@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
-import Upload from './Upload';
+import Upload from './Upload.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -73,7 +73,7 @@ function FetchPosts() {
     <div className="container">
       <div className="row">
         {posts.map((post, index) => (
-          <div className="col-md-4" key={index}>
+          <div className="col-md-12" key={index}>
             <div className="card">
               <div className="card-body">
                 <p><i>User ID: {post.userId}</i></p>

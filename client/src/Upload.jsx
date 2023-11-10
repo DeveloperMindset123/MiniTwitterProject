@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {Post} from './dataTypes/UploadDB.js';
+import {Post} from './components/UploadDB.js';
 
 const Upload = () => {
   const [userId, setUserId] = useState('');
@@ -9,7 +9,7 @@ const Upload = () => {
   const [textOverflow, setTextOverFlow] = useState('');
   const [hashOverflow, setHashOverFlow] = useState(false)
 
-  useEffect(()=>{ 
+  useEffect(()=>{ // post button validation
     // sets condition to hit submit (body must be larger than 2 chars and hashtags <=3)
     setFormValid(bodyText.length > 1 && !hashOverflow);
 
