@@ -33,15 +33,17 @@
 
 .sign-out {
     margin-top: auto; /* Push "Sign Out" to the bottom */
-    display: block;
+    /*display: block;*/
     text-align: center; /* Center the text */
     padding: 10px 0; /* Apply padding to match the other menu items */
+    display: flex;
+    align-items: center; /* Align items vertically centered */
 }
   
 .sign-out button {
     color: white;
     text-decoration: none;
-    font-size: 21px;
+    font-size: 24px;
     background-color: #333; /* Apply the same background color as the sidebar */
     display: block;
     width: 100%;
@@ -60,4 +62,11 @@
     text-align: center;
     padding: 5px;
     
-} 
+}
+
+.icon {
+    margin-right: 5px; /* Adjust the spacing between the icon and text */
+    color: white; /* Set the color of the icons to white */
+  }
+
+ 

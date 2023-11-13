@@ -4,6 +4,9 @@ import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import Upload from './Upload';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faUpload, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -99,18 +102,18 @@ const Home = () => {
             <div className="sidebar">
               <ul>
               <div className="slogan">Connect More</div>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Notifications</a></li>
-                <li><a href="#">Community</a></li>
-                <li><a href="#">Bookmarks</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Lists</a></li>
-                <li><a href="#">More</a></li>
-                <li><a href='./upload'>Upload</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
+                <li><a href='./upload'><FontAwesomeIcon icon={faUpload} className="icon" /> Upload</a></li>
               </ul>
               <div className="sign-out">
-                <button>Sign Out</button>
+                <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button>
               </div>
             </div>
           </Col>
