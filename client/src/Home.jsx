@@ -5,7 +5,7 @@ import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import Upload from './Upload';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faUpload, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 async function Delete(_id) {
@@ -110,7 +110,8 @@ const Home = () => {
                 <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
-                <li><a href='./upload'><FontAwesomeIcon icon={faUpload} className="icon" /> Upload</a></li>
+                <li><a href='./upload'><FontAwesomeIcon icon={faPlus} className="icon" /> New Post</a></li> 
+                
               </ul>
               <div className="sign-out">
                 <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button>
