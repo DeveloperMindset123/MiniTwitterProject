@@ -5,8 +5,8 @@ import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import Upload from './Upload';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faUpload, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faUpload, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment} from '@fortawesome/free-solid-svg-icons';
+import '../src/styles/Home.css';
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -73,17 +73,24 @@ function FetchPosts() {
     <div className="container">
       <div className="row">
         {posts.map((post, index) => (
-          <div className="col-md-4" key={index}>
+          <div className="post-container " key={index}>
             <div className="card">
               <div className="card-body">
-                <p><i>User ID: {post.userId}</i></p>
+                <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
                 <h5 className="card-title">{post.bodyText}</h5>
-                <p className="card-text">Hashtags: {post.hashTags}</p>
+                <div className="post-image">
+                <img src="" alt="Image"/>
+              </div>
+                <p className="card-text">{post.hashTags}</p>
+                <p className='likes, posts, reviews,comments'>
+                <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faHeart} />{post.likes}</button>&nbsp;&nbsp;
+                <button className="comment" onClick={() => UpdatePostCounter(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
+                <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
+                <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
+                <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> {/* add condition to only allow user who posted and SU to change */}
+                <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                </p>
                 <p className='timestamp'>{post.time}</p>
-                <p className='likes, posts, reviews'>Likes:{post.likes} Reports:{post.reports} Views:{post.views}</p>
-                <button className="delete" onClick={() => Delete(post._id)}>Delete</button> {/* add condition to only allow user who posted and SU to change */}
-                <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}>Report</button>
-                <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}>Like</button>
               </div>
             </div>
           </div>
