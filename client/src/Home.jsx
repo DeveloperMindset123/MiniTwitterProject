@@ -44,8 +44,9 @@ async function UpdatePostCounter(postId, type){
     throw error; // Re-throw the error to be handled by the caller
   }
 }
-function FetchPosts() {
+async function FetchPosts() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     async function fetchData() {
@@ -57,19 +58,25 @@ function FetchPosts() {
         });
 
         if (response.status === 200) {
-          const data = response.data;
-          setPosts(data);
+          setPosts(response.data);
         } else {
           console.error('Error fetching data');
         }
       } catch (error) {
         console.error('Error fetching data', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     }
 
     fetchData();
-  }, []); // The empty dependency array ensures this runs once when the component mounts  
-  return (
+  }, []); // The empty dependency array ensures this runs once when the component mounts
+
+  // Conditional rendering based on loading state
+  if (loading) {
+    return <h1>Loading...</h1>;
+  } else {
+    return (
     <div className="container">
       <div className="row">
         {posts.map((post, index) => (
@@ -79,11 +86,12 @@ function FetchPosts() {
                 <p><i>User ID: {post.userId}</i></p>
                 <h5 className="card-title">{post.bodyText}</h5>
                 <p className="card-text">Hashtags: {post.hashTags}</p>
-                <p className='timestamp'>{post.time}</p>
-                <p className='likes, posts, reviews'>Likes:{post.likes} Reports:{post.reports} Views:{post.views}</p>
+                <p className='timestamp'>{post.time}</p> 
+                <p className='likes, posts, reviews'>Likes:{post.likes} Dislikes:{post.dislikes} Reports:{post.reports} Views:{post.views}</p>
                 <button className="delete" onClick={() => Delete(post._id)}>Delete</button> {/* add condition to only allow user who posted and SU to change */}
                 <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}>Report</button>
                 <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}>Like</button>
+                <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}>Dislike</button>
               </div>
             </div>
           </div>
@@ -91,8 +99,12 @@ function FetchPosts() {
       </div>
     </div>
   );
+        }
 }
-
+function Trending(){
+  //
+  return null;
+}
 const Home = () => {
   return (
     <div> 
@@ -120,7 +132,8 @@ const Home = () => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload></Upload>
-            <FetchPosts />
+            {FetchPosts() ? <h1>Loading</h1> : <FetchPosts/>}
+            {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
@@ -135,6 +148,4 @@ const Home = () => {
     </div>
   );
 }
-
-
 export default Home;
