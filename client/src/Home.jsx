@@ -44,14 +44,14 @@ async function UpdatePostCounter(postId, type){
     throw error; // Re-throw the error to be handled by the caller
   }
 }
-function FetchPosts() {
+function FetchPosts(type) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:4000/api/fetch-posts', {
+        const response = await axios.get(`http://localhost:4000/api/fetch-${type.type}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -112,10 +112,6 @@ function FetchPosts() {
     </div>
   );
 }
-}
-function Trending(){
-  //
-  return null;
 }
 function ElonGPT() {
   const [userInput, setUserInput] = useState('');
@@ -195,7 +191,7 @@ const Home = () => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload></Upload>
-            <FetchPosts/>
+            <FetchPosts type={'posts'}/> {/* hardcoded to regular posts at the moment */}
             {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
