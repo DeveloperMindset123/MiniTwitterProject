@@ -4,16 +4,13 @@ import mongoose from 'mongoose';
 import express, { json } from 'express';
 import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
+import { askChatGPT } from './chatbot.mjs';
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
-
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
 import pkg from './GoogleOAuth.cjs';
 const { passport: googlePassport, app: googleApp } = pkg;
-
-
-
 
 const app = express();
 //const app = express(); --> this shouldn't be neccessary
@@ -178,6 +175,19 @@ app.post('/api/delete-user', async (req, res) => {
     res.status(201).json({ message: 'User deleted successfully!' });
   } catch (err) {
     res.status(500).json({ message: 'Error deleting user:', err });
+  }
+});
+// api for calling gpt (req must be a string)
+app.post('/api/askGPT', async (req,res)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+  try {
+    const response = await askChatGPT(String(req.question));
+
+    res.status(201).json({ response });
+  } catch (err) {
+    res.status(500).json({ message: 'Error calling gpt:', err });
   }
 });
 

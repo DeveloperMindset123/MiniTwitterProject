@@ -44,7 +44,7 @@ async function UpdatePostCounter(postId, type){
     throw error; // Re-throw the error to be handled by the caller
   }
 }
-async function FetchPosts() {
+function FetchPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
 
@@ -99,11 +99,62 @@ async function FetchPosts() {
       </div>
     </div>
   );
-        }
+}
 }
 function Trending(){
   //
   return null;
+}
+function ElonGPT() {
+  const [userInput, setUserInput] = useState('');
+  const [conversation, setConversation] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:4000/api/askGPT', {
+        input: userInput,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        setConversation([...conversation, { user: userInput, ai: response.data }]);
+      } else {
+        console.error('Error fetching data');
+      }
+    } catch (error) {
+      console.error('Error fetching data', error);
+    } finally {
+      setLoading(false);
+      setUserInput(''); // Clear input field after submission
+    }
+  };
+
+  return (
+    <div className="container">
+      <div className="input-form">
+        <input type="text" value={userInput} onChange={handleInputChange} placeholder="Type your message here" />
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Sending...' : 'Submit'}
+        </button>
+      </div>
+      <div className="conversation">
+        {conversation.map((entry, index) => (
+          <div key={index}>
+            <p><strong>You:</strong> {entry.user}</p>
+            <p><strong>AI:</strong> {entry.ai}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 const Home = () => {
   return (
@@ -132,7 +183,7 @@ const Home = () => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload></Upload>
-            {FetchPosts() ? <h1>Loading</h1> : <FetchPosts/>}
+            <FetchPosts/>
             {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
@@ -140,7 +191,8 @@ const Home = () => {
             <div className="search-bar">
                 <input type="text" placeholder="Search..." />
               </div>
-              <h2>AI Chat Bot</h2>
+              <h2>Talk to Elon!</h2>
+              <ElonGPT/>
             </div>
           </Col>
         </Row>
