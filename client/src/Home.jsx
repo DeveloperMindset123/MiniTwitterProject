@@ -3,9 +3,9 @@ import { Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
-import Upload from './Upload';
+import Upload from './Upload.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faUpload, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment} from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 
 async function Delete(_id) {
@@ -46,6 +46,7 @@ async function UpdatePostCounter(postId, type){
 }
 function FetchPosts() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     async function fetchData() {
@@ -57,19 +58,25 @@ function FetchPosts() {
         });
 
         if (response.status === 200) {
-          const data = response.data;
-          setPosts(data);
+          setPosts(response.data);
         } else {
           console.error('Error fetching data');
         }
       } catch (error) {
         console.error('Error fetching data', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     }
 
     fetchData();
-  }, []); // The empty dependency array ensures this runs once when the component mounts  
-  return (
+  }, []); // The empty dependency array ensures this runs once when the component mounts
+
+  // Conditional rendering based on loading state
+  if (loading) {
+    return <h1>Loading...</h1>;
+  } else {
+    return (
     <div className="container">
       <div className="row">
         {posts.map((post, index) => (
@@ -99,7 +106,62 @@ function FetchPosts() {
     </div>
   );
 }
+}
+function Trending(){
+  //
+  return null;
+}
+function ElonGPT() {
+  const [userInput, setUserInput] = useState('');
+  const [conversation, setConversation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:4000/api/askGPT', {
+        input: userInput,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        setConversation([...conversation, { user: userInput, ai: response.data }]);
+      } else {
+        console.error('Error fetching data');
+      }
+    } catch (error) {
+      console.error('Error fetching data', error);
+    } finally {
+      setLoading(false);
+      setUserInput(''); // Clear input field after submission
+    }
+  };
+
+  return (
+    <div className="container">
+      <div className="input-form">
+        <input type="text" value={userInput} onChange={handleInputChange} placeholder="Type your message here" />
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Sending...' : 'Submit'}
+        </button>
+      </div>
+      <div className="conversation">
+        {conversation.map((entry, index) => (
+          <div key={index}>
+            <p><strong>You:</strong> {entry.user}</p>
+            <p><strong>AI:</strong> {entry.ai}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 const Home = () => {
   return (
     <div> 
@@ -117,7 +179,8 @@ const Home = () => {
                 <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
-                <li><a href='./upload'><FontAwesomeIcon icon={faUpload} className="icon" /> Upload</a></li>
+                <li><a href='./upload'><FontAwesomeIcon icon={faPlus} className="icon" /> New Post</a></li> 
+                
               </ul>
               <div className="sign-out">
                 <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button>
@@ -126,14 +189,16 @@ const Home = () => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload></Upload>
-            <FetchPosts />
+            <FetchPosts/>
+            {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
             <div className="search-bar">
                 <input type="text" placeholder="Search..." />
               </div>
-              <h2>AI Chat Bot</h2>
+              <h2>Talk to Elon!</h2>
+              <ElonGPT/>
             </div>
           </Col>
         </Row>
@@ -141,6 +206,4 @@ const Home = () => {
     </div>
   );
 }
-
-
 export default Home;

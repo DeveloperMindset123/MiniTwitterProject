@@ -35,6 +35,7 @@ export class Post {
         this.imageId = imageId;
         this.time = DATE;
         this.likes = 0;
+        this.dislikes = 0;
         this.reports = 0;
         this.views = 0;
     }
@@ -93,6 +94,9 @@ export async function UpdatePostCounter(postId, type) {
         switch (type) {
             case 'like':
             postObject.likes++;
+            break;
+            case 'dislike':
+            postObject.dislikes++;
             break;
             case 'report':
             postObject.reports++;
@@ -159,8 +163,62 @@ export async function DeletePost(postId){
         return false;
     }
 }
+
+// Search Functions
+export async function Search(hashTags){ // takes array of hashtags as input
+    try {
+        const client = new MongoClient(mongoUri());
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+        const query = {
+            hashTags: { $all: hashTags }
+        };
+        const posts = await collection.find(query).toArray();
+
+        if (!posts) {
+            console.error('Post not found!');
+            return;
+        }
+
+        await client.close();
+        return posts;
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+    }
+}
+export async function FetchTrending(){
+    // logic:
+    // Any message with >10 reads, #likes - #dislikes>3
+    // will be promoted to “trendy post” shown in the 
+    // 'trending tab'.
+    
+    try {
+        const client = new MongoClient(mongoUri());
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+        const query = {
+            $expr: { $gt: [{ $subtract: ["$likes", "$dislikes"] }, 3] }
+        };
+        const posts = await collection.find(query).toArray();
+
+        if (!posts) {
+            console.error('Post not found!');
+            return;
+        }
+
+        await client.close();
+        return posts;
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+    }
+}
 'Usage examples:'
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
 // UpdatePostCounter(2, 'like');
 // console.log(await FetchPosts());
 // DeletePost(65306);
+// console.log(await FetchTrending());
