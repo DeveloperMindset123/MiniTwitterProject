@@ -2,7 +2,7 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost } from './posts.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
 import { askChatGPT } from './chatbot.mjs';
 import fs from 'fs';
@@ -98,6 +98,16 @@ app.delete('/api/delete-post/:postId', async (req, res) => {
         res.status(200).send('Post deleted successfully');
     }
 });
+app.get('/api/fetch-trendy', async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  try {
+    const response = await FetchTrending();
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching trendy posts:', err });
+  }
+});
 
 // apis for USER related functions
 // api for creating new user
@@ -163,7 +173,7 @@ app.post('/api/update-user', async (req, res) => {
     res.status(500).json({ message: 'Error saving updated user:', err });
   }
 });
-//api for deleting users
+//api for deleting users (takes in object userName)
 app.post('/api/delete-user', async (req, res) => {
   const userName = req.body.userName;
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -177,7 +187,7 @@ app.post('/api/delete-user', async (req, res) => {
     res.status(500).json({ message: 'Error deleting user:', err });
   }
 });
-// api for calling gpt (req must be a string)
+// api for calling gpt (req must be a object 'question' with a string)
 app.post('/api/askGPT', async (req,res)=>{
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');

@@ -14,28 +14,7 @@
 .avatar-icon{
     margin-right: 15px;
 }
-.like{
-    background-color: transparent;
-    border-color: transparent;
-}
-.report{
-    background-color: transparent;
-    border-color: transparent;
-}
-.view{
-    background-color: transparent;
-    border-color: transparent;
-}
-.delete{
-    background-color: transparent;
-    border-color: transparent;
-    margin-left: 450px;
-}
-.edit{
-    background-color: transparent;
-    border-color: transparent;
-}
-.comment{
+button{
     background-color: transparent;
     border-color: transparent;
 }

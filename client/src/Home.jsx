@@ -5,7 +5,7 @@ import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import Upload from './Upload.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment, faThumbsDown, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 
 async function Delete(_id) {
@@ -89,14 +89,20 @@ function FetchPosts() {
                 <img src="" alt="Image"/>
               </div>
                 <p className="card-text">{post.hashTags}</p>
-                <p className='likes, posts, reviews,comments'>
-                <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faHeart} />{post.likes}</button>&nbsp;&nbsp;
-                <button className="comment" onClick={() => UpdatePostCounter(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
-                <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
-                <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
-                <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> {/* add condition to only allow user who posted and SU to change */}
-                <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
-                </p>
+                <Row>
+                  <Col xl='10'> {/* Likes, Posts, Reviews, Comments */}
+                    <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faThumbsUp} />{post.likes}</button>&nbsp;&nbsp;
+                    <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}><FontAwesomeIcon icon={faThumbsDown} />{post.dislikes}</button>&nbsp;&nbsp;
+                    <button className="comment" onClick={() => UpdatePostCounter(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
+                    <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
+                    <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
+                  </Col>
+                  <Col> {/* Delete and Edit */}
+                    <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
+                    {/* add condition to only allow user who posted and SU to change */}
+                  </Col>
+                </Row>
                 <p className='timestamp'>{post.time}</p>
               </div>
             </div>
