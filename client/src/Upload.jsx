@@ -79,29 +79,27 @@ const Upload = () => {
 
 
   return (
-      <Form onSubmit={handleSubmit} > 
-        <Row >
-          <Col style={{padding: "5px", marginLeft:'288px'}}>
-            <label style ={{fontSize: "18px"}}
-            > UserID:</label>
-          </Col >
-          <Col style={{marginRight: '280px'}} >
-          <Form.Control style ={{width: '150.4px', height: '33px'}}
+    <div style={{/* justifyContent: 'center' */ marginLeft: "260px"}}>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group as={Row} style={{marginBottom: '1px'}}>
+          <Form.Label column lg="2"> UserID:</Form.Label>
+          <Col md ="10">
+          <Form.Control style ={{marginRight: '380px', width: '150.4px', height: '35px'}}
           placeholder="UserID" type="text" value={userId} 
           onChange={(event) => setUserId(event.target.value)}/>
           </Col>
-        </Row>
+        </Form.Group>
   {/*         <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} /> */}
   {/*       <label>BodyText (add hashtags with '#'):</label> */}
   {/*       <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} /> */}
 
-        <Row>
+        <Form.Group as={Row} >
           <Form.Control as="textarea" value={bodyText} 
             onChange={(event) => setBodyText(event.target.value)} 
-            style ={{marginLeft: '290px', width: '300.4px', height: '80.2px', resize: 'none', border: 'none' }}
+            style ={{marginLeft: '10px', width: '340.4px', height: '80.2px', resize: 'none', border: 'none' }}
             placeholder='What is Happening?!'
           />
-        </Row>
+        </Form.Group>
 
         {textOverflow > 0 && (
           <div> {/* for Common User */}
@@ -109,22 +107,21 @@ const Upload = () => {
           </div>
         )}
 
-        <Row>
-          <Col style={{marginTop: "5px"}}>
-            <Button size="sm" variant="dark" style={{marginLeft: '276px'}} >
+        <Form.Group as={Row} style={{marginTop: "5px"}}>
+          <Col>
+            <Button size="sm" variant="dark"  >
               <FontAwesomeIcon icon={faImage} size="sm" />
             </Button>
             <Button size="sm" variant="dark" style={{marginLeft: '1px'}}>
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
-          </Col>
-          <Col>
-          <Button size="sm" variant="dark" type="submit" disabled={!formValid} style={{margin: '6px 100px'}}>
+            <Button size="sm" variant="dark" type="submit" disabled={!formValid} style={{marginLeft: '200px'}}>
               Save Post
-          </Button>
+            </Button>
           </Col>
-        </Row>
+        </Form.Group>
       </Form>
+    </div>
   );
 };
 
