@@ -1,11 +1,12 @@
 import {React, useState, useEffect} from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import Upload from './Upload.jsx';
+import UploadPop_up from "./UploadPop_up.jsx"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt, faHeart, faFlag, faEye, faTrashAlt, faPen, faComment, faThumbsDown, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 
 async function Delete(_id) {
@@ -165,6 +166,7 @@ function ElonGPT() {
   );
 }
 const Home = () => {
+  const [showUpload, setShowUpload] = useState(false)
   return (
     <div> 
       <div className="home-container">
@@ -181,7 +183,16 @@ const Home = () => {
                 <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
-                <li><a href='./upload'><FontAwesomeIcon icon={faPlus} className="icon" /> New Post</a></li> 
+                <li><Button onClick={() => setShowUpload(!showUpload)} variant="dark" className="btn-lg">
+                  <FontAwesomeIcon icon={faPlus} className="icon" />
+                   New Post
+                   </Button>
+                   {showUpload &&(
+                    <UploadPop_up
+                      setShowUpload ={setShowUpload}
+                      showUpload ={showUpload}/>
+                   )}
+                   </li> 
                 
               </ul>
               <div className="sign-out">
@@ -190,8 +201,8 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
-            <Upload></Upload>
-            <FetchPosts type={'posts'}/> {/* hardcoded to regular posts at the moment */}
+                   <Upload/>
+            <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
