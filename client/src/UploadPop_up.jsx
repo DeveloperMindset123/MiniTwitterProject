@@ -91,6 +91,7 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
                     </Col>
                     <Col >
                         <Form.Control className='UserControlForm'
+                        style={{backgroundColor: '#333', color: 'rgb(205, 198, 198)', borderColor: '#42509e', borderWidth: '2px'}}
                         type="text" value={userId} 
                         onChange={(event) => setUserId(event.target.value)}/>
                     </Col>
@@ -98,7 +99,8 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
                 <Row style={{marginTop:"3px"}}>
                     <Form.Control as="textarea" value={bodyText} 
                     onChange={(event) => setBodyText(event.target.value)} 
-                    className='ControlForm'
+                    className= 'ControlForm'
+                    style={{backgroundColor: '#333', color: 'rgb(205, 198, 198)', border: 'none' }}
                     placeholder='What is happening?!'/>
 
                     {textOverflow > 0 && (
@@ -110,7 +112,7 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
             </Form>
 
             </Modal.Body>
-                <Modal.Footer className='DarkMode' >
+                <Modal.Footer style={{backgroundColor : '#333'}} >
                     <Col>
                         <Button  variant="dark" style={{marginRight: '1px'}} >
                         <FontAwesomeIcon icon={faImage} size="sm" />

@@ -206,7 +206,7 @@ const Home = () => {
           </Col>
           <Col lg={7}> {/* Content */}
                    <Upload/>
-            <FetchPosts/>
+            <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
