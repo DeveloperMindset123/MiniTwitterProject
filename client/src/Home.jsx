@@ -6,7 +6,8 @@ import '../src/styles/sidebar.css';
 import Upload from './Upload.jsx';
 import UploadPop_up from "./UploadPop_up.jsx"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag, 
+  faEye, faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 
 async function Delete(_id) {
