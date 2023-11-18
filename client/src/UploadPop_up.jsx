@@ -41,6 +41,8 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
   }, [bodyText, hashOverflow]);
 
   const handleSubmit = async (event) => {
+    console.log(1234)
+    setShowUpload(false)
     event.preventDefault();
     let hashTags = bodyText.match(/#\w+/g);
 
@@ -84,7 +86,6 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
             <CloseButton onClick={() => setShowUpload(false)} style={{marginLeft: '0'}}/>
         </Modal.Header>
         <Modal.Body className='DarkMode'>
-            <Form onSubmit={handleSubmit}>
                 <Row>
                     <Col  lg="1">
                         <label className='labelStyle'> UserID:</label>
@@ -109,7 +110,6 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
                         </div>
                     )}
                 </Row>
-            </Form>
 
             </Modal.Body>
                 <Modal.Footer style={{backgroundColor : '#333'}} >
@@ -121,7 +121,7 @@ const UploadPop_up = ({setShowUpload,showUpload}) => {
                         <FontAwesomeIcon icon={faFilm} size="sm" />
                         </Button>
                     </Col>
-                    <Button  variant="dark" type="submit" disabled={!formValid} style={{marginRight: '0'}}>
+                    <Button variant="dark" type="submit" onClick ={handleSubmit} disabled={!formValid} style={{marginRight: '0'}}>
                         Save Post
                     </Button>
             </Modal.Footer>
