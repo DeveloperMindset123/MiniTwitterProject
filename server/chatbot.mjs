@@ -3,11 +3,7 @@ import dotenv from 'dotenv/config'; // even tho its gray its needed
 import { resolve } from 'path';
 import { rejects } from 'assert';
 import { error } from 'console';
-const apiKey = process.env.OPENAI_API_KEY;
-
-const openai = new OpenAI({
-    apiKey: apiKey,
-});
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY,});
 
 let conversationHistory = [{"role": "system", "content": "You are a elon musk."}];
 
