@@ -3,18 +3,9 @@ import fs from 'fs';
 const DATE = new Date(); // uses UTC time - ooordinated universal time
 const POSTS = 'posts';
 const DBNAME = 'deadBird';
+import dotenv from 'dotenv/config'; // even tho its gray its needed
+const MONGOURI = process.env.MONOGODB;
 
-export function mongoUri(){
-    const filePath = 'mongoUri.json';
-    try {
-        const jsonContent = fs.readFileSync(filePath, 'utf8');
-        const config = JSON.parse(jsonContent);
-
-        return config.uri;
-    } catch (err) {
-        console.error('Error reading or parsing the JSON file:', err);
-    }
-}
 function getBannedWords(){
     const filePath = 'bannedWords.json';
     try {
@@ -63,7 +54,7 @@ export async function SaveNewPost(uniquePost) {
     }
 
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -78,7 +69,7 @@ export async function SaveNewPost(uniquePost) {
 }
 export async function UpdatePostCounter(postId, type) {
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -117,7 +108,7 @@ export async function UpdatePostCounter(postId, type) {
 }
 export async function FetchPosts(){
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -138,7 +129,7 @@ export async function FetchPosts(){
 }
 export async function DeletePost(postId){
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -167,7 +158,7 @@ export async function DeletePost(postId){
 // Search Functions
 export async function Search(hashTags){ // takes array of hashtags as input
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -195,7 +186,7 @@ export async function FetchTrending(){
     // 'trending tab'.
     
     try {
-        const client = new MongoClient(mongoUri());
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);

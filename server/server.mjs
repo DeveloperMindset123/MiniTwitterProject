@@ -10,25 +10,13 @@ import cors from 'cors';  //imported by Ayan
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
 import pkg from './GoogleOAuth.cjs';
+import dotenv from 'dotenv/config'; // even tho its gray its needed
+const MONGOURI = process.env.MONOGODB;
 const { passport: googlePassport, app: googleApp } = pkg;
-
 const app = express();
-//const app = express(); --> this shouldn't be neccessary
 const port = 4000;
 app.use(express.json());
-
-// Get Mongo URI
-export function mongoUri(){
-  const filePath = 'mongoUri.json';
-  try {
-    const jsonContent = fs.readFileSync(filePath, 'utf8');
-    const config = JSON.parse(jsonContent);
-
-    return config.uri;
-  } catch (err) {
-    console.error('Error reading or parsing the JSON file:', err);
-  }
-}
+app.use(cors());
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -208,7 +196,8 @@ app.listen(port, () => {
 
 async function connectDB(){
   try{
-    await mongoose.connect(mongoUri());
+    console.log(MONGOURI)
+    await mongoose.connect(MONGOURI);
     console.log("MongoDb Connected!");
   }
   catch(err){
