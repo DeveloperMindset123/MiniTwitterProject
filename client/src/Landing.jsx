@@ -2,7 +2,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useState }  from "react";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
+
+import { GoogleOAuthProvider , useGoogleLogin, GoogleLogin } from "@react-oauth/google";
+
 //import { Container, Row, Col, Button } from "react-bootstrap"; --> import them individually instead
 import { faApple, faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +14,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
+import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY\
+
 
 //this part of the website will have the typical landing page of twitter, but instead with our logo
 //just follow this tutorial: https://www.sitepoint.com/google-auth-react-express/
@@ -20,10 +24,19 @@ function Landing() {
   //define the useNavigate function
   const navigate = useNavigate();
 
-  const navigateToAuthentication = () => {
-    //navigate to contacts
-    navigate('/Auth');
+  const navigateToAuthentication = async () => {  //if using await, the function needs to be async
+    try {
+      const response = await axios.get("http://localhost:4000/auth/google/success");
+      console.log(response.data);  //will display the user's info
+      //navigate to contacts
+      navigate('/Auth');
+    } catch (error) {
+      console.error("Login failed", "error")
+    }
   };
+
+  
+
 
   const navigateHome = () => {
     //navigate to home
@@ -31,25 +44,10 @@ function Landing() {
   }
 
   const [user, setUser] = useState(null);
-  const handleGoogleLogin = async () => {
-    try {
-      //Make a post request to the backend endpoint for Google Authentication
-      const response = await axios.post("http://localhost:5173/auth/google/callback");  //update this to have the correct api endpoint connected to the backend
-
-      //handle the response from the backend
-      const userData = response.data;
-
-      //update the state of the user's information
-      setUser(userData);
-    } catch(error) {
-      console.error("Error during google login: ", error);
-    }
-  }
 
 
   return (
-    
-    <div> 
+
       <Container fluid>
         <Row>
           {/**We will be displaying the content within nested rows/columns */}
@@ -61,21 +59,24 @@ function Landing() {
             <Row className="header"> {/**Within the second column, we will have multiple rows */}
               <center><h1 className="title-content">Bored? Join Now!</h1></center>
             </Row>
-            <Row className="login-buttons">
-              <Button  className="google-button" variant="outline-primary" size="lg" onClick={handleGoogleLogin}> 
-
-              <FontAwesomeIcon icon={faGoogle} size="sm" />
+                <Button  className="google-button" variant="outline-primary" size="lg" href="http://localhost:4000/auth/google"> 
+                <FontAwesomeIcon icon={faGoogle} size="sm" />
                 <span style={{margin: '10px' }}>Sign in with Google</span>
-  </Button>
-  {/*}  
-              <GoogleLogin 
-                className="google-button"
-                clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com"
-                buttonText="Sign in with Google"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-  cookiePolicy={'single_host_origin'}/> */}
-            </Row>
+              </Button> 
+
+{/*}
+          <Row className="login-buttons">
+            <GoogleOAuthProvider clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com">
+            <GoogleLogin
+                onSuccess={credentialResponse => {
+                  console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />;
+            </GoogleOAuthProvider> 
+            </Row> */}
             <Row className="login-buttons">
               <Button className="apple-button" variant="outline-secondary" size="lg">
               <FontAwesomeIcon icon={faApple} size="lg" />
@@ -100,7 +101,6 @@ function Landing() {
           </Col>
         </Row>
       </Container>
-    </div>
   )
 }
 

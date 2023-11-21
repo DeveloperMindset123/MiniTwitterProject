@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import {React, useState, useEffect} from 'react';
 import { Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
 import '../src/styles/topbar.css';
 
 function FetchPosts() {
   const [posts, setPosts] = useState([]);
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -52,6 +53,25 @@ function FetchPosts() {
 }
 
 const Home = () => {
+ 
+  const handleLogout = async () => {  //this function will handle logout
+    try {
+        const response = await axios.get("http://localhost:4000/auth/logout");
+        console.log(response.data);
+        navigate("/Landing"); //navigate the user back to the Landing page
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+};
+
+  //define the path to redirect user back to landing page upon logging out
+  let navigate = useNavigate();
+  const routeChange = () => {  
+    //here, we will implement the logic to redirect user back to the login page
+    let path = '/Landing';  //this will redirect user back to the landing page, backend functionalities hasn't been fully implemented yet
+    navigate(path); //redirect the user to the path specified
+  }
+
   return (
     <div>
       <div className="top-bar">
@@ -78,7 +98,7 @@ const Home = () => {
                 <li><a href='./upload'>Upload</a></li>
               </ul>
               <div className="sign-out">
-                <button>Sign Out</button>
+                <button onClick={routeChange}>Sign Out</button> {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
               </div>
             </div>
           </Col>

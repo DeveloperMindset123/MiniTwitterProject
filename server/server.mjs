@@ -9,16 +9,64 @@ import cors from 'cors';  //imported by Ayan
 
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
-import pkg from './GoogleOAuth.cjs';
-const { passport: googlePassport, app: googleApp } = pkg;
-
-
-
+//import { passport as googlePassport, app as googleApp, passport } from './GoogleOAuth.cjs';
+import authRoute from './routes/auth.cjs';  //import the router function, import the auth.cjs functions
+import cookieSession from 'cookie-session';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import passport from 'passport';
+import "./config/passport-local.cjs";
+import helmet from 'helmet';
+//import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 
 const app = express();
-//const app = express(); --> this shouldn't be neccessary
+//ensure that the cookie session gets defined before evrything else
+app.use(
+  cookieSession({name: "session", keys: ["openreplay"], maxAge: 25 * 60 * 60 *100,})
+)
+//register regenerate & save the cookieSession middleware initialization, otherwise, authentication won't work successfully
+app.use(function(request, response, next) {  //adding two conditional statements so as to not get error during redirect
+  if (request.session && !request.session.regenerate) {
+    request.session.regenerate = (cb) => {
+      cb()
+    }
+  }
+  if (request.session && !request.session.save) {
+    request.session.save = (cb) => {
+      cb()
+    }
+  }
+  next()
+})
+
+app.use(passport.initialize());
+app.use(passport.session());
+//configure cors
+app.use(
+  cors({ 
+    origin: 'http://localhost:5173',  //allows the server to accept requests from different origin
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    credentials: true  //allow session cookies from browser to pass through
+  })
+)
+app.use('/auth', authRoute);
+app.use(helmet());
 const port = 4000;
 app.use(express.json());
+app.use(bodyParser.json());
+
+app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 4000
+  console.log(`Server listening at http://localhost:${port}`);
+});
+
+
+
+//configure session storage
+/* --> I don't think this is neccessary
+app.use(cookieSession({
+  name: 'session-name',
+  keys: ['key1', 'key2']
+})) */
 
 // Get Mongo URI
 export function mongoUri(){
@@ -183,10 +231,6 @@ app.post('/api/delete-user', async (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
-
 async function connectDB(){
   try{
     await mongoose.connect(mongoUri());
@@ -199,5 +243,5 @@ async function connectDB(){
   }
 };
 connectDB();
-googlePassport.authenticate();
-app.use(googleApp);
+//app.use(googlePassport.session());
+//googleApp();
