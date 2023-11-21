@@ -1,6 +1,6 @@
 .sidebar {
     background-color: #333;
-    width: 200px;
+    width: 250px;
     height: 100vh; 
     position: fixed;
     top: 0;
@@ -21,7 +21,7 @@
 }
 
 .sidebar li {
-    margin-bottom: 35px; /* Add margin to create space between options */
+    margin-bottom: 30px; /* Add margin to create space between options */
 }  
   
 .sidebar a {
@@ -33,18 +33,40 @@
 
 .sign-out {
     margin-top: auto; /* Push "Sign Out" to the bottom */
-    display: block;
+    /*display: block;*/
     text-align: center; /* Center the text */
     padding: 10px 0; /* Apply padding to match the other menu items */
+    display: flex;
+    align-items: center; /* Align items vertically centered */
 }
   
 .sign-out button {
     color: white;
     text-decoration: none;
-    font-size: 21px;
+    font-size: 24px;
     background-color: #333; /* Apply the same background color as the sidebar */
     display: block;
     width: 100%;
     border: none;
     cursor: pointer;
 }
+
+.slogan {
+    font-family: cursive;
+    color: rgb(76, 113, 197);
+    font-size: 30px;
+    font-weight: bold; /* Make it bold */
+    text-shadow: 2px 2px 4px rgba(116, 110, 110, 0.5); 
+    margin-right: 20px;
+    flex-grow: 1; /* Stretch the slogan to fill available space */
+    text-align: center;
+    padding: 5px;
+    
+}
+
+.icon {
+    margin-right: 5px; /* Adjust the spacing between the icon and text */
+    color: white; /* Set the color of the icons to white */
+  }
+
+ 

@@ -91,3 +91,37 @@ body {
     width: 40%;
     margin-left: 30%;
 }
+
+  
+  .suggestions-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .suggestion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+
+  .follow-button {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+
+
+.suggested-box {
+    background-color: #f5f8fa;
+    border: 3px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 16px;
+    width: 460px;
+  }
+

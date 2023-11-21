@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faFilm } from '@fortawesome/free-solid-svg-icons';
 import {Post} from './components/UploadDB.js';
+import './styles/UploadModal.css'
 
 
-const Upload = () => {
+const UploadPop_up = ({setShowUpload,showUpload}) => {
   const [userId, setUserId] = useState('');
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
@@ -40,6 +41,8 @@ const Upload = () => {
   }, [bodyText, hashOverflow]);
 
   const handleSubmit = async (event) => {
+    console.log(1234)
+    setShowUpload(false)
     event.preventDefault();
     let hashTags = bodyText.match(/#\w+/g);
 
@@ -77,52 +80,53 @@ const Upload = () => {
     }
   };
 
-
   return (
-    <div style={{/* justifyContent: 'center' */ marginLeft: "260px"}}>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} style={{marginBottom: '1px'}}>
-          <Form.Label column lg="2"> UserID:</Form.Label>
-          <Col md ="10">
-          <Form.Control style ={{marginRight: '380px', width: '150.4px', height: '35px'}}
-          placeholder="UserID" type="text" value={userId} 
-          onChange={(event) => setUserId(event.target.value)}/>
-          </Col>
-        </Form.Group>
-  {/*         <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} /> */}
-  {/*       <label>BodyText (add hashtags with '#'):</label> */}
-  {/*       <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} /> */}
+    <Modal show={showUpload} onHide={() => setShowUpload(false)} backdrop="static">
+        <Modal.Header className='DarkMode'>
+            <CloseButton onClick={() => setShowUpload(false)} style={{marginLeft: '0'}}/>
+        </Modal.Header>
+        <Modal.Body className='DarkMode'>
+                <Row>
+                    <Col  lg="1">
+                        <label className='labelStyle'> UserID:</label>
+                    </Col>
+                    <Col >
+                        <Form.Control className='UserControlForm'
+                        style={{backgroundColor: '#333', color: 'rgb(205, 198, 198)', borderColor: '#42509e', borderWidth: '2px'}}
+                        type="text" value={userId} 
+                        onChange={(event) => setUserId(event.target.value)}/>
+                    </Col>
+                </Row>
+                <Row style={{marginTop:"3px"}}>
+                    <Form.Control as="textarea" value={bodyText} 
+                    onChange={(event) => setBodyText(event.target.value)} 
+                    className= 'ControlForm'
+                    style={{backgroundColor: '#333', color: 'rgb(205, 198, 198)', border: 'none' }}
+                    placeholder='What is happening?!'/>
 
-        <Form.Group as={Row} >
-          <Form.Control as="textarea" value={bodyText} 
-            onChange={(event) => setBodyText(event.target.value)} 
-            style ={{marginLeft: '10px', width: '340.4px', height: '80.2px', resize: 'none', border: 'none' }}
-            placeholder='What is Happening?!'
-          />
-        </Form.Group>
+                    {textOverflow > 0 && (
+                        <div> {/* for Common User */}
+                        You are {textOverflow} words overlimit! You will be charged ${(textOverflow)*1}
+                        </div>
+                    )}
+                </Row>
 
-        {textOverflow > 0 && (
-          <div> {/* for Common User */}
-            You are {textOverflow} words overlimit! You will be charged ${(textOverflow)*1}
-          </div>
-        )}
-
-        <Form.Group as={Row} style={{marginTop: "5px"}}>
-          <Col>
-            <Button size="sm" variant="dark"  >
-              <FontAwesomeIcon icon={faImage} size="sm" />
-            </Button>
-            <Button size="sm" variant="dark" style={{marginLeft: '1px'}}>
-            <FontAwesomeIcon icon={faFilm} size="sm" />
-            </Button>
-            <Button size="sm" variant="dark" type="submit" disabled={!formValid} style={{marginLeft: '200px'}}>
-              Save Post
-            </Button>
-          </Col>
-        </Form.Group>
-      </Form>
-    </div>
+            </Modal.Body>
+                <Modal.Footer style={{backgroundColor : '#333'}} >
+                    <Col>
+                        <Button  variant="dark" style={{marginRight: '1px'}} >
+                        <FontAwesomeIcon icon={faImage} size="sm" />
+                        </Button>
+                        <Button  variant="dark">
+                        <FontAwesomeIcon icon={faFilm} size="sm" />
+                        </Button>
+                    </Col>
+                    <Button variant="dark" type="submit" onClick ={handleSubmit} disabled={!formValid} style={{marginRight: '0'}}>
+                        Save Post
+                    </Button>
+            </Modal.Footer>
+    </Modal>
   );
 };
 
-export default Upload;
+export default UploadPop_up;

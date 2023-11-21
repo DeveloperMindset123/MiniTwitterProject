@@ -2,13 +2,14 @@
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts } from './posts.mjs';
+import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';
 import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
+import { askChatGPT } from './chatbot.mjs';
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
-
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
+<<<<<<< HEAD
 //import { passport as googlePassport, app as googleApp, passport } from './GoogleOAuth.cjs';
 import authRoute from './routes/auth.cjs';  //import the router function, import the auth.cjs functions
 import cookieSession from 'cookie-session';
@@ -80,6 +81,16 @@ export function mongoUri(){
     console.error('Error reading or parsing the JSON file:', err);
   }
 }
+=======
+import pkg from './GoogleOAuth.cjs';
+import dotenv from 'dotenv/config'; // even tho its gray its needed
+const MONGOURI = process.env.MONOGODB;
+const { passport: googlePassport, app: googleApp } = pkg;
+const app = express();
+const port = 4000;
+app.use(express.json());
+app.use(cors());
+>>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -94,7 +105,6 @@ app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
     res.status(500).json({ message: 'Error updating post counter:', err });
   }
 });
-// apis for USER POST related functions
 // api for saving a brand new post
 app.post('/api/save-new-post', async (req, res) => {
   const uniquePost = req.body;
@@ -124,19 +134,6 @@ app.post('/api/save-new-post', async (req, res) => {
     res.status(500).json({ message: 'Error saving new post:', err });
   }
 });
-// api for updating post-counter (likes, reports, etc.)
-app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
-  const postId = req.params.postId;
-  const type = req.params.type;
-
-  try {
-    await UpdatePostCounter(postId, type);
-
-    res.status(200).json({ message: 'Post counter updated successfully!' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating post counter:', err });
-  }
-});
 // api for fetching all posts
 app.get('/api/fetch-posts', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -148,6 +145,29 @@ app.get('/api/fetch-posts', async (req, res) => {
   } catch (err) {
     console.error('Error getting all posts', err);
     res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
+// api for deleting posts
+app.delete('/api/delete-post/:postId', async (req, res) => {
+    const postId = req.params.postId;
+    const result = await DeletePost(postId);
+
+    if (result === false) {
+        res.status(500).send('Internal Server Error');
+    } else if (result === 'Post not found') {
+        res.status(404).send('Post not found');
+    } else {
+        res.status(200).send('Post deleted successfully');
+    }
+});
+app.get('/api/fetch-trendy', async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  try {
+    const response = await FetchTrending();
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching trendy posts:', err });
   }
 });
 
@@ -215,7 +235,7 @@ app.post('/api/update-user', async (req, res) => {
     res.status(500).json({ message: 'Error saving updated user:', err });
   }
 });
-//api for deleting users
+//api for deleting users (takes in object userName)
 app.post('/api/delete-user', async (req, res) => {
   const userName = req.body.userName;
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -229,11 +249,25 @@ app.post('/api/delete-user', async (req, res) => {
     res.status(500).json({ message: 'Error deleting user:', err });
   }
 });
+// api for calling gpt (req must be a object 'question' with a string)
+app.post('/api/askGPT', async (req,res)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+  try {
+    const response = await askChatGPT(String(req.question));
+
+    res.status(201).json({ response });
+  } catch (err) {
+    res.status(500).json({ message: 'Error calling gpt:', err });
+  }
+});
 
 
 async function connectDB(){
   try{
-    await mongoose.connect(mongoUri());
+    console.log(MONGOURI)
+    await mongoose.connect(MONGOURI);
     console.log("MongoDb Connected!");
   }
   catch(err){

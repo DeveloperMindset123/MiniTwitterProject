@@ -5,55 +5,54 @@
     align-items: center;
     height: 100vh;
     position: relative;
+  }
+  
+.chat-bot {
+  background-color: #333;
+  width: 300px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column; /* Display vertically */
+  justify-content: flex-start; /* Start items at the top */
+  align-items: center;
+  padding: 10px 20px 20px 20px; /* Add extra padding-bottom (20px) */
+  box-sizing: border-box;
 }
 
-.messages-section {
-    background-color: #333;
-    width: 300px;
-    height: 100vh;
-    position: fixed;
-    top: 64px;
-    right: 0;
-    display: flex;
-    flex-direction: column; /* Display vertically */
-    justify-content: flex-start; /* Start items at the top */
-    align-items: center;
-    padding: 10px 20px 20px 20px; /* Add extra padding-top (40px) */
-    box-sizing: border-box;
+.chat-bot ul {
+  list-style: none;
+  padding: 0;
+  text-align: center; /* Center text within list items */
 }
-  
-.messages-section ul {
-    list-style: none;
-    padding: 0;
-    text-align: center; /* Center text within list items */
+
+.chat-bot h2 {
+  color: white;
+  font-family: cursive;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 32px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  display: block;
+  border-top: 2px solid #555; /* Add a border on top of the chat box */
 }
-  
-.messages-section h2 {
-    color: white;
-    font-family: cursive;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 32px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    display: block;
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex-grow: 0; /* Stretch the search bar to fill available space */
+  border-bottom: 2px solid gray; /* Add a gray line under the search box */
+  margin-bottom: 20px; /* Increase the space under the search box (adjust as needed) */
 }
-  
-.chat-box {
-    background-color: #333; /* Match the background color */
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border-top: 2px solid #555; /* Add a border on top of the chat box */
+
+.search-bar input {
+  padding: 10px;
+  flex-grow: 1;
+  border: none; /* Remove the border */
+  border-radius: 0; /* Set border-radius to 0 for square corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
 }
-  
-.chat-message {
-    background-color: #444; /* Background color for chat messages */
-    color: white;
-    padding: 15px; /* Increase padding for a fancier look */
-    border-radius: 15px; /* Round the corners of chat messages */
-    margin: 5px 0; /* Add spacing between chat messages */
-    margin-bottom: 25px; /* Adjust the margin-bottom */
-    text-align: center;
-}
-  
+

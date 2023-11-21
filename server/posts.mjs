@@ -1,20 +1,11 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'fs';
 const DATE = new Date(); // uses UTC time - ooordinated universal time
 const POSTS = 'posts';
 const DBNAME = 'deadBird';
+import dotenv from 'dotenv/config'; // even tho its gray its needed
+const MONGOURI = process.env.MONOGODB;
 
-export function mongoUri(){
-    const filePath = 'mongoUri.json';
-    try {
-        const jsonContent = fs.readFileSync(filePath, 'utf8');
-        const config = JSON.parse(jsonContent);
-
-        return config.uri;
-    } catch (err) {
-        console.error('Error reading or parsing the JSON file:', err);
-    }
-}
 function getBannedWords(){
     const filePath = 'bannedWords.json';
     try {
@@ -35,6 +26,7 @@ export class Post {
         this.imageId = imageId;
         this.time = DATE;
         this.likes = 0;
+        this.dislikes = 0;
         this.reports = 0;
         this.views = 0;
     }
@@ -62,7 +54,7 @@ export async function SaveNewPost(uniquePost) {
     }
 
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -77,13 +69,13 @@ export async function SaveNewPost(uniquePost) {
 }
 export async function UpdatePostCounter(postId, type) {
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
-        const postObject = await collection.findOne({ postId });
+        const postObject = await collection.findOne({ '_id': new ObjectId(postId) });
 
         if (!postObject) {
             console.error('Post not found!');
@@ -93,6 +85,9 @@ export async function UpdatePostCounter(postId, type) {
         switch (type) {
             case 'like':
             postObject.likes++;
+            break;
+            case 'dislike':
+            postObject.dislikes++;
             break;
             case 'report':
             postObject.reports++;
@@ -104,7 +99,7 @@ export async function UpdatePostCounter(postId, type) {
             console.error('Invalid Update Command Type!');
         }
 
-        await collection.updateOne({ postId }, { $set: postObject });
+        await collection.updateOne({ '_id': new ObjectId(postId) }, { $set: postObject });
 
         await client.close();
     } catch (err) {
@@ -113,7 +108,7 @@ export async function UpdatePostCounter(postId, type) {
 }
 export async function FetchPosts(){
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
@@ -134,19 +129,19 @@ export async function FetchPosts(){
 }
 export async function DeletePost(postId){
     try {
-        const client = new MongoClient(mongoUri(), { useUnifiedTopology: true });
+        const client = new MongoClient(MONGOURI);
         await client.connect();
 
         const db = client.db(DBNAME);
         const collection = db.collection(POSTS);
 
-        const query = { postId: postId };
+        const query = { '_id': new ObjectId(postId) };
         const post = await collection.findOne(query);
 
         if (!post) {
             console.error('Post not found!');
             await client.close();
-            return;
+            return false;
         }
 
         // delete logic
@@ -159,8 +154,62 @@ export async function DeletePost(postId){
         return false;
     }
 }
+
+// Search Functions
+export async function Search(hashTags){ // takes array of hashtags as input
+    try {
+        const client = new MongoClient(MONGOURI);
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+        const query = {
+            hashTags: { $all: hashTags }
+        };
+        const posts = await collection.find(query).toArray();
+
+        if (!posts) {
+            console.error('Post not found!');
+            return;
+        }
+
+        await client.close();
+        return posts;
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+    }
+}
+export async function FetchTrending(){
+    // logic:
+    // Any message with >10 reads, #likes - #dislikes>3
+    // will be promoted to “trendy post” shown in the 
+    // 'trending tab'.
+    
+    try {
+        const client = new MongoClient(MONGOURI);
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(POSTS);
+        const query = {
+            $expr: { $gt: [{ $subtract: ["$likes", "$dislikes"] }, 3] }
+        };
+        const posts = await collection.find(query).toArray();
+
+        if (!posts) {
+            console.error('Post not found!');
+            return;
+        }
+
+        await client.close();
+        return posts;
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+    }
+}
 'Usage examples:'
 // SaveNewPost(new Post('1', "Fahad's first post", ['firstpost', '1', '2']));
 // UpdatePostCounter(2, 'like');
 // console.log(await FetchPosts());
 // DeletePost(65306);
+// console.log(await FetchTrending());
