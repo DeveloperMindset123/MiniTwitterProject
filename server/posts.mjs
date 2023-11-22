@@ -5,7 +5,10 @@ const POSTS = 'posts';
 const DBNAME = 'deadBird';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
 const MONGOURI = process.env.MONOGODB;
-
+/**
+ * 
+ * @returns {String} array of banned words
+ */
 function getBannedWords(){
     const filePath = 'bannedWords.json';
     try {
@@ -17,6 +20,14 @@ function getBannedWords(){
         console.error('Error reading or parsing the JSON file:', err);
     }
 }
+/**
+ * universal object used to store post data
+ * 
+ * likes, dislikes, reports, & views set to 0 by default
+ * 
+ * time and unique object ID generated automatically
+ * @constructor userId, bodyText, hashTags, videoId = null, imageId = null
+ */
 export class Post {
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null) {
         this.userId = userId;
@@ -31,6 +42,15 @@ export class Post {
         this.views = 0;
     }
 }
+/**
+ * Saves posts to mongoDB "deadBird" under collection "posts"
+ * 
+ * If <3 banned words are detected, it filters them into '*' of the same length
+ * 
+ * If >3 banned words are detected, post will not save, returns `false`
+ * @param {uniquePost} uniquePost 
+ * @returns {null} null
+ */
 export async function SaveNewPost(uniquePost) {
     const BANNEDWORDS = getBannedWords();
     // fitler
@@ -69,6 +89,7 @@ export async function SaveNewPost(uniquePost) {
 }
 export async function UpdatePostCounter(postId, type) {
     try {
+        // console.log(postId, type);
         const client = new MongoClient(MONGOURI);
         await client.connect();
 
@@ -155,8 +176,14 @@ export async function DeletePost(postId){
     }
 }
 
-// Search Functions
-export async function Search(hashTags){ // takes array of hashtags as input
+/**
+ * Takes in array of hashtags & returns array of posts with said hashtag
+ * @async 
+ * @function Search
+ * @param {hashTags} hashTag 
+ * @returns {Promise<Array>} A promise that resolves to an array of relevant posts.
+*/
+export async function Search(hashtag){ // takes array of hashtags as input
     try {
         const client = new MongoClient(MONGOURI);
         await client.connect();
@@ -179,12 +206,15 @@ export async function Search(hashTags){ // takes array of hashtags as input
         console.error('Error fetching posts:', err);
     }
 }
-export async function FetchTrending(){
-    // logic:
-    // Any message with >10 reads, #likes - #dislikes>3
-    // will be promoted to “trendy post” shown in the 
-    // 'trending tab'.
-    
+/**
+ * Any message with >10 reads, #likes - #dislikes>3
+ * will be fetched
+ *
+ * @async
+ * @function FetchTrending
+ * @returns {Promise<Array>} A promise that resolves to an array of trending posts.
+ */
+export async function FetchTrending(){    
     try {
         const client = new MongoClient(MONGOURI);
         await client.connect();

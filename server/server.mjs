@@ -122,10 +122,10 @@ app.post('/api/save-new-post', async (req, res) => {
       return;
     }
 
-    const requiredFields = ['userId', 'bodyText', 'hashTags'];
+    const requiredFields = [ 'bodyText'];
 
     if (!uniquePost || requiredFields.some(field => !uniquePost[field])) {
-      res.status(400).json({ message: 'Missing required fields' });
+      res.status(400).json({ message: `Missing required fields:${requiredFields}` });
       return;
     }
 
@@ -266,7 +266,6 @@ app.post('/api/askGPT', async (req,res)=>{
 
 async function connectDB(){
   try{
-    console.log(MONGOURI)
     await mongoose.connect(MONGOURI);
     console.log("MongoDb Connected!");
   }
