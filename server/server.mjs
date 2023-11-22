@@ -9,7 +9,6 @@ import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
-<<<<<<< HEAD
 //import { passport as googlePassport, app as googleApp, passport } from './GoogleOAuth.cjs';
 import authRoute from './routes/auth.cjs';  //import the router function, import the auth.cjs functions
 import cookieSession from 'cookie-session';
@@ -19,6 +18,8 @@ import passport from 'passport';
 import "./config/passport-local.cjs";
 import helmet from 'helmet';
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
+import dotenv from 'dotenv/config'; // even tho its gray its needed
+const MONGOURI = process.env.MONOGODB;
 
 const app = express();
 //ensure that the cookie session gets defined before evrything else
@@ -60,37 +61,12 @@ app.listen(port, () => {  //in my case, the server is running on port 4000, on t
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-
-
 //configure session storage
 /* --> I don't think this is neccessary
 app.use(cookieSession({
   name: 'session-name',
   keys: ['key1', 'key2']
 })) */
-
-// Get Mongo URI
-export function mongoUri(){
-  const filePath = 'mongoUri.json';
-  try {
-    const jsonContent = fs.readFileSync(filePath, 'utf8');
-    const config = JSON.parse(jsonContent);
-
-    return config.uri;
-  } catch (err) {
-    console.error('Error reading or parsing the JSON file:', err);
-  }
-}
-=======
-import pkg from './GoogleOAuth.cjs';
-import dotenv from 'dotenv/config'; // even tho its gray its needed
-const MONGOURI = process.env.MONOGODB;
-const { passport: googlePassport, app: googleApp } = pkg;
-const app = express();
-const port = 4000;
-app.use(express.json());
-app.use(cors());
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {

@@ -14,12 +14,8 @@
   "proxy": "http://localhost:4000",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "axios": "^1.6.0",
     "cookie-session": "^2.0.0",
-=======
     "axios": "^1.6.2",
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
