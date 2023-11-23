@@ -175,7 +175,7 @@ const Home = () => {
     try {
         const response = await axios.get("http://localhost:4000/auth/logout");
         console.log(response.data);
-        navigate("/Landing"); //navigate the user back to the Landing page
+        navigate("/landing"); //navigate the user back to the Landing page
     } catch (error) {
         console.error("Logout failed:", error);
     }

@@ -262,6 +262,44 @@ app.post('/api/askGPT', async (req,res)=>{
   }
 });
 
+// Auth 
+/**
+ * Google Auth
+ */
+const CLIENT_URL = "http://localhost:5173/landing"; //on the tutorial, the client is running on local host 3000, in my case, the client is running on local host 5173
+const CLIENT_HOME_URL = "http://localhost:5173/"
+
+app.get("/auth/login/success", (req, res) => {  //api endpoint for successful login
+    if (req.user) {
+        res.status(200).json({
+            success: true,
+            message: "successful login",
+            user: req.user,
+            cookies: req.cookies,
+        });
+    }
+});
+app.get("/auth/login/failed", (req,res) => {  //api endpoint for failed login
+    res.status(401).json({  //error message 401
+        success: false,
+        message: "login failed" //error message indicating that there has been a login failure
+    })
+});
+app.get("/auth/logout", (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.json({'res':'Success!'}); //in my case, when the user logs out user will need to be redirected to the landing page
+        // res.redirect(CLIENT_URL); //in my case, when the user logs out user will need to be redirected to the landing page
+      });
+});
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
+app.get(
+    "/google/callback",
+    passport.authenticate("google", {
+        successRedirect: CLIENT_HOME_URL, //upon successful login, redirect user to client home URL
+        failureRedirect: "/login/failed"  //otherwise, direct the user back to the failed login
+    })
+);
 
 async function connectDB(){
   try{
