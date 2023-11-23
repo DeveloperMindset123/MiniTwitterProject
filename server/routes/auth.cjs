@@ -9,6 +9,7 @@ router.get("/login/success", (req, res) => {  //api endpoint for successful logi
             success: true,
             message: "successful login",
             user: req.user,
+            cookies: req.cookies,
         });
     }
 });
@@ -20,9 +21,11 @@ router.get("/login/failed", (req,res) => {  //api endpoint for failed login
     })
 })
 
-router.get("/logout", (req, res) => {
-    req.logout();
-    res.redirect(CLIENT_URL); //redirect user back to client Landing page upon logging out
+router.post("/logout", (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect(CLIENT_URL); //in my case, when the user logs out user will need to be redirected to the landing page
+    });
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));

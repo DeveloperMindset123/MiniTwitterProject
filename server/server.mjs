@@ -9,7 +9,6 @@ import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
 import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport, app } from './passport.js';
-<<<<<<< HEAD
 //import { passport as googlePassport, app as googleApp, passport } from './GoogleOAuth.cjs';
 import authRoute from './routes/auth.cjs';  //import the router function, import the auth.cjs functions
 import cookieSession from 'cookie-session';
@@ -18,6 +17,7 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import "./config/passport-local.cjs";
 import helmet from 'helmet';
+import dotenv from 'dotenv/config'; // even tho its gray its needed
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 
 const app = express();
@@ -46,8 +46,8 @@ app.use(passport.session());
 app.use(
   cors({ 
     origin: 'http://localhost:5173',  //allows the server to accept requests from different origin
-    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
-    credentials: true  //allow session cookies from browser to pass through
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,  //allow session cookies from browser to pass through
   })
 )
 app.use('/auth', authRoute);
@@ -56,7 +56,7 @@ const port = 4000;
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 4000
+app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 5000
   console.log(`Server listening at http://localhost:${port}`);
 });
 
@@ -81,16 +81,12 @@ export function mongoUri(){
     console.error('Error reading or parsing the JSON file:', err);
   }
 }
-=======
-import pkg from './GoogleOAuth.cjs';
-import dotenv from 'dotenv/config'; // even tho its gray its needed
+
 const MONGOURI = process.env.MONOGODB;
-const { passport: googlePassport, app: googleApp } = pkg;
-const app = express();
-const port = 4000;
-app.use(express.json());
-app.use(cors());
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
+//const { passport: googlePassport, app: googleApp } = pkg;  --> we will not be using this
+//const app = express();  --> this has already been declared once
+//const port = 4000; --> this has already been declared once
+//app.use(express.json()); --> this line has already been declared above as well
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -148,7 +144,7 @@ app.get('/api/fetch-posts', async (req, res) => {
   }
 });
 // api for deleting posts
-app.delete('/api/delete-post/:postId', async (req, res) => {
+app.delete('/api/delete-post/:postId', async (req, res) => {//delete post based on post id
     const postId = req.params.postId;
     const result = await DeletePost(postId);
 

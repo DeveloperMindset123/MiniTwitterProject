@@ -50,11 +50,7 @@ async function UpdatePostCounter(postId, type){
 }
 function FetchPosts(type) {
   const [posts, setPosts] = useState([]);
-<<<<<<< HEAD
-=======
   const [loading, setLoading] = useState(true); // Added loading state
-
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
   useEffect(() => {
     async function fetchData() {
       try {
@@ -152,29 +148,9 @@ function ElonGPT() {
     }
   };
 
-<<<<<<< HEAD
-const Home = () => {
- 
-  const handleLogout = async () => {  //this function will handle logout
-    try {
-        const response = await axios.get("http://localhost:4000/auth/logout");
-        console.log(response.data);
-        navigate("/Landing"); //navigate the user back to the Landing page
-    } catch (error) {
-        console.error("Logout failed:", error);
-    }
-};
 
-  //define the path to redirect user back to landing page upon logging out
-  let navigate = useNavigate();
-  const routeChange = () => {  
-    //here, we will implement the logic to redirect user back to the login page
-    let path = '/Landing';  //this will redirect user back to the landing page, backend functionalities hasn't been fully implemented yet
-    navigate(path); //redirect the user to the path specified
-  }
+//const Home = () => {
 
-=======
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
   return (
     <div className="container">
       <div className="input-form">
@@ -195,6 +171,23 @@ const Home = () => {
   );
 }
 const Home = () => {
+  const handleLogout = async () => {  //this function will handle logout
+    try {
+        const response = await axios.get("http://localhost:4000/auth/logout");
+        console.log(response.data);
+        navigate("/Landing"); //navigate the user back to the Landing page
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+};
+
+  //define the path to redirect user back to landing page upon logging out
+  let navigate = useNavigate();
+  const routeChange = () => {  
+    //here, we will implement the logic to redirect user back to the login page
+    let path = '/Landing';  //this will redirect user back to the landing page, backend functionalities hasn't been fully implemented yet
+    navigate(path); //redirect the user to the path specified
+  }
   const [showUpload, setShowUpload] = useState(false)
   return (
     <div> 
@@ -225,11 +218,8 @@ const Home = () => {
                 
               </ul>
               <div className="sign-out">
-<<<<<<< HEAD
-                <button onClick={routeChange}>Sign Out</button> {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
-=======
-                <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button>
->>>>>>> a47427f8afd8f853d3c2e5765fc7725178b3f167
+                <button onClick={handleLogout}>Sign Out</button> {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
+               {/*} <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button> */}
               </div>
             </div>
           </Col>
