@@ -36,7 +36,7 @@ async function Delete(_id) {
   }
 }
 async function UpdatePostCounter(postId, type){
-  const apiUrl = 'http://localhost:4000/api/update-post-counter'; // Replace with your actual server URL
+  const apiUrl = 'http://localhost:4000/api/update-post-counter';
   const fullUrl = `${apiUrl}/${encodeURIComponent(postId)}/${encodeURIComponent(type)}`;
 
   try {
@@ -45,7 +45,7 @@ async function UpdatePostCounter(postId, type){
     return response.data;
   } catch (error) {
     console.error('Error updating post counter:', error.response ? error.response.data : error.message);
-    throw error; // Re-throw the error to be handled by the caller
+    throw error;
   }
 }
 function FetchPosts(type) {
@@ -224,7 +224,7 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
-                   <Upload/>
+            <Upload/>
             <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
           </Col>

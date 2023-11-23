@@ -19,6 +19,9 @@ import "./config/passport-local.cjs";
 import helmet from 'helmet';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
+//import dotenv from 'dotenv/config'; // even tho its gray its needed
+
+const MONGOURI = process.env.MONOGODB;
 
 const app = express();
 //ensure that the cookie session gets defined before evrything else
@@ -60,14 +63,13 @@ app.listen(port, () => {  //in my case, the server is running on port 4000, on t
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-
-
 //configure session storage
 /* --> I don't think this is neccessary
 app.use(cookieSession({
   name: 'session-name',
   keys: ['key1', 'key2']
 })) */
+
 
 // Get Mongo URI
 export function mongoUri(){
@@ -82,11 +84,12 @@ export function mongoUri(){
   }
 }
 
-const MONGOURI = process.env.MONOGODB;
+//const MONGOURI = process.env.MONOGODB;
 //const { passport: googlePassport, app: googleApp } = pkg;  --> we will not be using this
 //const app = express();  --> this has already been declared once
 //const port = 4000; --> this has already been declared once
 //app.use(express.json()); --> this line has already been declared above as well
+
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -118,10 +121,10 @@ app.post('/api/save-new-post', async (req, res) => {
       return;
     }
 
-    const requiredFields = ['userId', 'bodyText', 'hashTags'];
+    const requiredFields = [ 'bodyText'];
 
     if (!uniquePost || requiredFields.some(field => !uniquePost[field])) {
-      res.status(400).json({ message: 'Missing required fields' });
+      res.status(400).json({ message: `Missing required fields:${requiredFields}` });
       return;
     }
 
@@ -262,7 +265,6 @@ app.post('/api/askGPT', async (req,res)=>{
 
 async function connectDB(){
   try{
-    console.log(MONGOURI)
     await mongoose.connect(MONGOURI);
     console.log("MongoDb Connected!");
   }
