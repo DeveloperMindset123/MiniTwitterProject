@@ -7,6 +7,7 @@ import Landing from './Landing';
 import Upload from './Upload';
 import User from './User';
 import Auth from './components/Auth';
+//import { AnimatePresence } from 'framer-motion'; --> we can use this for remodeling our UI components later, if we have time, we will not worry about this atm
 
 
 const App = () => {
@@ -17,11 +18,11 @@ const App = () => {
     return (
       <BrowserRouter>
         <Routes> 
-            <Route path='/' element={<Home />} />
-            <Route path='/Landing' element={<Landing />} />
-            <Route path='/Upload' element={<Upload />} />
-            <Route path='/User' element={<User />} />
-            <Route path='/Auth' element={<Auth/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
+              <Route path='/' element={<Home />} />
+              <Route path='/Landing' element={<Landing />} />
+              <Route path='/Upload' element={<Upload />} />
+              <Route path='/User' element={<User />} />
+              <Route path='/Auth' element={<Auth/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
         </Routes>
       </BrowserRouter>
     );

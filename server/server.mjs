@@ -264,7 +264,11 @@ app.post('/api/askGPT', async (req,res)=>{
 
 // Auth 
 /**
- * Google Auth
+ * Google Auth --> note: was running into some issues regarding authentication using the routes, which may have been causing confict, therefore, everything from auth.cjs was transferred here and instead we are using "app.get" method instead of "router.get" method
+ * 
+ * Another important meeting detail from fahad: if on the backend side the method defined is get, or post, on the frontend, we also have to use get or post, respectively, meaning the method needs to match
+ * 
+ * Note: use postman to verify api endpoints are successfully working as intended
  */
 const CLIENT_URL = "http://localhost:5173/landing"; //on the tutorial, the client is running on local host 3000, in my case, the client is running on local host 5173
 const CLIENT_HOME_URL = "http://localhost:5173/"
@@ -288,7 +292,7 @@ app.get("/auth/login/failed", (req,res) => {  //api endpoint for failed login
 app.get("/auth/logout", (req, res, next) => {
     req.logout(function(err) {
         if (err) { return next(err); }
-        res.json({'res':'Success!'}); //in my case, when the user logs out user will need to be redirected to the landing page
+        res.json({'res':'Success!'}); //in my case, when the user logs out user will need to be redirected to the landing page, on the frontend side, the user is redirected back to the landing page, the res.redirect(CLIENT_URL) was causing an error
         // res.redirect(CLIENT_URL); //in my case, when the user logs out user will need to be redirected to the landing page
       });
 });
@@ -300,6 +304,21 @@ app.get(
         failureRedirect: "/login/failed"  //otherwise, direct the user back to the failed login
     })
 );
+
+/**End of google oauth code */
+
+/**Beginning of Github authentication 
+ * Advice: duplicates the api endpoints for google and simply cater it for github, the route endpoints needs to match what is defined in the callback url in passport-local.cjs file
+*/
+app.get("/auth/github", passport.authenticate("github", { scope: ["profie"]})); 
+app.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    successRedirect: CLIENT_HOME_URL, //redirect user to the homepage after successful login
+    failureRedirect: "/login/failed"  //Otherwise, direct the user back to the failed login screen
+  })
+)
+//this is the end of the github authentication code
 
 async function connectDB(){
   try{

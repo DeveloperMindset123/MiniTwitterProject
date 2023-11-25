@@ -171,11 +171,11 @@ function ElonGPT() {
   );
 }
 const Home = () => {
-  const handleLogout = async () => {  //this function will handle logout
+  const handleLogout = async () => {  //this function will handle logout, this same function can be used for other methods of authentication
     try {
-        const response = await axios.get("http://localhost:4000/auth/logout");
+        const response = await axios.get("http://localhost:4000/auth/logout"); //get the information about the user that is logged out from this link of the server
         console.log(response.data);
-        navigate("/landing"); //navigate the user back to the Landing page
+        navigate("/landing"); //navigate the user back to the Landing page, note, here the path was not found, leading to an error, because intially I had "navigate("/Landing");", no such routes exist
     } catch (error) {
         console.error("Logout failed:", error);
     }

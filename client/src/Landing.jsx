@@ -59,24 +59,12 @@ function Landing() {
             <Row className="header"> {/**Within the second column, we will have multiple rows */}
               <center><h1 className="title-content">Bored? Join Now!</h1></center>
             </Row>
-                <Button  className="google-button" variant="outline-primary" size="lg" href="http://localhost:4000/auth/google"> 
-                <FontAwesomeIcon icon={faGoogle} size="sm" />
-                <span style={{margin: '10px' }}>Sign in with Google</span>
-              </Button> 
-
-{/*}
-          <Row className="login-buttons">
-            <GoogleOAuthProvider clientId="1000681390710-omq8f36aua0r1ih93p455d960ush5uou.apps.googleusercontent.com">
-            <GoogleLogin
-                onSuccess={credentialResponse => {
-                  console.log(credentialResponse);
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-            />;
-            </GoogleOAuthProvider> 
-            </Row> */}
+            <Row className="login-buttons">
+              <Button className="apple-button" variant="outline-primary" size="lg" href="http://localhost:4000/auth/google">
+              <FontAwesomeIcon icon={faGoogle} size="lg" />
+                 <span style={{margin: '10px'}}>Sign in with Google</span>
+              </Button>
+            </Row>
             <Row className="login-buttons">
               <Button className="apple-button" variant="outline-secondary" size="lg">
               <FontAwesomeIcon icon={faApple} size="lg" />
@@ -85,7 +73,7 @@ function Landing() {
             </Row>
             <Row className="login-buttons">
               {/**Div containing the login option for github */}
-              <Button className="github-button" variant="outline-dark" size="lg">
+              <Button className="github-button" variant="outline-dark" size="lg" href="http://localhost:4000/auth/github">
               <FontAwesomeIcon icon={faGithub} size="lg" />
                 <span style={{margin: '10px'}}>Sign in with Github</span>
               </Button>
@@ -105,3 +93,7 @@ function Landing() {
 }
 
 export default Landing;
+
+/**
+ * Note from Ayan: The sign out animation can use some improvement. Additionally, it would look pretty nice if we have some kind of nice animation in the landing page, please implement this frontend team
+ */
