@@ -1,10 +1,10 @@
 // const express = require('express');
 // const mongoose = require('mongoose');
-import mongoose from 'mongoose';
-import express, { json } from 'express';
-import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';
-import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';
-import { askChatGPT } from './chatbot.mjs';
+import mongoose from 'mongoose';  //mongoose has already been installed and in use, meaning I don't need to reinstall it
+import express, { json } from 'express';  //we initially planned on using JSOn but since we migrated everything to database, we will not be using JSON
+import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';  //import the functions that has been written in posts.mjs, this handles the logic for posting, deleting, trending posts etc.
+import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';  //the functions defined here will allow us to manually create users, delete users, get user unformation etc.
+import { askChatGPT } from './chatbot.mjs'; //this is where the chatgpt based code has been implemented
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
 import jwt from 'jsonwebtoken'; //imported by Ayan
@@ -12,18 +12,27 @@ import jwt from 'jsonwebtoken'; //imported by Ayan
 //import { passport as googlePassport, app as googleApp, passport } from './GoogleOAuth.cjs';
 import authRoute from './routes/auth.cjs';  //import the router function, import the auth.cjs functions
 import cookieSession from 'cookie-session';
-import session from 'express-session';
-import bodyParser from 'body-parser';
-import passport from 'passport';
+import expressSession from 'express-session';   //since express-session has already been imported, this means I have already installed it in the past
+import bodyParser from 'body-parser';  //body-praser has already been installed, meaning we don't need to worry about bodyparser atm
+import passport from 'passport';  //passport has already been imported and is in fact in use at the moment
 import "./config/passport-local.cjs";
 import helmet from 'helmet';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
+import passportLocalMongoose from 'passport-local-mongoose'; //import the passportLocalMongoose dependancy
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 //import dotenv from 'dotenv/config'; // even tho its gray its needed
 
 const MONGOURI = process.env.MONOGODB;
 
-const app = express();
+const app = express();  //initialize our express app
+//configure express session
+const expresSession = expressSession({
+  secret: 'secret',  //here, we are configuring express-session with a secret to sign the session ID cookie (this can be changed to be a unique value instead, secret is the default value according to the tutorial)
+  resave: false, //forces the session to be saved back to the session store
+  saveUninitialized: false, //forces a session that is "uninitialized" to be saved to the store.
+})
+
+
 //ensure that the cookie session gets defined before evrything else
 app.use(
   cookieSession({name: "session", keys: ["openreplay"], maxAge: 25 * 60 * 60 *100,})
@@ -57,7 +66,28 @@ app.use('/auth', authRoute);
 app.use(helmet());
 const port = 4000;
 app.use(express.json());
-app.use(bodyParser.json());
+app.use(bodyParser.json());  //this has already been defined, meaning we don't need to redefine it
+//additional configurations for body parser
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(expresSession);  //we want to ensure that our app is using the express session we defined above
+
+//here, we require passport and initialize it along with its session authentication middleware, directly inside our express app
+app.use(passport.initialize()); //--> let's understand what the purpose of this line is: Purpose --> This line initializes Passport and is typically used at the beginning of a middleware stack to set up the authentication process. Explanation: Passport initializes itself and prepares to authenticate requests. It adds properties and methods to the `req` (request) object, including the `req.passport` object.
+app.use(passport.session());  //--> purpose: This line sets up passport to support persistent login sessions. Explanations: Passport can maintain a user's login state across HTTP requests using sessions. When a user logs in, their user object is serialized and stored in the session, subsequent requests will deserialize the user object, making it available in `req.user`. This is particularly useful for keeping a user authenticated across multiple requests.
+
+/**
+ * Breakdown of the steps involved:
+ * 1. Serialization: When a user logs in, Passport serializes the user object (typically just the user ID) into the session. This is done using 'passport.serializeUser'
+ * 2. Deserialization: On subsequent requests, Passport deserializes the user object from the session using `passport.deserializeUser`. The user object is then attached to the `req.user` property, allowing the application to identify the logged-in user.
+ * 3. passport.session() --> middleware: This middleware is responsible for setting up passport to use sessions. It works in conjuction with the express session middleware, which must be used before `passport.session()` in the middleware stack.
+ */
+
+
+/**
+ * Let is try to understand the logic that is taking place here, in order to understand it better:
+ * 1. First, we require express and create our Express app by calling express(). Then we define the directory from which to serve our static files
+ * 2. The next lines sees us require the body-parser middleware, which will help us parse the body of our requests. We're also adding the express-session middleware to help us save the session cookie
+ */
 
 app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 5000
   console.log(`Server listening at http://localhost:${port}`);
@@ -320,9 +350,9 @@ app.get(
 )
 //this is the end of the github authentication code
 
-async function connectDB(){
+async function connectDB(){  //this is where the database connection the MongoDB database took place using mongoose
   try{
-    await mongoose.connect(MONGOURI);
+    await mongoose.connect(MONGOURI);  
     console.log("MongoDb Connected!");
   }
   catch(err){
@@ -331,6 +361,51 @@ async function connectDB(){
     console.error(err);
   }
 };
+
+/**Let's break down the logic that is taking place here:
+ * 1. Here we require the previously installed packages. Then we connect to our database using mongoose.connect and give it the path to our database. Next, we're making use of a schema to define our data structure. In this case, we're creating a userDetail schema with username, password, corpo, trendy, normal/ordinary, etc, so that once the user signs up during the registration process, the information is saved
+ */
+
+const Schema = mongoose.Schema;
+const userDetail = new Schema({
+  _id: String,
+  admin: Boolean,
+  corporate: Boolean,
+  trendy: Boolean,
+  ordinary: Boolean, //note, I changed normal --> ordinary, to more accurately reflect the requirements of the project
+  username: String,  //this will be the username the user registers with
+  cash: Number,  //note that cash needs to be represented in not just whole numbers but also floating point values
+  picture: Buffer, //in MongoDB, when storing images or binary data, the appropriate datatype for the "image" attribute is "Buffer". A Buffer is a built-in data type in MongoDb that can hold binary data. It is commonly used to store binary data such as images, documents or any other type of files
+  bio: String,
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],  //array of references: This is useful when it is neccessary to maintain a seperate collection for users and have a central place to store user details
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]  //same as above concept, added following and followers to distinguish who the user follows and whom is being followed by the user
+}) 
+
+userDetail.plugin(passportLocalMongoose);
+const UserDetails = mongoose.model('userInfo', userDetail, 'userInfo');
+
+/**Let's break donw what is going on here:
+ * 1. After installing the passportLocalMongoose and importing it here, we make use of the schema to define our data structure. In this case, we're creating a schema named userData with various fields and datatypes
+ * 2. next, we add passportLocalMongoose as a plugin to our schema. The first parameter is the name of the collection in the database. The second parameter references to our schema that was created, and the third one is the name we're assigning to the collection inside Mongoose
+ * 
+ */
+
+/**Passport local authentication setup */
+passport.use(UserDetails.createStrategy()); //First, we make passport use the local strategy by calling the createStrategy() on our UserDetails model, utilizing passport-local-mongoose --> which takes care of everything so that we don't have to set up the strategy
+passport.serializeUser(UserDetails.serializeUser()); //Then, we're using serializeUser() and deserializeUser() callbacks. The first one will be invoked on authentication, and its job is to serialize the user instance with the inforemation we pass on to it and store it in the session via a cookie. The second one will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a credential.
+passport.deserializeUser(UserDetails.deserializeUser());
+
+//the following are the list of links I left off at:
+
+/**
+ * 1. https://www.sitepoint.com/local-authentication-using-passport-node-js/
+ * 2. http://www.passportjs.org/concepts/authentication/middleware/
+ * 3. https://www.npmjs.com/package/connect-ensure-login
+ * 4. https://chat.openai.com/c/abefa185-254f-49e1-bbc1-abbea10e51d9
+ * 5. https://stackoverflow.com/collectives/mobile-dev
+ * 6. https://stackoverflow.com/questions/10203589/cant-use-mongo-command-shows-command-not-found-on-mac/74240679#74240679
+ * 7. https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
+ */
 connectDB();
 //app.use(googlePassport.session());
 //googleApp();
