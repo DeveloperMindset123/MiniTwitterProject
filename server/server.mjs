@@ -19,6 +19,7 @@ import "./config/passport-local.cjs";
 import helmet from 'helmet';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
 import passportLocalMongoose from 'passport-local-mongoose'; //import the passportLocalMongoose dependancy
+import connectEnsureLogin from 'connect-ensure-login'; //import the connectEnsureLogin from the connect-ennsure-login module 
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 //import dotenv from 'dotenv/config'; // even tho its gray its needed
 
@@ -396,15 +397,34 @@ passport.serializeUser(UserDetails.serializeUser()); //Then, we're using seriali
 passport.deserializeUser(UserDetails.deserializeUser());
 
 //the following are the list of links I left off at:
+/**Define the routes associated with the server for the local authentication methods */
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local',
+  (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
 
+    if (!user) {
+      return res.redirect('/login?info='+info); //displays the login info of the user
+    }
+
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+
+      return res.redirect('/');
+    });
+  })(req, res, next);
+});
+
+app.get('/login',
+  (req, res) => res.sendFile()
+)
 /**
- * 1. https://www.sitepoint.com/local-authentication-using-passport-node-js/
- * 2. http://www.passportjs.org/concepts/authentication/middleware/
- * 3. https://www.npmjs.com/package/connect-ensure-login
- * 4. https://chat.openai.com/c/abefa185-254f-49e1-bbc1-abbea10e51d9
- * 5. https://stackoverflow.com/collectives/mobile-dev
- * 6. https://stackoverflow.com/questions/10203589/cant-use-mongo-command-shows-command-not-found-on-mac/74240679#74240679
- * 7. https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
+ * notes regarding connect-ensure-login:
+ * 1. As the name suggest, this package is a middleware that ensures a user is logged in. If a request is recieved that is unauthenticated, the request will be redirected to a login page. We'll use this to guard our routes.
  */
 connectDB();
 //app.use(googlePassport.session());
