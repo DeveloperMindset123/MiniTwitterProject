@@ -285,7 +285,7 @@ app.post('/api/askGPT', async (req,res)=>{
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers','Content-Type');
   try {
-    const response = await askChatGPT(String(req.question));
+    const response = await askChatGPT(String(req.body.input));
 
     res.status(201).json({ response });
   } catch (err) {
