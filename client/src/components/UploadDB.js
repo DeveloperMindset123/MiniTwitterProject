@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 
 function convertTimeZone(date, targetTimeZone) {
-    const time = moment(date).tz(targetTimeZone).format('LLLL');
+    const time = moment(date).tz(targetTimeZone).format();
     return time;
 }
 const DATE = convertTimeZone(new Date(), 'America/New_York');

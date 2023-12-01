@@ -7,7 +7,7 @@ const MONGOURI = process.env.MONOGODB;
 import moment from 'moment-timezone';
 
 function convertTimeZone(date, targetTimeZone) {
-    const var1 = moment(date).tz(targetTimeZone).format('LLLL');
+    const var1 = moment(date).tz(targetTimeZone).format();
     return var1;
 }
 const DATE = convertTimeZone(new Date(), 'America/New_York');
