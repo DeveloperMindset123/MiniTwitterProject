@@ -82,10 +82,10 @@ const Upload = () => {
     <div style={{/* justifyContent: 'center' */ marginLeft: "260px"}}>
       <Form onSubmit={handleSubmit}>
         <Form.Group as={Row} style={{marginBottom: '1px'}}>
-          <Form.Label column lg="2"> UserID:</Form.Label>
+          <Form.Label column lg="2" style ={{color:'white'}}> UserID:</Form.Label>
           <Col md ="10">
-          <Form.Control style ={{marginRight: '380px', width: '150.4px', height: '35px'}}
-          placeholder="UserID" type="text" value={userId} 
+          <Form.Control style ={{marginRight: '380px', width: '150.4px', height: '35px', backgroundColor: '#333'}}
+           type="text" value={userId} 
           onChange={(event) => setUserId(event.target.value)}/>
           </Col>
         </Form.Group>
@@ -96,7 +96,7 @@ const Upload = () => {
         <Form.Group as={Row} >
           <Form.Control as="textarea" value={bodyText} 
             onChange={(event) => setBodyText(event.target.value)} 
-            style ={{marginLeft: '10px', width: '340.4px', height: '80.2px', resize: 'none', border: 'none' }}
+            style ={{marginLeft: '10px', width: '340.4px', height: '80.2px', resize: 'none', border: 'none',backgroundColor: '#333' }}
             placeholder='What is Happening?!'
           />
         </Form.Group>

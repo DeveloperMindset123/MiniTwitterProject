@@ -73,6 +73,7 @@ body {
 }
 
 .github-button {
+    background-color: rgb(106, 112, 113);
     width: 40%;
     margin-bottom: 3%;
 }

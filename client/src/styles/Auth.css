@@ -1,4 +1,7 @@
 /*CSS file for Auth.jsx*/
+body {
+    background-color: #333;
+}
 
 .App {
     background-color: white;

@@ -13,6 +13,7 @@ import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag,
 import '../src/styles/Home.css';
 import moment from 'moment-timezone';
 
+
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
   if (isConfirmed) {
@@ -76,8 +77,7 @@ function FetchPosts(type) {
     }
 
     fetchData();
-    console.log(type)
-  }, []); // The empty dependency array ensures this runs once when the component mounts
+  }, [posts]); // The empty dependency array ensures this runs once when the component mounts
 
   // Conditional rendering based on loading state
   if (loading) {
