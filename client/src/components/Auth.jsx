@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 //set up the authentication
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { response } from 'express';
+//import { response } from 'express';  --> we are not using this right now, uncomment this if needed
 
 
 export default function Auth(props) {
@@ -16,6 +16,23 @@ export default function Auth(props) {
     const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
     const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);
 
+    const formRef = useRef(null);  //initialized as a null value, will be updated depending on user input
+    const [formData, setFormData] = useState({
+        fullname: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            //this will update the form data
+            ...formData,
+            [name]: value,  //set the name which serves as a placeholder and the value that is inputted by the user
+        })
+    }
+
     const changeAuthMode = () => { //set the logic for whether to sign in or register
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
@@ -25,25 +42,40 @@ export default function Auth(props) {
 	const handleSubmit = (event) => {
         
         event.preventDefault(); 
+        //now, thanks to the handlechange function, 'formdata' will contain the values from the form inputs and can be used when constructing the JSON payload for the API request
+        //access form data
+        const { fullname, email, password, confirmPassword, Corporate } = formData;
+
+        //now we can create a JSOn payload given our data --> what is a JSON payload? --> JSON payload refers to the data sent in the body of an HTTP request or response, usually in the context of APIs, webhooks or other data exchange mechanism
+        const requestBody = {
+            fullname: fullname,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+            Corporate: isCorporateUser,  //we  already have the useState handling whether it is a corporate user or not, thanks to useState in React
+        }
+
 
         const endpoint = authMode === 'signin' ? '/login' : '/register';  //we are utilizing javascript ternary operators to check if signin or registration
-        const response = fetch(endpoint, {
+        fetch(endpoint, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                username: response.
+                requestBody,  //this will return requestBody as a JSON format on the console 
             })
-        })
+        }) 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
-        isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
+        //isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);  --> throwing an error
     };
+
+    //add the onchange event handlers to the form inputs
    
     if (authMode == 'signin') {
         return (
             <div className="Auth-form-container">
-                <form className='Auth-form'>
+                <Form className='Auth-form' ref={formRef}> {/**Attach formRef on the ref section of the react <form> tag */}
                     <div className='Auth-form-content'>
                         <h3 className='Auth-form-title'>Sign In</h3>
                         <div className='text-center'>
@@ -58,6 +90,8 @@ export default function Auth(props) {
                                 type='email'
                                 className='form-control mt-1'
                                 placeholder='Enter email'
+                                value={formData.email} //in our case, the email and username means the same thing for the sake of simplicity
+                                onChange={handleChange}  //call on the 
                             />
                         </div>
                         <div className='form-group mt-3'>
@@ -66,6 +100,8 @@ export default function Auth(props) {
                                 type='password'
                                 className='form-control mt-1'
                                 placeholder='Enter Password'
+                                value={formData.password}
+                                onChange={handleChange}
                             />
                         </div>
                         
@@ -78,14 +114,14 @@ export default function Auth(props) {
                             Forgot <a href='#'>Password?</a>
                         </p>
                     </div>
-                </form>
+                </Form>
             </div>
         )
     }
 
     return (
         <div className='Auth-form-container'>
-            <form className='Auth-form'>
+            <Form className='Auth-form'>
                 <div className='Auth-form-content'>
                     <h3 className='Auth-form-title'>Sign Up</h3>
                     <div className='text-center'>
@@ -101,6 +137,8 @@ export default function Auth(props) {
                             type='email'
                             className='form-control mt-1'
                             placeholder='e.g. Hans Zimmer'
+                            value={formData.fullname}
+                            onChange={handleChange}
                         />
                     </div>
                     {/**Create the placeholder for entering password */}
@@ -110,6 +148,8 @@ export default function Auth(props) {
                             type='email'
                             className='form-control mt-1'
                             placeholder='Email Address'
+                            value={formData.email}
+                            onChange={handleChange}
                         />
                     </div>
                     {/**Create the input section for inputting password */}
@@ -119,6 +159,8 @@ export default function Auth(props) {
                             type='password'
                             className='form-control mt-1'
                             placeholder='Enter Password'
+                            value={formData.password}
+                            onChange={handleChange}
                         />
                     </div>
                     {/**Create the input section for confirming password */}
@@ -128,6 +170,8 @@ export default function Auth(props) {
                             type='password'
                             className='form-control mt-1'
                             placeholder='Retype Password'
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="form-group mt-3">
@@ -150,7 +194,10 @@ export default function Auth(props) {
                         Forgot <a href='#'>Password?</a>
                     </p>
                 </div>
-            </form>
+            </Form>
+        </div>
+
+            /*
             {isCorporateUser && (
                 <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                 // only click submit, the pop up can be opened, either Corporate User or normal user
@@ -167,13 +214,11 @@ export default function Auth(props) {
                     setIsTrendyUserOpen={setIsTrendyUserOpen}
                     />
             )}
-
-        </div>
-
+            */
     )
 }
 
-function Corporate({ isModalOpen, setIsModalOpen }) {
+/*function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
 
     const closePopup = () => {
@@ -462,7 +507,7 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
         </Modal>
 
     );
-}
+} */
 
 
 
