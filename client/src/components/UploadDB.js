@@ -1,3 +1,12 @@
+import moment from 'moment-timezone';
+
+function convertTimeZone(date, targetTimeZone) {
+    const time = moment(date).tz(targetTimeZone).format('LLLL');
+    return time;
+}
+const DATE = convertTimeZone(new Date(), 'America/New_York');
+
+
 export class Post {
     constructor(userId, bodyText, hashTags, videoId = null, imageId = null) {
         this.userId = userId;
@@ -5,7 +14,7 @@ export class Post {
         this.hashTags = hashTags;
         this.videoId = videoId;
         this.imageId = imageId;
-        this.time = new Date(); // uses UTC time - ooordinated universal time
+        this.time = DATE;
         this.likes = 0;
         this.dislikes = 0;
         this.reports = 0;
