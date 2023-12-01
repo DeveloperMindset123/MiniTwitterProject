@@ -5,6 +5,7 @@ import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { response } from 'express';
 
 
 export default function Auth(props) {
@@ -19,8 +20,22 @@ export default function Auth(props) {
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
 
+
+    //update the handleSubmit function to send a POST request to the '/login' or '/register' endpoint based on the 'authMode'. The fetch API can be used or any other method such as axios
 	const handleSubmit = (event) => {
+        
         event.preventDefault(); 
+
+        const endpoint = authMode === 'signin' ? '/login' : '/register';  //we are utilizing javascript ternary operators to check if signin or registration
+        const response = fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: response.
+            })
+        })
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
         isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
     };
