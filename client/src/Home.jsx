@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag, 
   faEye, faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
+import moment from 'moment-timezone';
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -106,7 +107,7 @@ function FetchPosts(type) {
                     {/* add condition to only allow user who posted and SU to change */}
                   </Col>
                 </Row>
-                <p className='timestamp'>{post.time}</p>
+                <p className='timestamp'>{moment(post.time).format('MMMM Do YYYY, h:mm:ss a')}</p>
               </div>
             </div>
           </div>
