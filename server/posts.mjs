@@ -1,10 +1,17 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'fs';
-const DATE = new Date(); // uses UTC time - ooordinated universal time
 const POSTS = 'posts';
 const DBNAME = 'deadBird';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
 const MONGOURI = process.env.MONOGODB;
+import moment from 'moment-timezone';
+
+function convertTimeZone(date, targetTimeZone) {
+    const var1 = moment(date).tz(targetTimeZone).format();
+    return var1;
+}
+const DATE = convertTimeZone(new Date(), 'America/New_York');
+
 /**
  * 
  * @returns {String} array of banned words

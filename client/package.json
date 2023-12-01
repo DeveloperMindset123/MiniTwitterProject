@@ -27,6 +27,7 @@
     "install": "^0.13.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
+    "moment-timezone": "^0.5.43",
     "mongodb": "^6.2.0",
     "mongoose": "^7.6.3",
     "next": "^14.0.2",

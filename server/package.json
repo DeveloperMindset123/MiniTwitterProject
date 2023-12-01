@@ -14,6 +14,7 @@
   "proxy": "http://localhost:4000",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^7.6.0",
     "axios": "^1.6.2",
     "connect-ensure-login": "^0.1.1",
     "cookie-session": "^2.0.0",
@@ -25,6 +26,7 @@
     "google-auth-library": "^9.2.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.43",
     "mongodb": "^4.17.1",
     "mongoose": "^7.6.3",
     "openai": "^4.19.0",
