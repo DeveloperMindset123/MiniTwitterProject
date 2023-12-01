@@ -59,7 +59,7 @@ export async function CreateUser(newUser){ // assuming proper filtering for uniq
     console.log("User Registered!");
     return null;
 }
-export async function GetUser(userName){
+export async function GetUser(userId){
     try {
         const client = new MongoClient(MONGOURI, { useUnifiedTopology: true });
         await client.connect();
@@ -67,7 +67,7 @@ export async function GetUser(userName){
         const db = client.db(DBNAME);
         const collection = db.collection(USERS);
 
-        const query = { userName: userName };
+        const query = { _id: userId };
         const user = await collection.findOne(query);
 
         if (!user) {
@@ -79,7 +79,7 @@ export async function GetUser(userName){
         await client.close();
         return user;
     }catch(err){
-        console.error('Error fetching user ${userName}' + err);
+        console.error(`Error fetching user ${userId}` + err);
         return;
     }
 }

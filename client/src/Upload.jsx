@@ -54,7 +54,7 @@ const Upload = () => {
       });
 
       if (response.status === 201) {
-        alert('Post saved successfully!', response);
+        console.log('Post saved successfully!', response);
         setUserId('');
         setBodyText('');
       }

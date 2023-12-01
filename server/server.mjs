@@ -1,5 +1,3 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
 import mongoose from 'mongoose';  //mongoose has already been installed and in use, meaning I don't need to reinstall it
 import express, { json } from 'express';  //we initially planned on using JSOn but since we migrated everything to database, we will not be using JSON
 import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';  //import the functions that has been written in posts.mjs, this handles the logic for posting, deleting, trending posts etc.
@@ -17,7 +15,6 @@ import bodyParser from 'body-parser';  //body-praser has already been installed,
 import passport from 'passport';  //passport has already been imported and is in fact in use at the moment
 import "./config/passport-local.cjs";
 import helmet from 'helmet';
-import dotenv from 'dotenv/config'; // even tho its gray its needed
 import passportLocalMongoose from 'passport-local-mongoose'; //import the passportLocalMongoose dependancy
 import connectEnsureLogin from 'connect-ensure-login'; //import the connectEnsureLogin from the connect-ennsure-login module 
 import { connect } from 'http2';
@@ -25,8 +22,8 @@ import User from './model/user-model.cjs';
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 //import dotenv from 'dotenv/config'; // even tho its gray its needed
 
-//const MONGOURI = process.env.MONGODB; --> uncommented for now
-const MONGOURI = 'mongodb+srv://fahad:BDMvwOyKLD6yaJgO@deadbirdsociety.fgwkrhk.mongodb.net/?retryWrites=true&w=majority'
+import dotenv from 'dotenv/config'; // even tho its gray its in use
+const MONGOURI = process.env.MONOGODB;
 
 const app = express();  //initialize our express app
 //configure express session
@@ -99,20 +96,6 @@ app.use(cookieSession({
   name: 'session-name',
   keys: ['key1', 'key2']
 })) */
-
-
-// Get Mongo URI
-export function mongoUri(){
-  const filePath = 'mongoUri.json';
-  try {
-    const jsonContent = fs.readFileSync(filePath, 'utf8');
-    const config = JSON.parse(jsonContent);
-
-    return config.uri;
-  } catch (err) {
-    console.error('Error reading or parsing the JSON file:', err);
-  }
-}
 
 //const MONGOURI = process.env.MONOGODB;
 //const { passport: googlePassport, app: googleApp } = pkg;  --> we will not be using this
@@ -225,9 +208,9 @@ app.post('/api/create-user', async (req, res) => {
 });
 //api for fetching user
 app.get('/api/fetch-user', async (req, res) => {
-  const userName = req.body.userName;
+  const userId = req.body.userId;
   try {
-    const user = await GetUser(userName);
+    const user = await GetUser(userId);
     console.log("Got User: ", user);
 
     res.status(200).json(user);
