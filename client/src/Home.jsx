@@ -116,6 +116,7 @@ function FetchPosts(type) {
   );
 }
 }
+
 function ElonGPT() {
   const [userInput, setUserInput] = useState('');
   const [conversation, setConversation] = useState([]);
@@ -130,46 +131,58 @@ function ElonGPT() {
     try {
       const response = await axios.post('http://localhost:4000/api/askGPT', {
         input: userInput,
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
-      if (response.status === 200) {
-        setConversation([...conversation, { user: userInput, ai: response.data }]);
+      if (response.status === 201) {
+        const responseData = response.data;
+        console.log(responseData);
+        if (responseData && responseData.response) {
+          const updatedConversation = [
+            ...conversation,
+            { user: userInput, ai: responseData.response },
+          ];
+          setConversation(updatedConversation);
+        } else {
+          console.error('Unexpected response format:', responseData);
+        }
       } else {
-        console.error('Error fetching data');
+        console.error('Unexpected status:', response.status);
       }
     } catch (error) {
-      console.error('Error fetching data', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setUserInput(''); // Clear input field after submission
     }
   };
 
-
-//const Home = () => {
+  const handleFormSubmit = (event) => {
+    event.preventDefault(); // Prevent form submission causing a page reload
+    if (userInput.trim() !== '') {
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="container">
-      <div className="input-form">
-        <input type="text" value={userInput} onChange={handleInputChange} placeholder="Type your message here" />
-        <button onClick={handleSubmit} disabled={loading}>
+      <form onSubmit={handleFormSubmit} className="input-form">
+        <input type="text" value={userInput} onChange={handleInputChange} placeholder="Type your message here" className="input-box" />
+        <button type="submit" disabled={loading} className="submit-button">
           {loading ? 'Sending...' : 'Submit'}
         </button>
-      </div>
-      <div className="conversation">
-        {conversation.map((entry, index) => (
-          <div key={index}>
-            <p><strong>You:</strong> {entry.user}</p>
-            <p><strong>AI:</strong> {entry.ai}</p>
+      </form>
+      <div className="conversation-container">
+        {conversation.slice(0).reverse().map((entry, index) => ( // Reversed the conversation array
+          <div key={index} className="message">
+            <p className="user-message"><strong>You:</strong> {entry.user}</p>
+            <p className="ai-message"><strong>Elon:</strong> {entry.ai}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
 const Home = () => {
   const handleLogout = async () => {  //this function will handle logout, this same function can be used for other methods of authentication
     try {
@@ -243,3 +256,4 @@ const Home = () => {
   );
 }
 export default Home;
+
