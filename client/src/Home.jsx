@@ -62,7 +62,9 @@ function FetchPosts(type) {
         });
 
         if (response.status === 200) {
-          setPosts(response.data);
+          const data = response.data
+          data.reverse()
+          setPosts(data)
         } else {
           console.error('Error fetching data');
         }
@@ -74,6 +76,7 @@ function FetchPosts(type) {
     }
 
     fetchData();
+    console.log(type)
   }, []); // The empty dependency array ensures this runs once when the component mounts
 
   // Conditional rendering based on loading state
