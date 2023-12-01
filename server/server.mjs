@@ -23,7 +23,7 @@ import connectEnsureLogin from 'connect-ensure-login'; //import the connectEnsur
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 //import dotenv from 'dotenv/config'; // even tho its gray its needed
 
-const MONGOURI = process.env.MONOGODB;
+const MONGOURI = process.env.MONGODB;
 
 const app = express();  //initialize our express app
 //configure express session
@@ -420,12 +420,17 @@ app.post('/login', (req, res, next) => {
 });
 
 app.get('/login',
-  (req, res) => res.sendFile()
+  (req, res) => res.sendFile('client/src/components/Auth.jsx', {root:__dirname}) //this needs to be configured based on our client side information
+)
+
+app.get('/', 
+  connectEnsureLogin.ensureLoggedIn(), (req, res) => res.sendFile('client/src/Home.jsx', {root: __dirname})
 )
 /**
  * notes regarding connect-ensure-login:
  * 1. As the name suggest, this package is a middleware that ensures a user is logged in. If a request is recieved that is unauthenticated, the request will be redirected to a login page. We'll use this to guard our routes.
  */
+
 connectDB();
 //app.use(googlePassport.session());
 //googleApp();
