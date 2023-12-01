@@ -24,7 +24,7 @@ function Landing() {
   //define the useNavigate function
   const navigate = useNavigate();
 
-  const navigateToAuthentication = async () => {  //if using await, the function needs to be async
+  const navigateToAuthenticationGoogle = async () => {  //if using await, the function needs to be async
     try {
       const response = await axios.get("http://localhost:4000/auth/google/success");
       console.log(response.data);  //will display the user's info
@@ -41,6 +41,11 @@ function Landing() {
   const navigateHome = () => {
     //navigate to home
     navigate('/'); //this will allow the user to navigate back to the landing page
+  }
+
+  const navigateToAuthentication = () => {
+    //navigate user to authentication
+    navigate('/Auth');
   }
 
   const [user, setUser] = useState(null);
