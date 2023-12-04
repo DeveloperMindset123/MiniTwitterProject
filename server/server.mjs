@@ -21,10 +21,12 @@ import dotenv from 'dotenv/config'; // even tho its gray its needed
 import passportLocalMongoose from 'passport-local-mongoose'; //import the passportLocalMongoose dependancy
 import connectEnsureLogin from 'connect-ensure-login'; //import the connectEnsureLogin from the connect-ennsure-login module 
 import { connect } from 'http2';
+import User from './model/user-model.cjs';
 //import './config/passport-setup.mjs';  //mjs equivalent of using require('./config/passport-setup.cjs')
 //import dotenv from 'dotenv/config'; // even tho its gray its needed
 
-const MONGOURI = process.env.MONGODB;
+//const MONGOURI = process.env.MONGODB; --> uncommented for now
+const MONGOURI = 'mongodb+srv://fahad:BDMvwOyKLD6yaJgO@deadbirdsociety.fgwkrhk.mongodb.net/?retryWrites=true&w=majority'
 
 const app = express();  //initialize our express app
 //configure express session
@@ -364,6 +366,7 @@ async function connectDB(){  //this is where the database connection the MongoDB
  * 1. Here we require the previously installed packages. Then we connect to our database using mongoose.connect and give it the path to our database. Next, we're making use of a schema to define our data structure. In this case, we're creating a userDetail schema with username, password, corpo, trendy, normal/ordinary, etc, so that once the user signs up during the registration process, the information is saved
  */
 
+/* --> we created a seperate schema model
 const Schema = mongoose.Schema;
 const userDetail = new Schema({
   _id: String,
@@ -381,7 +384,7 @@ const userDetail = new Schema({
 
 userDetail.plugin(passportLocalMongoose);
 const UserDetails = mongoose.model('userInfo', userDetail, 'userInfo');
-
+*/
 /**Let's break donw what is going on here:
  * 1. After installing the passportLocalMongoose and importing it here, we make use of the schema to define our data structure. In this case, we're creating a schema named userData with various fields and datatypes
  * 2. next, we add passportLocalMongoose as a plugin to our schema. The first parameter is the name of the collection in the database. The second parameter references to our schema that was created, and the third one is the name we're assigning to the collection inside Mongoose
@@ -389,22 +392,22 @@ const UserDetails = mongoose.model('userInfo', userDetail, 'userInfo');
  */
 
 /**Passport local authentication setup */
-passport.use(new LocalStrategy(UserDetails.authenticate()));
+//passport.use(new LocalStrategy(UserDetails.authenticate()));
 
 // --> uncomment this if the previous line causes errors, refer to the documentation --> passport.use(UserDetails.createStrategy()); //First, we make passport use the local strategy by calling the createStrategy() on our UserDetails model, utilizing passport-local-mongoose --> which takes care of everything so that we don't have to set up the strategy
-passport.serializeUser(UserDetails.serializeUser()); //Then, we're using serializeUser() and deserializeUser() callbacks. The first one will be invoked on authentication, and its job is to serialize the user instance with the inforemation we pass on to it and store it in the session via a cookie. The second one will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a credential.
-passport.deserializeUser(UserDetails.deserializeUser());
+//passport.serializeUser(UserDetails.serializeUser()); //Then, we're using serializeUser() and deserializeUser() callbacks. The first one will be invoked on authentication, and its job is to serialize the user instance with the inforemation we pass on to it and store it in the session via a cookie. The second one will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a credential.
+//passport.deserializeUser(UserDetails.deserializeUser());
 
 
 //moved the code here
 //here, we require passport and initialize it along with its session authentication middleware, directly inside our express app
-app.use(passport.initialize()); //--> let's understand what the purpose of this line is: Purpose --> This line initializes Passport and is typically used at the beginning of a middleware stack to set up the authentication process. Explanation: Passport initializes itself and prepares to authenticate requests. It adds properties and methods to the `req` (request) object, including the `req.passport` object.
-app.use(passport.session());  //--> purpose: This line sets up passport to support persistent login sessions. Explanations: Passport can maintain a user's login state across HTTP requests using sessions. When a user logs in, their user object is serialized and stored in the session, subsequent requests will deserialize the user object, making it available in `req.user`. This is particularly useful for keeping a user authenticated across multiple requests.
+//app.use(passport.initialize()); //--> let's understand what the purpose of this line is: Purpose --> This line initializes Passport and is typically used at the beginning of a middleware stack to set up the authentication process. Explanation: Passport initializes itself and prepares to authenticate requests. It adds properties and methods to the `req` (request) object, including the `req.passport` object.
+//app.use(passport.session());  //--> purpose: This line sets up passport to support persistent login sessions. Explanations: Passport can maintain a user's login state across HTTP requests using sessions. When a user logs in, their user object is serialized and stored in the session, subsequent requests will deserialize the user object, making it available in `req.user`. This is particularly useful for keeping a user authenticated across multiple requests.
 
 
 //the following are the list of links I left off at:
 /**Define the routes associated with the server for the local authentication methods */
-app.post('/login', (req, res, next) => { //create a route for user login
+/*app.post('/login', (req, res, next) => { //create a route for user login
   passport.authenticate('local'),
   //if the authentication is successful, redirect to the homepage or send a success response
   res.status(200).json( {success: true, user: req.user })
@@ -422,7 +425,7 @@ app.get('/login', passport.authenticate('local'), {
  * 3. 'connectEnsureLogin.ensureLoggedIn()' is a middleware function provided by the 'connect-ensure-login' library. It ensures that the user is logged in before allowing access to the subsequent middleware or route handler.
  * 4.  The third argument is a route handler function that gets executed when a request is made to the root URL. In this case, it sends the 'client/src/Home.jsx' file as a response. The {root: __dirname} option specifies that the file should be served from the current directory (this may also need to be modified)
  */
-
+/*
 app.get('/',   
   connectEnsureLogin.ensureLoggedIn(), (req, res) => res.sendFile('client/src/Home.jsx', {root: __dirname})
 );
@@ -469,7 +472,29 @@ app.post('/register', async (req, res) => {
  * notes regarding connect-ensure-login:
  * 1. As the name suggest, this package is a middleware that ensures a user is logged in. If a request is recieved that is unauthenticated, the request will be redirected to a login page. We'll use this to guard our routes.
  */
+app.post('/insert', async(req, res) => { //api endpoint code for getting information from user input
+  const fullName = req.body.fullname
+  const email = req.body.email
+  const password = req.body.password
+  const confirmPassword = req.body.confirmPassword
+  const role = req.body.role
 
+  const formData = new User({
+    fullname: fullName,
+    email: email,
+    password: password,
+    confirmPassword: confirmPassword,
+    role: role
+  })
+
+  try { 
+    await formData.save(); 
+    res.status(200).json({formData});  //this is like a return statement, it can cause a continous loop
+  } catch (err) {
+    console.log(err)
+    res.status(404).json({"error": "no data"});
+  } 
+});
 connectDB();
 //app.use(googlePassport.session());
 //googleApp();

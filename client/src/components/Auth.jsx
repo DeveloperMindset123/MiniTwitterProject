@@ -5,25 +5,79 @@ import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Axios from 'axios';  // we will need this to make api endpoint calls
 //import { response } from 'express';  --> we are not using this right now, uncomment this if needed
 
 
 export default function Auth(props) {
 
+    //we can use useState to change the values stated here following the tutorial
+    const [name, setName] = useState(""); //initialize name to be an empty string, will be replaced by the user input
+    const [email, setEmail] = useState("");  //initialize email to be an empty string, will be replaced by the user input
+    const [password, setPassword] = useState("");  //we will store the password in string format as well, we don't have to worry about security implications as that is not part of the project requirements
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [isCorporateUser, setIsCorporateUser] = useState(false);  //by default, user will not be a corporate user
+    const [isOrdinaryUser, setIsOrdinaryUser] = useState(true);  //by default, if user is not corporate, user will be ordinary
+    const [isTrendyUser, setIsTrendyUser] = useState(false); //by default, user will not be trendy user, user can only be trendy user if they are first an ordinary user
+
+    const handleSubmit = async (e) => {
+        if (password !== confirmPassword) {
+            console.log("Passwords do not match");
+            return;
+        }
+    
+        const role = isCorporateUser ? "corporate" : "ordinary";
+    
+        e.preventDefault();
+    
+        try {
+            const response = await fetch("http://localhost:4000/insert", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fullname: name,
+                    email: email,
+                    password: password,
+                    confirmPassword: confirmPassword,
+                    role: role
+                }),
+            });
+    
+            if (!response.ok) {
+                // Handle non-successful response
+                console.error("Error registering user:", response.statusText);
+                return;
+            }
+    
+            const data = await response.json(); //--> this was causing an error becuase it wasn't sending any JSON back
+            console.log("User successfully registered:", data);
+            // Additional logic or state updates can be done here upon successful registration.
+        } catch (error) {
+            console.error("Error registering user: ", error);
+            // Handle errors, display error messages, or update state accordingly.
+        }
+    };
+    
+
+
     let [authMode, setAuthMode] = useState("signin");
-    const [isCorporateUser, setIsCorporateUser] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
-    const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);
+   // const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);  --> moved above
 
     const formRef = useRef(null);  //initialized as a null value, will be updated depending on user input
+
+    /*  --> comment this out as we won't use it at the momemnt
     const [formData, setFormData] = useState({
         fullname: '',
         email: '',
         password: '',
         confirmPassword: '',
-    })
+    }) */
 
+    /*
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -32,13 +86,15 @@ export default function Auth(props) {
             [name]: value,  //set the name which serves as a placeholder and the value that is inputted by the user
         })
     }
-
+*/
+//the below function helps ensure that user can signup if they don't have an account
     const changeAuthMode = () => { //set the logic for whether to sign in or register
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
 
 
     //update the handleSubmit function to send a POST request to the '/login' or '/register' endpoint based on the 'authMode'. The fetch API can be used or any other method such as axios
+    /*  --> has been defined above in simpler form
 	const handleSubmit = (event) => {
         
         event.preventDefault(); 
@@ -68,14 +124,14 @@ export default function Auth(props) {
         }) 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
         //isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);  --> throwing an error
-    };
+    }; */
 
     //add the onchange event handlers to the form inputs
    
     if (authMode == 'signin') {
         return (
             <div className="Auth-form-container">
-                <Form className='Auth-form' ref={formRef}> {/**Attach formRef on the ref section of the react <form> tag */}
+                <form className='Auth-form' ref={formRef} onSubmit={handleSubmit}> {/**Attach formRef on the ref section of the react <form> tag */}
                     <div className='Auth-form-content'>
                         <h3 className='Auth-form-title'>Sign In</h3>
                         <div className='text-center'>
@@ -90,8 +146,8 @@ export default function Auth(props) {
                                 type='email'
                                 className='form-control mt-1'
                                 placeholder='Enter email'
-                                value={formData.email} //in our case, the email and username means the same thing for the sake of simplicity
-                                onChange={handleChange}  //call on the 
+                                //value={formData.email} =-> this parameter doesn't allow inputs in our case, the email and username means the same thing for the sake of simplicity
+                                //onChange={handleChange}  --> leave this empty for now as authentication logic has not yet been fully implemented 
                             />
                         </div>
                         <div className='form-group mt-3'>
@@ -100,8 +156,8 @@ export default function Auth(props) {
                                 type='password'
                                 className='form-control mt-1'
                                 placeholder='Enter Password'
-                                value={formData.password}
-                                onChange={handleChange}
+                                //value={formData.password}
+                                //onChange={handleChange}
                             />
                         </div>
                         
@@ -114,14 +170,14 @@ export default function Auth(props) {
                             Forgot <a href='#'>Password?</a>
                         </p>
                     </div>
-                </Form>
+                </form>
             </div>
         )
     }
 
     return (
         <div className='Auth-form-container'>
-            <Form className='Auth-form'>
+            <form className='Auth-form' onSubmit={handleSubmit}>
                 <div className='Auth-form-content'>
                     <h3 className='Auth-form-title'>Sign Up</h3>
                     <div className='text-center'>
@@ -137,8 +193,8 @@ export default function Auth(props) {
                             type='email'
                             className='form-control mt-1'
                             placeholder='e.g. Hans Zimmer'
-                            value={formData.fullname}
-                            onChange={handleChange}
+                           // value={formData.fullname}
+                            onChange={(e) => {setName(e.target.value)}} //get the value of the user input and update it
                         />
                     </div>
                     {/**Create the placeholder for entering password */}
@@ -148,8 +204,8 @@ export default function Auth(props) {
                             type='email'
                             className='form-control mt-1'
                             placeholder='Email Address'
-                            value={formData.email}
-                            onChange={handleChange}
+                            //value={formData.email}
+                            onChange={(e) => {setEmail(e.target.value)}}  //get the value of the user email address
                         />
                     </div>
                     {/**Create the input section for inputting password */}
@@ -159,8 +215,8 @@ export default function Auth(props) {
                             type='password'
                             className='form-control mt-1'
                             placeholder='Enter Password'
-                            value={formData.password}
-                            onChange={handleChange}
+                            //value={formData.password}
+                            onChange={(e) => {setPassword(e.target.value)}}  //set the password to the user password input
                         />
                     </div>
                     {/**Create the input section for confirming password */}
@@ -170,8 +226,8 @@ export default function Auth(props) {
                             type='password'
                             className='form-control mt-1'
                             placeholder='Retype Password'
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
+                            //value={formData.confirmPassword}
+                            onChange={(e) => {setConfirmPassword(e.target.value)}}  //set the confirm password and the function for handle submit will check if the password  and confirm password values matches 
                         />
                     </div>
                     <div className="form-group mt-3">
@@ -179,14 +235,18 @@ export default function Auth(props) {
                                 type="checkbox"
                                 className="form-check-input"
                                 checked={isCorporateUser}
-                                onChange={()=>setIsCorporateUser(!isCorporateUser)}
+                                /**We will need to ensure when the user clicks on this checkbox, the useState property can be used to change the values */
+                                onChange={()=>{
+                                    setIsCorporateUser(!isCorporateUser);  //when the user selects the checkbox, it will ensure that the corporate user value is changed to true (default false)
+                                    setIsOrdinaryUser(!isOrdinaryUser);  //this will ensure that upon checking the box for corporate user, the ordinary user value is changed to false
+                                }}
                                 style={{ marginRight: "10px" }}
                             />
                             <label>Corporate User</label>
                         </div>
                         
                         <div className='d-grid gap-2 mt-3'>
-                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
+                        <button type='button' className='btn btn-primary' onClick={handleSubmit}>
                             Submit
                         </button>
                     </div>
@@ -194,7 +254,7 @@ export default function Auth(props) {
                         Forgot <a href='#'>Password?</a>
                     </p>
                 </div>
-            </Form>
+            </form>
         </div>
 
             /*
