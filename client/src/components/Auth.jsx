@@ -5,7 +5,7 @@ import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import Axios from 'axios';  // we will need this to make api endpoint calls
+import axios from 'axios';  // we will need this to make api endpoint calls
 //import { response } from 'express';  --> we are not using this right now, uncomment this if needed
 
 
@@ -25,31 +25,27 @@ export default function Auth(props) {
             console.log("Passwords do not match");
             return;
         }
-    
         const role = isCorporateUser ? "corporate" : "ordinary";
-    
         e.preventDefault();
     
         try {
-            const response = await fetch("http://localhost:4000/insert", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fullname: name,
-                    email: email,
-                    password: password,
-                    confirmPassword: confirmPassword,
-                    role: role
-                }),
+            const response = await axios.post('http://localhost:4000/insert', {
+                fullname: name,
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword,
+                role: role
             });
-    
+
+            // Handle the response here
+            console.log(response.data);
+
             if (!response.ok) {
                 // Handle non-successful response
                 console.error("Error registering user:", response.statusText);
                 return;
             }
+            console.log("User successfully registered:", response.data);
     
             const data = await response.json(); //--> this was causing an error becuase it wasn't sending any JSON back
             console.log("User successfully registered:", data);

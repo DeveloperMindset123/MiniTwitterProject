@@ -191,15 +191,15 @@ app.post('/api/create-user', async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers','Content-Type');
   try {
-    console.log('New User: ' + newUser);
-    await CreateUser(newUser);
-
     const requiredFields = ['userName']; // should expand this
 
     if (!newUser || requiredFields.some(field => !newUser[field])) {
       res.status(400).json({ message: 'Missing required fields' });
       return;
     }
+
+    console.log('New User: ' + newUser);
+    await CreateUser(newUser);
 
     res.status(201).json({ message: 'User created successfully!' });
   } catch (err) {
@@ -469,6 +469,7 @@ app.post('/insert', async(req, res) => { //api endpoint code for getting informa
     confirmPassword: confirmPassword,
     role: role
   })
+  console.log('recieved data!', formData);
 
   try { 
     await formData.save(); 
