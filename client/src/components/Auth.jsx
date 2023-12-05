@@ -10,8 +10,6 @@ import axios from 'axios';  // we will need this to make api endpoint calls
 
 
 export default function Auth(props) {
-
-    //we can use useState to change the values stated here following the tutorial
     const [name, setName] = useState(""); //initialize name to be an empty string, will be replaced by the user input
     const [email, setEmail] = useState("");  //initialize email to be an empty string, will be replaced by the user input
     const [password, setPassword] = useState("");  //we will store the password in string format as well, we don't have to worry about security implications as that is not part of the project requirements
@@ -19,6 +17,9 @@ export default function Auth(props) {
     const [isCorporateUser, setIsCorporateUser] = useState(false);  //by default, user will not be a corporate user
     const [isOrdinaryUser, setIsOrdinaryUser] = useState(true);  //by default, if user is not corporate, user will be ordinary
     const [isTrendyUser, setIsTrendyUser] = useState(false); //by default, user will not be trendy user, user can only be trendy user if they are first an ordinary user
+    let [authMode, setAuthMode] = useState("signin");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
 
     const handleSubmit = async (e) => {
         if (password !== confirmPassword) {
@@ -27,41 +28,41 @@ export default function Auth(props) {
         }
         const role = isCorporateUser ? "corporate" : "ordinary";
         e.preventDefault();
-    
-        try {
-            const response = await axios.post('http://localhost:4000/insert', {
-                fullname: name,
-                email: email,
-                password: password,
-                confirmPassword: confirmPassword,
-                role: role
-            });
 
-            // Handle the response here
-            console.log(response.data);
-
-            if (!response.ok) {
-                // Handle non-successful response
-                console.error("Error registering user:", response.statusText);
-                return;
-            }
-            console.log("User successfully registered:", response.data);
-    
-            const data = await response.json(); //--> this was causing an error becuase it wasn't sending any JSON back
-            console.log("User successfully registered:", data);
-            // Additional logic or state updates can be done here upon successful registration.
-        } catch (error) {
-            console.error("Error registering user: ", error);
-            // Handle errors, display error messages, or update state accordingly.
+        const user = {
+            userName: name,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+            role: role,
+            cash: 0,
+            bio: null,
+            following: [],
+            followers: [],
+            interests: []
         }
+
+        // we shouldn't be registering until the user has selected their interests
+        isCorporateUser ? setIsModalOpen(true) :setIsSelectionModalOpen(true);
+
+
+        // try {
+        //     const response = await axios.post('http://localhost:4000/api/create-user', user);
+        //     console.log(response.data);
+
+        //     if (!response.status === 201) {
+        //         console.error("Error registering user:", response.statusText);
+        //         return;
+        //     }
+        //     console.log(response.data.message);
+        // } catch (error) {
+        //     console.error("Error registering user\n", error);
+        //     alert("We appologize but there was an error registering your account, please try again!");
+        // }
+
+        // user now registered
     };
     
-
-
-    let [authMode, setAuthMode] = useState("signin");
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
-   // const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);  --> moved above
 
     const formRef = useRef(null);  //initialized as a null value, will be updated depending on user input
 
@@ -184,11 +185,11 @@ export default function Auth(props) {
                     </div>
                     {/**Create the input section for entering full name */}
                     <div className='form-group mt-3'>
-                        <label>Full Name</label>
+                        <label>Username</label>
                         <input 
                             type='email'
                             className='form-control mt-1'
-                            placeholder='e.g. Hans Zimmer'
+                            placeholder='Mark Zuckerberg'
                            // value={formData.fullname}
                             onChange={(e) => {setName(e.target.value)}} //get the value of the user input and update it
                         />
@@ -253,28 +254,26 @@ export default function Auth(props) {
             </form>
         </div>
 
-            /*
-            {isCorporateUser && (
-                <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-                // only click submit, the pop up can be opened, either Corporate User or normal user
-            )}
-            {isSelectionModalOpen &&
-             <Selection isSelectionModalOpen= {isSelectionModalOpen} 
-             setIsSelectionModalOpen={setIsSelectionModalOpen} 
-             setIsTrendyUserOpen ={setIsTrendyUserOpen}
-             />
-            }
+        // {isCorporateUser && (
+        //     <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        //     // only click submit, the pop up can be opened, either Corporate User or normal user
+        // )}
+        // {isSelectionModalOpen &&
+        //     <Selection isSelectionModalOpen= {isSelectionModalOpen} 
+        //     setIsSelectionModalOpen={setIsSelectionModalOpen} 
+        //     setIsTrendyUserOpen ={setIsTrendyUserOpen}
+        //     />
+        // }
 
-            {isTrendyUserOpen && !isSelectionModalOpen && (<TrendyUser
-                    isTrendyUserOpen={isTrendyUserOpen}
-                    setIsTrendyUserOpen={setIsTrendyUserOpen}
-                    />
-            )}
-            */
+        // {isTrendyUserOpen && !isSelectionModalOpen && (<TrendyUser
+        //         isTrendyUserOpen={isTrendyUserOpen}
+        //         setIsTrendyUserOpen={setIsTrendyUserOpen}
+        //         />
+        // )}
     )
 }
 
-/*function Corporate({ isModalOpen, setIsModalOpen }) {
+function Corporate({isModalOpen, setIsModalOpen}) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
 
     const closePopup = () => {
@@ -341,7 +340,7 @@ export default function Auth(props) {
     );
 }
 
-function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
+function CustomerTarget(isCustomerTargetModalOpen, setIsCustomerTargetModalOpen) {
 
     const [selectedInterests, setSelectedInterests] = useState([]);
 
@@ -410,7 +409,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
     );
 }
 
-function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen}) {
+function Selection(isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen) {
 
     const closeSelectionModal = () => {
         setIsSelectionModalOpen(false);
@@ -494,7 +493,7 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
     );
   }
 
-function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
+function TrendyUser(isTrendyUserOpen, setIsTrendyUserOpen) {
    
     const closePopup = () => {
         setIsTrendyUserOpen(false);
@@ -563,10 +562,6 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
         </Modal>
 
     );
-} */
-
-
-
-
+}
 
 //note: continue here --> https://www.codementor.io/@supertokens/building-a-login-screen-with-react-and-bootstrap-1sqpm1iszfx

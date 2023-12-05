@@ -186,7 +186,8 @@ app.get('/api/fetch-trendy', async (req, res) => {
 // apis for USER related functions
 // api for creating new user
 app.post('/api/create-user', async (req, res) => {
-  const newUser = req.body.newUser;
+  const newUser = req.body;
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers','Content-Type');
@@ -474,6 +475,7 @@ app.post('/insert', async(req, res) => { //api endpoint code for getting informa
   try { 
     await formData.save(); 
     res.status(200).json({formData});  //this is like a return statement, it can cause a continous loop
+    console.log('registeration success!');
   } catch (err) {
     console.log(err)
     res.status(404).json({"error": "no data"});
