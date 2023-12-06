@@ -1,134 +1,53 @@
 /* eslint-disable no-unused-vars */
 //set up the authentication
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';  // we will need this to make api endpoint calls
-//import { response } from 'express';  --> we are not using this right now, uncomment this if needed
+import axios from 'axios';
+import { User } from './UploadDB';
+let newUser = new User();
 
-
-export default function Auth(props) {
-    const [name, setName] = useState(""); //initialize name to be an empty string, will be replaced by the user input
-    const [email, setEmail] = useState("");  //initialize email to be an empty string, will be replaced by the user input
-    const [password, setPassword] = useState("");  //we will store the password in string format as well, we don't have to worry about security implications as that is not part of the project requirements
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [isCorporateUser, setIsCorporateUser] = useState(false);  //by default, user will not be a corporate user
-    const [isOrdinaryUser, setIsOrdinaryUser] = useState(true);  //by default, if user is not corporate, user will be ordinary
-    const [isTrendyUser, setIsTrendyUser] = useState(false); //by default, user will not be trendy user, user can only be trendy user if they are first an ordinary user
+export default function Auth(props) { //login
     let [authMode, setAuthMode] = useState("signin");
+    const [isCorporateUser, setIsCorporateUser] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
+    const [isTrendyUserOpen, setIsTrendyUserOpen] = useState(false);
 
-    const handleSubmit = async (e) => {
-        if (password !== confirmPassword) {
-            console.log("Passwords do not match");
-            return;
-        }
-        const role = isCorporateUser ? "corporate" : "ordinary";
-        e.preventDefault();
+    const [username, setUserName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-        const user = {
-            userName: name,
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword,
-            role: role,
-            cash: 0,
-            bio: null,
-            following: [],
-            followers: [],
-            interests: []
-        }
-
-        // we shouldn't be registering until the user has selected their interests
-        isCorporateUser ? setIsModalOpen(true) :setIsSelectionModalOpen(true);
-
-
-        // try {
-        //     const response = await axios.post('http://localhost:4000/api/create-user', user);
-        //     console.log(response.data);
-
-        //     if (!response.status === 201) {
-        //         console.error("Error registering user:", response.statusText);
-        //         return;
-        //     }
-        //     console.log(response.data.message);
-        // } catch (error) {
-        //     console.error("Error registering user\n", error);
-        //     alert("We appologize but there was an error registering your account, please try again!");
-        // }
-
-        // user now registered
-    };
-    
-
-    const formRef = useRef(null);  //initialized as a null value, will be updated depending on user input
-
-    /*  --> comment this out as we won't use it at the momemnt
-    const [formData, setFormData] = useState({
-        fullname: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-    }) */
-
-    /*
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            //this will update the form data
-            ...formData,
-            [name]: value,  //set the name which serves as a placeholder and the value that is inputted by the user
-        })
-    }
-*/
-//the below function helps ensure that user can signup if they don't have an account
     const changeAuthMode = () => { //set the logic for whether to sign in or register
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
 
-
-    //update the handleSubmit function to send a POST request to the '/login' or '/register' endpoint based on the 'authMode'. The fetch API can be used or any other method such as axios
-    /*  --> has been defined above in simpler form
 	const handleSubmit = (event) => {
-        
         event.preventDefault(); 
-        //now, thanks to the handlechange function, 'formdata' will contain the values from the form inputs and can be used when constructing the JSON payload for the API request
-        //access form data
-        const { fullname, email, password, confirmPassword, Corporate } = formData;
 
-        //now we can create a JSOn payload given our data --> what is a JSON payload? --> JSON payload refers to the data sent in the body of an HTTP request or response, usually in the context of APIs, webhooks or other data exchange mechanism
-        const requestBody = {
-            fullname: fullname,
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword,
-            Corporate: isCorporateUser,  //we  already have the useState handling whether it is a corporate user or not, thanks to useState in React
+        //update recorded values
+        newUser.userName = username;
+        newUser.email = email;
+        newUser.password = password;
+
+        if(isCorporateUser){
+            newUser.corpo = true;
+            newUser.normal = false;
         }
 
+        console.log("New User Updated:" + newUser)
 
-        const endpoint = authMode === 'signin' ? '/login' : '/register';  //we are utilizing javascript ternary operators to check if signin or registration
-        fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                requestBody,  //this will return requestBody as a JSON format on the console 
-            })
-        }) 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
-        //isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);  --> throwing an error
-    }; */
+        isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
 
-    //add the onchange event handlers to the form inputs
+    };
    
     if (authMode == 'signin') {
         return (
             <div className="Auth-form-container">
-                <form className='Auth-form' ref={formRef} onSubmit={handleSubmit}> {/**Attach formRef on the ref section of the react <form> tag */}
+                <form className='Auth-form'>
                     <div className='Auth-form-content'>
                         <h3 className='Auth-form-title'>Sign In</h3>
                         <div className='text-center'>
@@ -143,8 +62,6 @@ export default function Auth(props) {
                                 type='email'
                                 className='form-control mt-1'
                                 placeholder='Enter email'
-                                //value={formData.email} =-> this parameter doesn't allow inputs in our case, the email and username means the same thing for the sake of simplicity
-                                //onChange={handleChange}  --> leave this empty for now as authentication logic has not yet been fully implemented 
                             />
                         </div>
                         <div className='form-group mt-3'>
@@ -153,8 +70,6 @@ export default function Auth(props) {
                                 type='password'
                                 className='form-control mt-1'
                                 placeholder='Enter Password'
-                                //value={formData.password}
-                                //onChange={handleChange}
                             />
                         </div>
                         
@@ -172,9 +87,9 @@ export default function Auth(props) {
         )
     }
 
-    return (
+    return ( // signup
         <div className='Auth-form-container'>
-            <form className='Auth-form' onSubmit={handleSubmit}>
+            <form className='Auth-form'>
                 <div className='Auth-form-content'>
                     <h3 className='Auth-form-title'>Sign Up</h3>
                     <div className='text-center'>
@@ -183,67 +98,62 @@ export default function Auth(props) {
                             Sign In
                         </span>
                     </div>
-                    {/**Create the input section for entering full name */}
+                    {/** full name */}
                     <div className='form-group mt-3'>
-                        <label>Username</label>
+                        <label>User Name</label>
                         <input 
-                            type='email'
+                            type='text'
                             className='form-control mt-1'
-                            placeholder='Mark Zuckerberg'
-                           // value={formData.fullname}
-                            onChange={(e) => {setName(e.target.value)}} //get the value of the user input and update it
+                            placeholder='User Name'
+                            value={username}
+                            onChange={e => setUserName(e.target.value)}
                         />
                     </div>
-                    {/**Create the placeholder for entering password */}
+                    {/** email */}
                     <div className='form-group mt-3'>
                         <label>Email Address</label>
                         <input 
                             type='email'
                             className='form-control mt-1'
                             placeholder='Email Address'
-                            //value={formData.email}
-                            onChange={(e) => {setEmail(e.target.value)}}  //get the value of the user email address
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
                     </div>
-                    {/**Create the input section for inputting password */}
+                    {/** password */}
                     <div className='form-group mt-3'>
                         <label>Password</label>
                         <input 
                             type='password'
                             className='form-control mt-1'
                             placeholder='Enter Password'
-                            //value={formData.password}
-                            onChange={(e) => {setPassword(e.target.value)}}  //set the password to the user password input
+                            value={password}
+                            onChange={e=>setPassword(e.target.value)}
                         />
                     </div>
-                    {/**Create the input section for confirming password */}
+                    {/**confirming password */}
                     <div className='form-group mt-3'>
                         <label>Confirm Password</label>
                         <input 
                             type='password'
                             className='form-control mt-1'
                             placeholder='Retype Password'
-                            //value={formData.confirmPassword}
-                            onChange={(e) => {setConfirmPassword(e.target.value)}}  //set the confirm password and the function for handle submit will check if the password  and confirm password values matches 
                         />
                     </div>
+                    {/** Corpo */}
                     <div className="form-group mt-3">
                             <input
                                 type="checkbox"
                                 className="form-check-input"
                                 checked={isCorporateUser}
-                                /**We will need to ensure when the user clicks on this checkbox, the useState property can be used to change the values */
-                                onChange={()=>{
-                                    setIsCorporateUser(!isCorporateUser);  //when the user selects the checkbox, it will ensure that the corporate user value is changed to true (default false)
-                                    setIsOrdinaryUser(!isOrdinaryUser);  //this will ensure that upon checking the box for corporate user, the ordinary user value is changed to false
-                                }}
+                                onChange={()=>setIsCorporateUser(!isCorporateUser)}
                                 style={{ marginRight: "10px" }}
                             />
                             <label>Corporate User</label>
                         </div>
                         
-                        <div className='d-grid gap-2 mt-3'>
-                        <button type='button' className='btn btn-primary' onClick={handleSubmit}>
+                    <div className='d-grid gap-2 mt-3'>
+                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
                             Submit
                         </button>
                     </div>
@@ -252,37 +162,46 @@ export default function Auth(props) {
                     </p>
                 </div>
             </form>
+            {isCorporateUser && (
+                <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                // only click submit, the pop up can be opened, either Corporate User or normal user
+            )}
+            {isSelectionModalOpen &&
+             <Selection isSelectionModalOpen= {isSelectionModalOpen} 
+             setIsSelectionModalOpen={setIsSelectionModalOpen} 
+             setIsTrendyUserOpen ={setIsTrendyUserOpen}
+             />
+            }
+
+            {isTrendyUserOpen && !isSelectionModalOpen && (<TrendyUser
+                    isTrendyUserOpen={isTrendyUserOpen}
+                    setIsTrendyUserOpen={setIsTrendyUserOpen}
+                    />
+            )}
+
         </div>
 
-        // {isCorporateUser && (
-        //     <Corporate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-        //     // only click submit, the pop up can be opened, either Corporate User or normal user
-        // )}
-        // {isSelectionModalOpen &&
-        //     <Selection isSelectionModalOpen= {isSelectionModalOpen} 
-        //     setIsSelectionModalOpen={setIsSelectionModalOpen} 
-        //     setIsTrendyUserOpen ={setIsTrendyUserOpen}
-        //     />
-        // }
-
-        // {isTrendyUserOpen && !isSelectionModalOpen && (<TrendyUser
-        //         isTrendyUserOpen={isTrendyUserOpen}
-        //         setIsTrendyUserOpen={setIsTrendyUserOpen}
-        //         />
-        // )}
     )
 }
 
-function Corporate({isModalOpen, setIsModalOpen}) {
+function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
+    const [companyName, setCompanyName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zipCode, setZipCode] = useState('');
 
-    const closePopup = () => {
-        setIsModalOpen(false);
-    }
+    const closePopup = () => {setIsModalOpen(false);}
 
     const OnClickContinueHandler =() =>{
         setIsCustomerTargetModalOpen(true);
-        closePopup()
+        const corpoInfo = {'companyname': companyName, 'phonenumber': phoneNumber, 'address': address, 'city': city,'state': state, 'zipcode': zipCode};
+        console.log(corpoInfo);
+        newUser.corpoInfo = corpoInfo;
+
+        closePopup();
     }
     
     return (
@@ -295,36 +214,66 @@ function Corporate({isModalOpen, setIsModalOpen}) {
                 <div className="corporateInformation">
                     <div className="corporate">
                         <label>Company Name</label>
-                        <input type="text" placeholder="Enter your company name" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter your company name"
+                            value={companyName}
+                            onChange={e => setCompanyName(e.target.value)} 
+                        />
                     </div>
                     <div className="corporate">
                         <label>Phone Number</label>
-                        <input type="text" placeholder="Enter your phone number" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter your phone number"
+                            value={phoneNumber}
+                            onChange={e => setPhoneNumber(e.target.value)}
+                        />
                     </div>
                     <div className="corporate">
                         <label>Address</label>
-                        <input type="address" placeholder="Enter your address" />
+                        <input 
+                            type="address" 
+                            placeholder="Enter your address" 
+                            value={address}
+                            onChange={e => setAddress(e.target.value)}
+                            />
                     </div>
                     <div className="corporate">
                         <label>City</label>
-                        <input type="address" placeholder="Enter your city" />
+                        <input 
+                            type="address" 
+                            placeholder="Enter your city" 
+                            value={city}
+                            onChange={e => setCity(e.target.value)}
+                            />
                     </div>
                     <div className="corporate">
                         <label>State</label>
-                        <input type="address" placeholder="Enter your state" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter your state" 
+                            value={state}
+                            onChange={e => setState(e.target.value)}
+                            />
                     </div>
                     <div className="corporate">
                         <label>Zip Code</label>
-                        <input type="address" placeholder="Enter the Zip Code" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter your Zip Code" 
+                            value={zipCode}
+                            onChange={e => setZipCode(e.target.value)}
+                            />                    
                     </div>
                     <div className="d-grid gap-2 mt-3">
                         <Button
                             className="custom-button"
                             onClick={OnClickContinueHandler}
                         >
-                        Continue
+                            Continue
                         </Button>
-                </div>
+                    </div>
                 </div>
             </Modal.Body>
         </Modal>
@@ -340,7 +289,7 @@ function Corporate({isModalOpen, setIsModalOpen}) {
     );
 }
 
-function CustomerTarget(isCustomerTargetModalOpen, setIsCustomerTargetModalOpen) {
+function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
 
     const [selectedInterests, setSelectedInterests] = useState([]);
 
@@ -375,9 +324,21 @@ function CustomerTarget(isCustomerTargetModalOpen, setIsCustomerTargetModalOpen)
         setIsCustomerTargetModalOpen(false);
     }
 
-    const doneHandler =() =>{
+    const doneHandler =() =>{ // axios post for corpo only
         closeCustomerTargetModal();
-        //console.log('Selected interests:', selectedInterests);
+        console.log('Selected interests:', selectedInterests);
+
+        newUser.interests = selectedInterests;
+
+    new Promise((resolve, reject) => {
+        axios.post('http://localhost:4000/api/create-user', newUser)
+             .then(response => resolve(response))
+             .catch(error => reject(error));
+    }).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.error(err);
+    });
     }
    
     return (
@@ -409,8 +370,7 @@ function CustomerTarget(isCustomerTargetModalOpen, setIsCustomerTargetModalOpen)
     );
 }
 
-function Selection(isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen) {
-
+function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen}) {
     const closeSelectionModal = () => {
         setIsSelectionModalOpen(false);
     };
@@ -493,7 +453,7 @@ function Selection(isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserO
     );
   }
 
-function TrendyUser(isTrendyUserOpen, setIsTrendyUserOpen) {
+function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
    
     const closePopup = () => {
         setIsTrendyUserOpen(false);
@@ -560,7 +520,6 @@ function TrendyUser(isTrendyUserOpen, setIsTrendyUserOpen) {
             </div>
             </Modal.Body>
         </Modal>
-
     );
 }
 
