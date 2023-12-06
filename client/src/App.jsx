@@ -23,9 +23,12 @@ const App = () => {
 
       if (sessionCookie) {
         try {
-          const response = await axios.get('http://localhost:4000/api/fetch-user', {userId: sessionCookie});
-          console.log(response);
-          // setUser(await response.json());
+          // console.log(sessionCookie);
+          const response = await axios.get('http://localhost:4000/api/fetch-user', {
+            params:{'userId': sessionCookie}
+          });
+          // console.log('user:', response.data);
+          setUser(response.data);
         } 
         catch (error) {
           console.error('Error validating session:', error);
@@ -34,16 +37,16 @@ const App = () => {
   };
     validateSession();
   }, []);
-  console.log(user);
+  console.log('User:',user);
 // add 'user' object to input param to landing
     return (
       <BrowserRouter>
         <Routes> 
-              <Route path='/' element={<Home />} />
-              <Route path='/Landing' element={<Landing />} />
-              <Route path='/Upload' element={<Upload />} />
-              <Route path='/User' element={<User />} />
-              <Route path='/Auth' element={<Auth/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
+              <Route path='/' element={<Home userId={user._id}/>} />
+              <Route path='/Landing' element={<Landing userId={user._id}/>} />
+              <Route path='/Upload' element={<Upload userId={user._id}/>} />
+              <Route path='/User' element={<User userId={user._id}/>} />
+              <Route path='/Auth' element={<Auth userId={user._id}/>} />  {/**We want to ensure that when user clicks on the sign up or login button, user  */}
         </Routes>
       </BrowserRouter>
     );

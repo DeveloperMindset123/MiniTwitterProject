@@ -189,7 +189,7 @@ function ElonGPT() {
   );
 }
 
-const Home = () => {
+const Home = ({userId}) => {
   const handleLogout = async () => {  //this function will handle logout, this same function can be used for other methods of authentication
     try {
         const response = await axios.get("http://localhost:4000/auth/logout"); //get the information about the user that is logged out from this link of the server
@@ -261,6 +261,8 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
+            <Upload userId={userId}/>
+            <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
             {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'} />}
             {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} />} 

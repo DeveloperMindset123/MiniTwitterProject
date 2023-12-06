@@ -11,8 +11,8 @@ import {Post} from './components/UploadDB.js';
 import '../src/styles/Upload.css'
 
 
-const Upload = () => {
-  const [userId, setUserId] = useState('');
+const Upload = ({ userId }) => {
+  console.log('userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
   const [textOverflow, setTextOverFlow] = useState('');
@@ -56,7 +56,6 @@ const Upload = () => {
 
       if (response.status === 201) {
         console.log('Post saved successfully!', response);
-        setUserId('');
         setBodyText('');
       }
       else if(response.status === 400){
@@ -82,14 +81,14 @@ const Upload = () => {
   return (
     <div className='form-container'>
       <Form onSubmit={handleSubmit}>
-        <Row className='Group-Form'>
-          <Col>
+        {/* <Row className='Group-Form'> */}
+          {/* <Col>
           <label className='iD-label'> UserID:</label>
           </Col>
           <Col md ="10">
           <input className='iD-field' type="text" value={userId} onChange={(event) => setUserId(event.target.value)}/>
           </Col>
-        </Row>
+        </Row> */}
   {/*         <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} /> */}
   {/*       <label>BodyText (add hashtags with '#'):</label> */}
   {/*       <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} /> */}

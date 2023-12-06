@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'fs';
 import dotenv from 'dotenv/config'; // even tho its gray its needed
 const MONGOURI = process.env.MONOGODB;
@@ -68,7 +68,7 @@ export async function GetUser(userId){
         const db = client.db(DBNAME);
         const collection = db.collection(USERS);
 
-        const query = { _id: userId };
+        const query = { _id: new ObjectId(userId) };
         const user = await collection.findOne(query);
 
         if (!user) {

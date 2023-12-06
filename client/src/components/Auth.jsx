@@ -344,7 +344,6 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
     new Promise((resolve, reject) => {
         axios.post('http://localhost:4000/api/create-user', newUser)
              .then(response => {
-                // console.log('response',response.data.id);
                 setCookie('username', response.data.id, 36500); // Setting it for 100 years
                 resolve(response);
                 })

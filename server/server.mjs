@@ -209,16 +209,20 @@ app.post('/api/create-user', async (req, res) => {
 });
 //api for fetching user
 app.get('/api/fetch-user', async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.query.userId;
   console.log('userId:', userId);
+  
+  if(!userId || userId === ''){
+    return res.status(400).json({ message: 'Missing userId', got: req.query });
+  }
   try {
     const user = await GetUser(userId);
-    console.log("Got User: ", user);
+    console.log("Got User: ", userId);
 
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (err) {
     console.error('Error getting user', err);
-    res.status(500).json({ error: 'Failed to fetch user' });
+    return res.status(500).json({ error: 'Failed to fetch user' });
   }
 });
 //api for getting user's posts
