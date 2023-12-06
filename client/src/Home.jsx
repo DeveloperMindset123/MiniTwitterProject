@@ -84,7 +84,7 @@ function FetchPosts(type) {
     return <h1>Loading...</h1>;
   } else {
     return (
-    <div className="container">
+    <div className="container" style={{marginLeft: '20px'}}>
       <div className="row">
         {posts.map((post, index) => (
           <div className="post-container " key={index}>
@@ -93,7 +93,7 @@ function FetchPosts(type) {
                 <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
                 <h5 className="card-title">{post.bodyText}</h5>
                 <div className="post-image">
-                <img src="" alt="Image"/>
+                {post._id.img && <img src="" alt="Image"/>}
               </div>
                 <p className="card-text">{post.hashTags}</p>
                 <Row>

@@ -1,0 +1,64 @@
+
+.form-container{
+    margin-left: 70px;
+    padding-top: 5px;
+
+}
+
+.Group-Form{
+    margin-bottom: 5px;
+}
+
+.iD-label{
+    color:white;
+    margin-left: 40px;
+}
+
+.iD-field{
+    margin-right: 480px;
+    width: 150.4px;
+    height: 30px;
+    background-color: #333;
+    color : #cdc6c6;
+    border: 1px solid #cdc6c6;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.iD-field:focus {
+    background-color: #555; 
+}
+
+.body-textarea{
+    margin-left: 40px;
+    width: 650px !important ;
+    height: 120.2px; 
+    resize: none;
+    border: none;
+    background-color: #333;
+    color : #cdc6c6;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8); 
+
+}
+.body-textarea:focus {
+    background-color: rgb(70, 68, 68); 
+}
+
+.body-textarea::placeholder {
+    color: #999; 
+    font-size: large;
+}
+
+.imageButton{
+    margin-left: 30px;
+    padding-top: 1px;
+}
+
+.videoButton{
+    margin-left: 1px;
+}
+.savePostButton{
+    margin-left: 460px;
+}

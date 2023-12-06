@@ -20,9 +20,12 @@
   align-items: center;
   padding: 10px 20px 20px 20px; /* Add extra padding-bottom (20px) */
   box-sizing: border-box;
+  color: #ece5e5;
 }
 
 .chat-bot ul {
+  background-color: #333;
+  color: #ece5e5;
   list-style: none;
   padding: 0;
   text-align: center; /* Center text within list items */
@@ -49,11 +52,18 @@
 }
 
 .search-bar input {
+  background-color: #333;
   padding: 10px;
   flex-grow: 1;
   border: none; /* Remove the border */
   border-radius: 0; /* Set border-radius to 0 for square corners */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  color:whitesmoke;
+}
+
+.search-bar input::placeholder{
+  color: whitesmoke; 
+  font-size: medium;
 }
 
 /* Ai */
@@ -63,7 +73,7 @@
   width: 80%;
   margin: 20px auto;
   padding: 30px;
-  background-color: #f5f5f5;
+  background-color: #333;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -82,14 +92,20 @@
   font-size: 16px;
   border: none;
   border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   transition: box-shadow 0.3s ease;
+  color:#f8f4f4;
+}
+.input-box::placeholder {
+  color: #999; 
+  font-size: large;
 }
 
 .input-box:focus {
+  background-color: rgb(70, 68, 68); 
   outline: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .submit-button {

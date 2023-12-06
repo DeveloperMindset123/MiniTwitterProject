@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faFilm } from '@fortawesome/free-solid-svg-icons';
 import {Post} from './components/UploadDB.js';
+import '../src/styles/Upload.css'
 
 
 const Upload = () => {
@@ -79,29 +80,25 @@ const Upload = () => {
 
 
   return (
-    <div style={{/* justifyContent: 'center' */ marginLeft: "50px"}}>
+    <div className='form-container'>
       <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} style={{marginBottom: '5px'}}>
+        <Row className='Group-Form'>
           <Col>
-          <label style ={{color:'white',marginLeft: "40px"}}> UserID:</label>
+          <label className='iD-label'> UserID:</label>
           </Col>
           <Col md ="10">
-          <Form.Control style ={{marginRight: '480px', width: '150.4px', height: '30px', backgroundColor: '#333', color : '#cdc6c6', border: '1px solid #cdc6c6'}}
-           type="text" value={userId} 
-          onChange={(event) => setUserId(event.target.value)}/>
+          <input className='iD-field' type="text" value={userId} onChange={(event) => setUserId(event.target.value)}/>
           </Col>
-        </Form.Group>
+        </Row>
   {/*         <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} /> */}
   {/*       <label>BodyText (add hashtags with '#'):</label> */}
   {/*       <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} /> */}
 
-        <Form.Group as={Row} >
-          <Form.Control as="textarea" value={bodyText} 
-            onChange={(event) => setBodyText(event.target.value)} 
-            style ={{marginLeft: '5px', width: '680px', height: '120.2px', resize: 'none',border: 'none', backgroundColor: '#333', color : '#cdc6c6' }}
+        <Row  className='Group-Form'>
+          <textarea className='body-textarea' value={bodyText} onChange={(event) => setBodyText(event.target.value)} 
             placeholder='What is Happening?!'
           />
-        </Form.Group>
+        </Row>
 
         {textOverflow > 0 && (
           <div> {/* for Common User */}
@@ -109,19 +106,19 @@ const Upload = () => {
           </div>
         )}
 
-        <Form.Group as={Row} style={{marginTop: "5px"}}>
+        <Row className='Group-Form'>
           <Col>
-            <Button size="md" variant="dark"  >
+            <Button size="md" variant="dark" className='imageButton' >
               <FontAwesomeIcon icon={faImage} size="sm" />
             </Button>
-            <Button size="md" variant="dark" style={{marginLeft: '1px'}}>
+            <Button size="md" variant="dark" className='videoButton'>
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
-            <Button size="md" variant="dark" type="submit" disabled={!formValid} style={{marginLeft: '500px'}}>
+            <Button size="md" variant="dark" type="submit" disabled={!formValid} className='savePostButton'>
               Save Post
             </Button>
           </Col>
-        </Form.Group>
+        </Row>
       </Form>
     </div>
   );
