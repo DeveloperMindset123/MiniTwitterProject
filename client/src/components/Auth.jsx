@@ -48,6 +48,7 @@ export default function Auth(props) { //login
             console.log(res.data.message);
             document.location.href = '/';
         }).catch(err => {
+            alert(err.response.data.message)
             console.error(err);
         });
     }
@@ -215,6 +216,7 @@ export default function Auth(props) { //login
     )
 }
 
+// if corpo checked
 function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
     const [companyName, setCompanyName] = useState('');
@@ -319,7 +321,7 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
 
     );
 }
-
+// after corpo info 
 function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
 
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -403,15 +405,15 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
         </Modal>
     );
 }
-
+// if ordinary user
 function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen}) {
     const closeSelectionModal = () => {
         setIsSelectionModalOpen(false);
     };
 
-
     const OnClickContinueHandler = () =>{
         if(selectedInterests.length >= 3){
+            newUser.interests = selectedInterests;
             setIsTrendyUserOpen(true)
             closeSelectionModal()
         }else{
@@ -485,14 +487,12 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
         
       </div>
     );
-  }
-
+}
+// after ordinary user
 function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
-   
     const closePopup = () => {
         setIsTrendyUserOpen(false);
     }
-
 
     const [users, setUsers] = useState([
         { id: 1, name: 'User 1', isFollowing: false },
@@ -514,6 +514,7 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
 
 
       const doneHandler = () => {
+        
         closePopup()
       }
  
@@ -548,13 +549,11 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
                 <Button
                     className="custom-button"
                     onClick={doneHandler}    
-                        >
-                        Done
+                >
+                    Done
                 </Button>
             </div>
             </Modal.Body>
         </Modal>
     );
 }
-
-//note: continue here --> https://www.codementor.io/@supertokens/building-a-login-screen-with-react-and-bootstrap-1sqpm1iszfx

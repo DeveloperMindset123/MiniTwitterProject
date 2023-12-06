@@ -263,7 +263,7 @@ app.get('/api/check-user', async(req, res) => {
       return res.status(200).json({message:'sign in successful', id: user._id});
     }
     else{
-      return res.status(400).json({message:'sign in fail', id: user._id});
+      return res.status(400).json({message:'Sign in Fail: either your password or username are incorrect!', id: user._id});
     }
   }catch(error){
     console.error('Error checking if user exists\n' + error);
