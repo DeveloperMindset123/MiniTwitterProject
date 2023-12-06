@@ -79,12 +79,14 @@ const Upload = () => {
 
 
   return (
-    <div style={{/* justifyContent: 'center' */ marginLeft: "260px"}}>
+    <div style={{/* justifyContent: 'center' */ marginLeft: "50px"}}>
       <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} style={{marginBottom: '1px'}}>
-          <Form.Label column lg="2" style ={{color:'white'}}> UserID:</Form.Label>
+        <Form.Group as={Row} style={{marginBottom: '5px'}}>
+          <Col>
+          <label style ={{color:'white',marginLeft: "40px"}}> UserID:</label>
+          </Col>
           <Col md ="10">
-          <Form.Control style ={{marginRight: '380px', width: '150.4px', height: '35px', backgroundColor: '#333'}}
+          <Form.Control style ={{marginRight: '480px', width: '150.4px', height: '30px', backgroundColor: '#333', color : '#cdc6c6', border: '1px solid #cdc6c6'}}
            type="text" value={userId} 
           onChange={(event) => setUserId(event.target.value)}/>
           </Col>
@@ -96,7 +98,7 @@ const Upload = () => {
         <Form.Group as={Row} >
           <Form.Control as="textarea" value={bodyText} 
             onChange={(event) => setBodyText(event.target.value)} 
-            style ={{marginLeft: '10px', width: '340.4px', height: '80.2px', resize: 'none', border: 'none',backgroundColor: '#333' }}
+            style ={{marginLeft: '5px', width: '680px', height: '120.2px', resize: 'none',border: 'none', backgroundColor: '#333', color : '#cdc6c6' }}
             placeholder='What is Happening?!'
           />
         </Form.Group>
@@ -109,13 +111,13 @@ const Upload = () => {
 
         <Form.Group as={Row} style={{marginTop: "5px"}}>
           <Col>
-            <Button size="sm" variant="dark"  >
+            <Button size="md" variant="dark"  >
               <FontAwesomeIcon icon={faImage} size="sm" />
             </Button>
-            <Button size="sm" variant="dark" style={{marginLeft: '1px'}}>
+            <Button size="md" variant="dark" style={{marginLeft: '1px'}}>
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
-            <Button size="sm" variant="dark" type="submit" disabled={!formValid} style={{marginLeft: '200px'}}>
+            <Button size="md" variant="dark" type="submit" disabled={!formValid} style={{marginLeft: '500px'}}>
               Save Post
             </Button>
           </Col>
