@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';  //mongoose has already been installed and in use, meaning I don't need to reinstall it
 import express, { json } from 'express';  //we initially planned on using JSOn but since we migrated everything to database, we will not be using JSON
 import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';  //import the functions that has been written in posts.mjs, this handles the logic for posting, deleting, trending posts etc.
-import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';  //the functions defined here will allow us to manually create users, delete users, get user unformation etc.
+import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser, GetUserByName } from './user.mjs';  //the functions defined here will allow us to manually create users, delete users, get user unformation etc.
 import { askChatGPT } from './chatbot.mjs'; //this is where the chatgpt based code has been implemented
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
@@ -72,37 +72,9 @@ app.use(bodyParser.json());  //this has already been defined, meaning we don't n
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expresSession);  //we want to ensure that our app is using the express session we defined above
 
-/**
- * Breakdown of the steps involved:
- * 1. Serialization: When a user logs in, Passport serializes the user object (typically just the user ID) into the session. This is done using 'passport.serializeUser'
- * 2. Deserialization: On subsequent requests, Passport deserializes the user object from the session using `passport.deserializeUser`. The user object is then attached to the `req.user` property, allowing the application to identify the logged-in user.
- * 3. passport.session() --> middleware: This middleware is responsible for setting up passport to use sessions. It works in conjuction with the express session middleware, which must be used before `passport.session()` in the middleware stack.
- */
-
-
-/**
- * Let is try to understand the logic that is taking place here, in order to understand it better:
- * 1. First, we require express and create our Express app by calling express(). Then we define the directory from which to serve our static files
- * 2. The next lines sees us require the body-parser middleware, which will help us parse the body of our requests. We're also adding the express-session middleware to help us save the session cookie
- */
-
 app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 5000
   console.log(`Server listening at http://localhost:${port}`);
 });
-
-//configure session storage
-/* --> I don't think this is neccessary
-app.use(cookieSession({
-  name: 'session-name',
-  keys: ['key1', 'key2']
-})) */
-
-//const MONGOURI = process.env.MONOGODB;
-//const { passport: googlePassport, app: googleApp } = pkg;  --> we will not be using this
-//const app = express();  --> this has already been declared once
-//const port = 4000; --> this has already been declared once
-//app.use(express.json()); --> this line has already been declared above as well
-
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -280,7 +252,24 @@ app.post('/api/askGPT', async (req,res)=>{
     res.status(500).json({ message: 'Error calling gpt:', err });
   }
 });
+// api for checking if user exists
+app.get('/api/check-user', async(req, res) => {
+  const userName = req.query.userName;
+  const password = req.query.password;
 
+  try{
+    const user = await GetUserByName(userName);
+    if(user.password === password){
+      return res.status(200).json({message:'sign in successful', id: user._id});
+    }
+    else{
+      return res.status(400).json({message:'Sign in Fail: either your password or username are incorrect!', id: user._id});
+    }
+  }catch(error){
+    console.error('Error checking if user exists\n' + error);
+    return res.status(500).json({message: 'server error ruh roh'});
+  }
+})
 // Auth 
 /**
  * Google Auth --> note: was running into some issues regarding authentication using the routes, which may have been causing confict, therefore, everything from auth.cjs was transferred here and instead we are using "app.get" method instead of "router.get" method
@@ -350,142 +339,4 @@ async function connectDB(){  //this is where the database connection the MongoDB
     console.error(err);
   }
 };
-
-/**Let's break down the logic that is taking place here:
- * 1. Here we require the previously installed packages. Then we connect to our database using mongoose.connect and give it the path to our database. Next, we're making use of a schema to define our data structure. In this case, we're creating a userDetail schema with username, password, corpo, trendy, normal/ordinary, etc, so that once the user signs up during the registration process, the information is saved
- */
-
-/* --> we created a seperate schema model
-const Schema = mongoose.Schema;
-const userDetail = new Schema({
-  _id: String,
-  admin: Boolean,
-  corporate: Boolean,
-  trendy: Boolean,
-  ordinary: Boolean, //note, I changed normal --> ordinary, to more accurately reflect the requirements of the project
-  username: String,  //this will be the username the user registers with
-  cash: Number,  //note that cash needs to be represented in not just whole numbers but also floating point values
-  picture: Buffer, //in MongoDB, when storing images or binary data, the appropriate datatype for the "image" attribute is "Buffer". A Buffer is a built-in data type in MongoDb that can hold binary data. It is commonly used to store binary data such as images, documents or any other type of files
-  bio: String,
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],  //array of references: This is useful when it is neccessary to maintain a seperate collection for users and have a central place to store user details
-  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}]  //same as above concept, added following and followers to distinguish who the user follows and whom is being followed by the user
-}) 
-
-userDetail.plugin(passportLocalMongoose);
-const UserDetails = mongoose.model('userInfo', userDetail, 'userInfo');
-*/
-/**Let's break donw what is going on here:
- * 1. After installing the passportLocalMongoose and importing it here, we make use of the schema to define our data structure. In this case, we're creating a schema named userData with various fields and datatypes
- * 2. next, we add passportLocalMongoose as a plugin to our schema. The first parameter is the name of the collection in the database. The second parameter references to our schema that was created, and the third one is the name we're assigning to the collection inside Mongoose
- * 
- */
-
-/**Passport local authentication setup */
-//passport.use(new LocalStrategy(UserDetails.authenticate()));
-
-// --> uncomment this if the previous line causes errors, refer to the documentation --> passport.use(UserDetails.createStrategy()); //First, we make passport use the local strategy by calling the createStrategy() on our UserDetails model, utilizing passport-local-mongoose --> which takes care of everything so that we don't have to set up the strategy
-//passport.serializeUser(UserDetails.serializeUser()); //Then, we're using serializeUser() and deserializeUser() callbacks. The first one will be invoked on authentication, and its job is to serialize the user instance with the inforemation we pass on to it and store it in the session via a cookie. The second one will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a credential.
-//passport.deserializeUser(UserDetails.deserializeUser());
-
-
-//moved the code here
-//here, we require passport and initialize it along with its session authentication middleware, directly inside our express app
-//app.use(passport.initialize()); //--> let's understand what the purpose of this line is: Purpose --> This line initializes Passport and is typically used at the beginning of a middleware stack to set up the authentication process. Explanation: Passport initializes itself and prepares to authenticate requests. It adds properties and methods to the `req` (request) object, including the `req.passport` object.
-//app.use(passport.session());  //--> purpose: This line sets up passport to support persistent login sessions. Explanations: Passport can maintain a user's login state across HTTP requests using sessions. When a user logs in, their user object is serialized and stored in the session, subsequent requests will deserialize the user object, making it available in `req.user`. This is particularly useful for keeping a user authenticated across multiple requests.
-
-
-//the following are the list of links I left off at:
-/**Define the routes associated with the server for the local authentication methods */
-/*app.post('/login', (req, res, next) => { //create a route for user login
-  passport.authenticate('local'),
-  //if the authentication is successful, redirect to the homepage or send a success response
-  res.status(200).json( {success: true, user: req.user })
-});  //this will print out a success response on the console
-
-//this needed additional modification
-app.get('/login', passport.authenticate('local'), {
-  successRedirect: '/',  //redirect the user to the homepage upon successfull login
-  failureRedirect: '/login?info=Invalid Username or Password', //redirect user back to login page with an error message upon login failure
-});
-/**
- * Explanation for the below corresponding code:
- * 1. app.get('/') --> this is defining a route for the root URL ("/") of the web application
- * 2. 'app' is the instance of the express application
- * 3. 'connectEnsureLogin.ensureLoggedIn()' is a middleware function provided by the 'connect-ensure-login' library. It ensures that the user is logged in before allowing access to the subsequent middleware or route handler.
- * 4.  The third argument is a route handler function that gets executed when a request is made to the root URL. In this case, it sends the 'client/src/Home.jsx' file as a response. The {root: __dirname} option specifies that the file should be served from the current directory (this may also need to be modified)
- */
-/*
-app.get('/',   
-  connectEnsureLogin.ensureLoggedIn(), (req, res) => res.sendFile('client/src/Home.jsx', {root: __dirname})
-);
-
-app.get('/private',  //this sets up a rorute for handling GET requests to the /private endpoint 
-  connectEnsureLogin.ensureLoggedIn(),  //this serves as a route guard, it's job is validating the session to make sure you're allowed to look at that route
-  (req, res) => res.sendFile('client/src/private.jsx', {root: __dirname})
-);
-
-app.get('/user',
-  connectEnsureLogin.ensureLoggedIn(),
-  (req, res) => res.send({user: req.user})
-);
-
-//define a registration route to handle information pertaining to registration
-app.post('/register', async (req, res) => {
-  try {
-    //extract the user details from the request body (meaning get the data the user inserts in the input box)
-    const { full_name, email_address, password, confirm_password, corporate } = req.body;
-
-    //create a new user, note that the parameters inside userDetails needs to match the above user that has been created
-    const user = await UserDetails.register(new UserDetails( {full_name, email_address, password, confirm_password, corporate }));
-
-    //login the newly registered user
-    req.login(user, (err) => {
-      if (err) {
-        return res.status(500).json({success: false, message: 'Error loggin in after registration'}) //this will mean the user hasn't successfully registered
-      }
-
-      return res.status(201).json( {success: true, user});  //otherwise, if err message is false, that indicates that user has successfully logged in
-    })
-  } catch (err) {
-    console.error('Error registering user:', err); //print out the error message in the case that user registration fails
-    res.status(500).json( {message: 'Error registering user', error: err}); //this will specify the error message status and the message that will printed out on the console
-  }
-});
-
-
-
-//next, we set up a route to handle a POST request to the '/login' path, inside the handler, we use the passport.authenticate method, which attempts to authenticate with the strategy it revieves as its first parameter --> in this case local. If authentication fails, it will redirect us to the '/login' page, but it will add a query parameter -- info -- that will contain an error message. Otherwise, if authentication is successful, it will redirect the user to the '/' route
-
-
-/**
- * notes regarding connect-ensure-login:
- * 1. As the name suggest, this package is a middleware that ensures a user is logged in. If a request is recieved that is unauthenticated, the request will be redirected to a login page. We'll use this to guard our routes.
- */
-app.post('/insert', async(req, res) => { //api endpoint code for getting information from user input
-  const fullName = req.body.fullname
-  const email = req.body.email
-  const password = req.body.password
-  const confirmPassword = req.body.confirmPassword
-  const role = req.body.role
-
-  const formData = new User({
-    fullname: fullName,
-    email: email,
-    password: password,
-    confirmPassword: confirmPassword,
-    role: role
-  })
-  console.log('recieved data!', formData);
-
-  try { 
-    await formData.save(); 
-    res.status(200).json({formData});  //this is like a return statement, it can cause a continous loop
-    console.log('registeration success!');
-  } catch (err) {
-    console.log(err)
-    res.status(404).json({"error": "no data"});
-  } 
-});
 connectDB();
-//app.use(googlePassport.session());
-//googleApp();

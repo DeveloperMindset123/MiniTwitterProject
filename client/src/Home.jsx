@@ -13,6 +13,12 @@ import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag,
 import '../src/styles/Home.css';
 import moment from 'moment-timezone';
 
+function setCookie(name, value, daysToExpire) {
+  var date = new Date();
+  date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+  document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
+}
+function deleteCookie(name) { setCookie(name, "", -1); }
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -77,8 +83,7 @@ function FetchPosts(type) {
     }
 
     fetchData();
-  }, [posts]); // The empty dependency array ensures this runs once when the component mounts
-
+  }, [posts]);
   // Conditional rendering based on loading state
   if (loading) {
     return <h1>Loading...</h1>;
@@ -121,7 +126,6 @@ function FetchPosts(type) {
   );
 }
 }
-
 function ElonGPT() {
   const [userInput, setUserInput] = useState('');
   const [conversation, setConversation] = useState([]);
@@ -189,11 +193,10 @@ function ElonGPT() {
 }
 
 const Home = ({userId}) => {
-  const handleLogout = async () => {  //this function will handle logout, this same function can be used for other methods of authentication
+  const handleLogout = async () => {
     try {
-        const response = await axios.get("http://localhost:4000/auth/logout"); //get the information about the user that is logged out from this link of the server
-        console.log(response.data);
-        navigate("/landing"); //navigate the user back to the Landing page, note, here the path was not found, leading to an error, because intially I had "navigate("/Landing");", no such routes exist
+        deleteCookie("username");
+        navigate("/landing");
     } catch (error) {
         console.error("Logout failed:", error);
     }

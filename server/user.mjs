@@ -84,6 +84,30 @@ export async function GetUser(userId){
         return;
     }
 }
+export async function GetUserByName(username){
+    try {
+        const client = new MongoClient(MONGOURI, { useUnifiedTopology: true });
+        await client.connect();
+
+        const db = client.db(DBNAME);
+        const collection = db.collection(USERS);
+
+        const query = { userName: username };
+        const user = await collection.findOne(query);
+
+        if (!user) {
+            console.error('User not found!');
+            await client.close();
+            return;
+        }
+
+        await client.close();
+        return user;
+    }catch(err){
+        console.error(`Error fetching user ${userId}` + err);
+        return;
+    }
+}
 export async function GetUserPosts(userName){
     try {
         const client = new MongoClient(MONGOURI, { useUnifiedTopology: true });
