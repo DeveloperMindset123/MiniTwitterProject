@@ -62,6 +62,8 @@ export default function Auth(props) { //login
                                 type='email'
                                 className='form-control mt-1'
                                 placeholder='Enter email'
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </div>
                         <div className='form-group mt-3'>
@@ -70,11 +72,13 @@ export default function Auth(props) { //login
                                 type='password'
                                 className='form-control mt-1'
                                 placeholder='Enter Password'
+                                value={password}
+                                onChange={e=>setPassword(e.target.value)}
                             />
                         </div>
                         
                         <div className='d-grid gap-2 mt-3'>
-                            <button type='Submit' className='btn btn-primary'>
+                            <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
                                 Submit
                             </button>
                         </div>
