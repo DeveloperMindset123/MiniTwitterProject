@@ -201,14 +201,6 @@ const Home = ({userId}) => {
         console.error("Logout failed:", error);
     }
 };
-
-  //define the path to redirect user back to landing page upon logging out
-  let navigate = useNavigate();
-  const routeChange = () => {  
-    //here, we will implement the logic to redirect user back to the login page
-    let path = '/Landing';  //this will redirect user back to the landing page, backend functionalities hasn't been fully implemented yet
-    navigate(path); //redirect the user to the path specified
-  }
   const [showUpload, setShowUpload] = useState(false)
   const [selectedTab, setSelectedTab] = useState('posts'); // State to manage selected tab
   const handleForYouClick = () => {

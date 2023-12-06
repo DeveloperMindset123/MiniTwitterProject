@@ -494,12 +494,13 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
         setIsTrendyUserOpen(false);
     }
 
+    // shit this should be dynamic
     const [users, setUsers] = useState([
-        { id: 1, name: 'User 1', isFollowing: false },
-        { id: 2, name: 'User 2', isFollowing: false },
-        { id: 3, name: 'User 3', isFollowing: false },
-        { id: 4, name: 'User 4', isFollowing: false },
-        { id: 5, name: 'User 5', isFollowing: false },
+        { id: 1, name: 'LordFarquaad', isFollowing: false },
+        { id: 2, name: 'woahzuh', isFollowing: false },
+        { id: 3, name: 'notHarryOsborn', isFollowing: false },
+        { id: 4, name: 'peetah', isFollowing: false },
+        { id: 5, name: 'n0obmaster69', isFollowing: false },
       ]);
 
       const toggleFollow = (userId) => {
