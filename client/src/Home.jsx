@@ -86,7 +86,6 @@ function FetchPosts(type) {
     return (
       
     <div className="container" style={{ marginTop:"-20px"}}>
-                  <Upload/>
       <div className="row">
         {posts.map((post, index) => (
           <div className="post-container " key={index}>
@@ -233,7 +232,7 @@ const Home = ({userId}) => {
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
               <ul>
-              <div className="slogan">Connect More</div>
+              <div className="slogan"><img className = 'logo'src="/logo.jpeg" alt="Log" /></div>
                 <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
