@@ -59,6 +59,7 @@
   border-radius: 0; /* Set border-radius to 0 for square corners */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
   color:whitesmoke;
+
 }
 
 .search-bar input::placeholder{
