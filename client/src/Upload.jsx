@@ -12,7 +12,7 @@ import '../src/styles/Upload.css'
 
 
 const Upload = ({ userId }) => {
-  console.log('userId:', userId);
+  console.log('Upload page has userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
   const [textOverflow, setTextOverFlow] = useState('');

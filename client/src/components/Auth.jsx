@@ -31,9 +31,29 @@ export default function Auth(props) { //login
         setAuthMode(authMode == "signin" ? "signup" : "signin")
     }
 
-	const handleSubmit = (event) => {
-        event.preventDefault(); 
+    const handleSignIn = (event) => {
+        event.preventDefault();
 
+        new Promise((resolve, reject) => {
+        axios.get('http://localhost:4000/api/check-user', {
+            params:{
+                userName: username,
+                password: password
+            }
+        }).then(response => {
+            setCookie('username', response.data.id, 36500); // Setting it for 100 years
+            resolve(response);
+            }).catch(error => reject(error));
+        }).then(res => {
+            console.log(res.data.message);
+            document.location.href = '/';
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
+	const handleSignUp = (event) => {
+        event.preventDefault(); 
         //update recorded values
         newUser.userName = username;
         newUser.email = email;
@@ -51,7 +71,7 @@ export default function Auth(props) { //login
 
     };
    
-    if (authMode == 'signin') {
+    if (authMode == 'signin') { // signin
         return (
             <div className="Auth-form-container">
                 <form className='Auth-form'>
@@ -64,13 +84,13 @@ export default function Auth(props) { //login
                             </span>
                         </div>
                         <div className='form-group mt-3'>
-                            <label>Email Address</label>
+                            <label>User Name</label>
                             <input 
-                                type='email'
+                                type='text'
                                 className='form-control mt-1'
-                                placeholder='Enter email'
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                placeholder='Enter username'
+                                value={username}
+                                onChange={e => setUserName(e.target.value)}
                             />
                         </div>
                         <div className='form-group mt-3'>
@@ -85,7 +105,7 @@ export default function Auth(props) { //login
                         </div>
                         
                         <div className='d-grid gap-2 mt-3'>
-                            <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
+                            <button type='Submit' className='btn btn-primary' onClick={handleSignIn}>
                                 Submit
                             </button>
                         </div>
@@ -164,7 +184,7 @@ export default function Auth(props) { //login
                         </div>
                         
                     <div className='d-grid gap-2 mt-3'>
-                        <button type='Submit' className='btn btn-primary' onClick={handleSubmit}>
+                        <button type='Submit' className='btn btn-primary' onClick={handleSignUp}>
                             Submit
                         </button>
                     </div>

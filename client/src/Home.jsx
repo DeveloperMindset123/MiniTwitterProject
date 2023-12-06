@@ -77,8 +77,7 @@ function FetchPosts(type) {
     }
 
     fetchData();
-  }, [posts]); // The empty dependency array ensures this runs once when the component mounts
-
+  }, [posts]);
   // Conditional rendering based on loading state
   if (loading) {
     return <h1>Loading...</h1>;
@@ -86,7 +85,6 @@ function FetchPosts(type) {
     return (
       
     <div className="container" style={{ marginTop:"-20px"}}>
-                  <Upload/>
       <div className="row">
         {posts.map((post, index) => (
           <div className="post-container " key={index}>

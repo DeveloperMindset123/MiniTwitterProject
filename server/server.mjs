@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';  //mongoose has already been installed and in use, meaning I don't need to reinstall it
 import express, { json } from 'express';  //we initially planned on using JSOn but since we migrated everything to database, we will not be using JSON
 import { SaveNewPost, UpdatePostCounter, FetchPosts, DeletePost, FetchTrending } from './posts.mjs';  //import the functions that has been written in posts.mjs, this handles the logic for posting, deleting, trending posts etc.
-import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser } from './user.mjs';  //the functions defined here will allow us to manually create users, delete users, get user unformation etc.
+import { CreateUser, DeleteUser, GetUser, GetUserPosts, UpdateUser, GetUserByName } from './user.mjs';  //the functions defined here will allow us to manually create users, delete users, get user unformation etc.
 import { askChatGPT } from './chatbot.mjs'; //this is where the chatgpt based code has been implemented
 import fs from 'fs';
 import cors from 'cors';  //imported by Ayan
@@ -89,20 +89,6 @@ app.use(expresSession);  //we want to ensure that our app is using the express s
 app.listen(port, () => {  //in my case, the server is running on port 4000, on the tutorial, the server is running at port 5000
   console.log(`Server listening at http://localhost:${port}`);
 });
-
-//configure session storage
-/* --> I don't think this is neccessary
-app.use(cookieSession({
-  name: 'session-name',
-  keys: ['key1', 'key2']
-})) */
-
-//const MONGOURI = process.env.MONOGODB;
-//const { passport: googlePassport, app: googleApp } = pkg;  --> we will not be using this
-//const app = express();  --> this has already been declared once
-//const port = 4000; --> this has already been declared once
-//app.use(express.json()); --> this line has already been declared above as well
-
 
 //api for updating post-counter (likes, reports, etc.)
 app.post('/api/update-post-counter/:postId/:type', async (req, res) => {
@@ -280,7 +266,24 @@ app.post('/api/askGPT', async (req,res)=>{
     res.status(500).json({ message: 'Error calling gpt:', err });
   }
 });
+// api for checking if user exists
+app.get('/api/check-user', async(req, res) => {
+  const userName = req.query.userName;
+  const password = req.query.password;
 
+  try{
+    const user = await GetUserByName(userName);
+    if(user.password === password){
+      return res.status(200).json({message:'sign in successful', id: user._id});
+    }
+    else{
+      return res.status(400).json({message:'sign in fail', id: user._id});
+    }
+  }catch(error){
+    console.error('Error checking if user exists\n' + error);
+    return res.status(500).json({message: 'server error ruh roh'});
+  }
+})
 // Auth 
 /**
  * Google Auth --> note: was running into some issues regarding authentication using the routes, which may have been causing confict, therefore, everything from auth.cjs was transferred here and instead we are using "app.get" method instead of "router.get" method
