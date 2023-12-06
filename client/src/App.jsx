@@ -9,35 +9,32 @@ import User from './User';
 import Auth from './components/Auth';
 //import { AnimatePresence } from 'framer-motion'; --> we can use this for remodeling our UI components later, if we have time, we will not worry about this atm
 import Cookies from 'js-cookie'; // or use document.cookie
+import axios from 'axios';
 
 const App = () => {
   const [user, setUser] = useState('');
-  console.log(Cookies.get())
+  // console.log(Cookies.get())
 
   useEffect(() => {
     const validateSession = async () => {
-      const sessionCookie = Cookies.get('session');
-      const sessionSigCookie = Cookies.get('session.sig');
+      const sessionCookie = Cookies.get('username');
 
       console.log(!sessionCookie ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
 
-      // try {
-      //   const response = await fetch('/api/fetch-user', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({ session: sessionCookie, sessionSig: sessionSigCookie }),
-      //   });
-      //   setUser(await response.json());
-      // } 
-      // catch (error) {
-      //   console.error('Error validating session:', error);
-      // }
-    };
-
+      if (sessionCookie) {
+        try {
+          const response = await axios.get('http://localhost:4000/api/fetch-user', {userId: sessionCookie});
+          console.log(response);
+          // setUser(await response.json());
+        } 
+        catch (error) {
+          console.error('Error validating session:', error);
+        }
+      }
+  };
     validateSession();
   }, []);
+  console.log(user);
 // add 'user' object to input param to landing
     return (
       <BrowserRouter>

@@ -200,9 +200,9 @@ app.post('/api/create-user', async (req, res) => {
     }
 
     console.log('New User: ' + newUser);
-    await CreateUser(newUser);
+    const id = await CreateUser(newUser);
 
-    res.status(201).json({ message: 'User created successfully!' });
+    res.status(201).json({ message: 'User created successfully!', id: id});
   } catch (err) {
     res.status(500).json({ message: 'Error saving new user:', err });
   }
@@ -210,6 +210,7 @@ app.post('/api/create-user', async (req, res) => {
 //api for fetching user
 app.get('/api/fetch-user', async (req, res) => {
   const userId = req.body.userId;
+  console.log('userId:', userId);
   try {
     const user = await GetUser(userId);
     console.log("Got User: ", user);

@@ -50,9 +50,10 @@ export async function CreateUser(newUser){ // assuming proper filtering for uniq
         const db = client.db(DBNAME);
         const collection = db.collection(USERS);
 
-        await collection.insertOne(newUser);
-
+        const result = await collection.insertOne(newUser);
+        
         await client.close();
+        return(result.insertedId);
     } catch (err) {
         console.error('Error saving new user:', err);
     }

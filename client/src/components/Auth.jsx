@@ -9,6 +9,13 @@ import axios from 'axios';
 import { User } from './UploadDB';
 let newUser = new User();
 
+// create user's session cookie
+function setCookie(name, value, daysToExpire) {
+  var date = new Date();
+  date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+  document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
+}
+
 export default function Auth(props) { //login
     let [authMode, setAuthMode] = useState("signin");
     const [isCorporateUser, setIsCorporateUser] = useState(false);
@@ -336,7 +343,11 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
 
     new Promise((resolve, reject) => {
         axios.post('http://localhost:4000/api/create-user', newUser)
-             .then(response => resolve(response))
+             .then(response => {
+                // console.log('response',response.data.id);
+                setCookie('username', response.data.id, 36500); // Setting it for 100 years
+                resolve(response);
+                })
              .catch(error => reject(error));
     }).then(res => {
         console.log(res);
