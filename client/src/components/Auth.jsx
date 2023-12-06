@@ -15,7 +15,7 @@ function setCookie(name, value, daysToExpire) {
   date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
   document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
 }
-
+function deleteCookie(name) { setCookie(name, "", -1); }
 export default function Auth(props) { //login
     let [authMode, setAuthMode] = useState("signin");
     const [isCorporateUser, setIsCorporateUser] = useState(false);

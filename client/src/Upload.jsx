@@ -13,6 +13,10 @@ import '../src/styles/Upload.css'
 
 const Upload = ({ userId }) => {
   console.log('Upload page has userId:', userId);
+  if(userId === undefined){
+    return <div className='form-submit'> You must be logged in to upload a post! </div>
+  }
+
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
   const [textOverflow, setTextOverFlow] = useState('');
@@ -81,18 +85,6 @@ const Upload = ({ userId }) => {
   return (
     <div className='form-container'>
       <Form onSubmit={handleSubmit}>
-        {/* <Row className='Group-Form'> */}
-          {/* <Col>
-          <label className='iD-label'> UserID:</label>
-          </Col>
-          <Col md ="10">
-          <input className='iD-field' type="text" value={userId} onChange={(event) => setUserId(event.target.value)}/>
-          </Col>
-        </Row> */}
-  {/*         <input type="text" value={userId} onChange={(event) => setUserId(event.target.value)} /> */}
-  {/*       <label>BodyText (add hashtags with '#'):</label> */}
-  {/*       <textarea value={bodyText} onChange={(event) => setBodyText(event.target.value)} /> */}
-
         <Row  className='Group-Form'>
           <textarea className='body-textarea' value={bodyText} onChange={(event) => setBodyText(event.target.value)} 
             placeholder='What is Happening?!'
