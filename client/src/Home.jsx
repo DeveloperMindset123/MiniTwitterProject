@@ -84,7 +84,9 @@ function FetchPosts(type) {
     return <h1>Loading...</h1>;
   } else {
     return (
-    <div className="container" style={{marginLeft: '20px'}}>
+      
+    <div className="container" style={{ marginTop:"-20px"}}>
+                  <Upload/>
       <div className="row">
         {posts.map((post, index) => (
           <div className="post-container " key={index}>
@@ -93,7 +95,7 @@ function FetchPosts(type) {
                 <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
                 <h5 className="card-title">{post.bodyText}</h5>
                 <div className="post-image">
-                {post._id.img && <img src="" alt="Image"/>}
+                {post.imageId && <img src="" alt="Image"/>}
               </div>
                 <p className="card-text">{post.hashTags}</p>
                 <Row>
@@ -209,6 +211,13 @@ const Home = () => {
   return (
     <div> 
       <div className="home-container">
+        {/* Trending bar */}
+        <Row className='trending-tab'> 
+          <Col className='trending-col'>
+              <button className='trending-item'>For you</button>
+              <button className='trending-item '>Following</button>
+          </Col>
+        </Row>
         <Row>
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
@@ -241,7 +250,6 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
-            <Upload/>
             <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
           </Col>

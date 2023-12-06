@@ -71,6 +71,7 @@
 
 /* Container style */
 .container {
+  margin-left: 20px;
   width: 80%;
   margin: 20px auto;
   padding: 30px;
@@ -133,3 +134,31 @@
   border-radius: 8px;
   padding: 10px;
 }
+
+
+.trending-tab {
+  width: 650px;
+  margin: 20px auto; 
+}
+
+.trending-col{
+  margin-left: 60px;
+}
+
+.trending-item {
+  font-size: larger;
+  width: 200px;
+  height: 40px;
+  border: 1px solid #555;
+  margin-top: 5px;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  color:#f8f4f4;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.trending-item:hover {
+  color: #1877f2;
+  background-color: #e6f7ff; /* Change the background color on hover */
+}
+
