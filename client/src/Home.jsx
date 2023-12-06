@@ -208,16 +208,27 @@ const Home = () => {
     navigate(path); //redirect the user to the path specified
   }
   const [showUpload, setShowUpload] = useState(false)
+  const [selectedTab, setSelectedTab] = useState('posts'); // State to manage selected tab
+  const handleForYouClick = () => {
+    setSelectedTab('posts'); // Update the selected tab to 'posts'
+  };
+  const handleTrendingClick = () => {
+    setSelectedTab('trendy'); // Update the selected tab to 'trendy'
+  };
   return (
     <div> 
       <div className="home-container">
         {/* Trending bar */}
         <Row className='trending-tab'> 
           <Col className='trending-col'>
-              <button className='trending-item'>For you</button>
-              <button className='trending-item '>Following</button>
+              <button className='trending-item' onClick={handleForYouClick}>
+                For you
+              </button>
+              <button className='trending-item ' onClick={handleTrendingClick}>
+                Trending
+              </button>
           </Col>
-        </Row>
+        </Row> 
         <Row>
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
@@ -250,8 +261,9 @@ const Home = () => {
             </div>
           </Col>
           <Col lg={7}> {/* Content */}
-            <FetchPosts type={'posts'} />
             {/* <FetchPosts /> */}
+            {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'} />}
+            {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} />} 
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
