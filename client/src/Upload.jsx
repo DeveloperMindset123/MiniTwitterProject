@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import CloseButton from 'react-bootstrap/CloseButton';
@@ -13,10 +13,6 @@ import '../src/styles/Upload.css'
 
 const Upload = ({ userId }) => {
   console.log('Upload page has userId:', userId);
-  if(userId === undefined){
-    return <div className='form-submit'> You must be logged in to upload a post! </div>
-  }
-
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
   const [textOverflow, setTextOverFlow] = useState('');
@@ -81,6 +77,9 @@ const Upload = ({ userId }) => {
     }
   };
 
+  if(userId === undefined){
+    return <div className='form-submit'> You must be logged in to upload a post! </div>
+  }
 
   return (
     <div className='form-container'>
