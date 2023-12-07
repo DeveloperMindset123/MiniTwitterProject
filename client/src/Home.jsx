@@ -12,6 +12,7 @@ import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag,
   faEye, faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 import moment from 'moment-timezone';
+import CommentPopup from './CommentPopup.jsx';
 
 function setCookie(name, value, daysToExpire) {
   var date = new Date();
@@ -59,6 +60,15 @@ async function UpdatePostCounter(postId, type){
 function FetchPosts({type, userId}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  const [showCommentPopup, setShowCommentPopup] = useState(false);
+ const [selectedPostId, setSelectedPostId] = useState(null);
+
+
+ const handleCommentButtonClick = (postId) => {
+   setShowCommentPopup(true);
+   setSelectedPostId(postId);
+ };
+
   // console.log('FetchPosts page has userId:', userId);
   useEffect(() => {
     async function fetchData() {
@@ -107,7 +117,7 @@ function FetchPosts({type, userId}) {
                   <Col xl='10'> {/* Likes, Posts, Reviews, Comments */}
                     <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faThumbsUp} />{post.likes}</button>&nbsp;&nbsp;
                     <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}><FontAwesomeIcon icon={faThumbsDown} />{post.dislikes}</button>&nbsp;&nbsp;
-                    <button className="comment" onClick={() => UpdatePostCounter(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
+                    <button className="comment" onClick={() => handleCommentButtonClick(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
                     <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
                     <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
                   </Col>
@@ -129,6 +139,12 @@ function FetchPosts({type, userId}) {
           </div>
         ))}
       </div>
+      {showCommentPopup && (
+       <CommentPopup
+         postId={selectedPostId}
+         onClose={() => setShowCommentPopup(false)}
+       />
+     )}
     </div>
   );
 }
@@ -254,7 +270,7 @@ const Home = ({userId}) => {
         {/* Trending bar */}
         <Row className='trending-tab'> 
           <Col className='trending-col'>
-              <button className='trending-item' onClick={handleForYouClick}>
+              <button className='trending-item' onClick={handleForYouClick} >
                 For you
               </button>
               <button className='trending-item ' onClick={handleTrendingClick}>
