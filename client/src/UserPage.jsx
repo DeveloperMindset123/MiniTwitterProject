@@ -5,6 +5,7 @@ const UserPage = ({ userId }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Ensure userId is not null before making the request
     if (userId) {
       async function fetchUserData() {
         const userData = await GetUser({ userId });
@@ -15,28 +16,22 @@ const UserPage = ({ userId }) => {
     }
   }, [userId]);
 
-  const renderUserData = () => {
-    if (!user) {
-      return <p>{userId ? 'Loading...' : 'No user ID provided'}</p>;
-    }
-
-    const { password, ...userDetails } = user; // Exclude 'password' from being displayed
-
-    return (
-      <div>
-        <h2>User Information</h2>
-        {Object.entries(userDetails).map(([key, value]) => (
-          <p key={key}>
-            {key}: {Array.isArray(value) ? value.join(', ') : value}
-          </p>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div style={{ backgroundColor: 'white', height: '100vh', padding: '20px' }}>
-      {renderUserData()}
+      {user ? (
+        <div>
+          <h2>User Information</h2>
+          <p>User ID: {user._id}</p>
+          <p>Username: {user.userName}</p>
+          <p>Email: {user.email}</p>
+          <p>Cash: {user.cash}</p>
+          <p>Bio: {user.bio}</p>
+          <p>Likes: {user.likes}</p>
+
+        </div>
+      ) : (
+        <p>{userId ? 'Loading...' : 'No user ID provided'}</p>
+      )}
     </div>
   );
 };
