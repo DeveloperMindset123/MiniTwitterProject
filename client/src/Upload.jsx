@@ -81,8 +81,6 @@ const Upload = ({ userId }) => {
     event.preventDefault();
     let hashTags = bodyText.match(/#\w+/g);
 
-
-
     const uniquePost = new Post(userId, user.userName, bodyText, hashTags, isAd);
 
     try {// make post
@@ -169,6 +167,12 @@ const Upload = ({ userId }) => {
             You are {textOverflow} words overlimit! You will be charged ${parseFloat((textOverflow)*chargeRate).toFixed(2)}
           </div>
         )}
+        {isAd 
+          ? (user.corpo 
+              ? <div>You will be charged 10 cents per click!</div> 
+              : <div>You cannot post an ad or job posting! You will be fined $10 if you continue!</div>)
+          : null
+        }
 
         <Row className='Group-Form'>
           <Col>
