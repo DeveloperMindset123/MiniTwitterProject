@@ -24,8 +24,13 @@ async function GetUser({userId}) {
     }
 }
 
-
 const Upload = ({ userId }) => {
+  // its gotta be placed at top level to prevent crashing
+  if(userId === undefined){
+    return (
+      <div>Loading...</div>
+    )
+  }
   console.log('Upload page has userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');

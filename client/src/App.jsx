@@ -18,7 +18,7 @@ const App = () => {
     const validateSession = async () => {
       const sessionCookie = Cookies.get('username');
 
-      console.log(!sessionCookie ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
+      console.log(!sessionCookie ===undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
 
       if (sessionCookie) {
         try {
