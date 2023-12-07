@@ -1,6 +1,11 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 //set up the authentication
 import React, { useState } from 'react';
+import { ThemeContext, themes } from './ThemeContext';
+import InputGroup from 'react-bootstrap/InputGroup'; 
+import ToggleDark from './ToggleDark';
 import '../styles/Auth.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -26,6 +31,7 @@ export default function Auth(props) { //login
     const [username, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [darkMode, setDarkMode] = useState(true);
 
     const changeAuthMode = () => { //set the logic for whether to sign in or register
         setAuthMode(authMode == "signin" ? "signup" : "signin")
@@ -73,7 +79,22 @@ export default function Auth(props) { //login
    
     if (authMode == 'signin') { // signin
         return (
+            
             <div className="Auth-form-container">
+                <div className="mode-toggle-containers"> {/**the CSS for this div is defined in the Landing.css file */}
+              <InputGroup>
+              <ThemeContext.Consumer>
+                {({ changeTheme }) => (
+                <ToggleDark
+                    toggleDark={() => {
+                    setDarkMode(!darkMode);
+                    changeTheme(darkMode ? themes.light : themes.dark);
+                  }}
+                />
+              )}
+            </ThemeContext.Consumer>
+              </InputGroup>
+              </div>
                 <form className='Auth-form'>
                     <div className='Auth-form-content'>
                         <h3 className='Auth-form-title'>Sign In</h3>
@@ -362,7 +383,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
         newUser.interests = selectedInterests;
 
     new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/api/create-user', newUser)
+        axios.post('http://localhost:4000/api/create-user', newUser)  //the purpose of this api endpoint is to create new users and provide a cookie for session handling
              .then(response => {
                 setCookie('username', response.data.id, 36500); // Setting it for 100 years
                 resolve(response);
@@ -556,5 +577,3 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
         </Modal>
     );
 }
-
-//note: continue here --> https://www.codementor.io/@supertokens/building-a-login-screen-with-react-and-bootstrap-1sqpm1iszfx

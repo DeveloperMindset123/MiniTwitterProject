@@ -126,3 +126,9 @@ body {
     width: 460px;
   }
 
+  .mode-toggle-containers {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+

@@ -5,6 +5,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../src/styles/style.css';
 import '../src/styles/sidebar.css';
+import { ThemeContext, themes } from './components/ThemeContext'; //dark to light toggle inputs
+import InputGroup from 'react-bootstrap/InputGroup'; 
+import ToggleDark from './components/ToggleDark'; //dark to light toggle imports
 import Upload from './Upload.jsx';
 import UploadPop_up from "./UploadPop_up.jsx"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -232,14 +235,14 @@ const Home = ({userId}) => {
             <div className="sidebar">
               <ul>
               <div className="slogan">Connect More</div>
-                <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
+                <li><a href="#Home"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
+                <li><a href="#Notifications"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
+                <li><a href="#Community"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
+                <li><a href="#Booksmarks"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li>
+                <li><a href="#Profile"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
+                <li><a href="#Settings"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
+                <li><a href="#Lists"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>  {/**This can be changed to a expandable button instead to display additional information */}
                 <li><Button onClick={() => setShowUpload(!showUpload)} variant="dark" className="btn-lg">
                   <FontAwesomeIcon icon={faPlus} className="icon" />
                    New Post
