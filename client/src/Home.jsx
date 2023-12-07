@@ -278,7 +278,7 @@ const Home = ({userId}) => {
                 
               </ul>
               <div className="sign-out">
-                {!userId ? <button onClick={() => document.location.href = '/login'}>Sign In</button> : <button onClick={handleLogout}>Sign Out</button>} 
+                {!userId ? <button onClick={() => document.location.href = '/landing'}>Sign In</button> : <button onClick={handleLogout}>Sign Out</button>} 
                 {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
                {/*} <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button> */}
               </div>
