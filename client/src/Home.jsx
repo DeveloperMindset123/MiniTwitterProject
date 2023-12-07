@@ -60,17 +60,16 @@ async function UpdatePostCounter(postId, type){
     throw error;
   }
 }
-function FetchPosts({type, userId}) {
+function FetchPosts({type, userId, query}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
   const [showCommentPopup, setShowCommentPopup] = useState(false);
- const [selectedPostId, setSelectedPostId] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
-
- const handleCommentButtonClick = (postId) => {
-   setShowCommentPopup(true);
-   setSelectedPostId(postId);
- };
+  const handleCommentButtonClick = (postId) => {
+    setShowCommentPopup(true);
+    setSelectedPostId(postId);
+  };
 
   // console.log('FetchPosts page has userId:', userId);
   useEffect(() => {
@@ -226,12 +225,16 @@ const Home = ({userId}) => {
 };
   const [showUpload, setShowUpload] = useState(false)
   const [selectedTab, setSelectedTab] = useState('posts'); // State to manage selected tab
+  const [query, setQuery] = useState(''); // State to manage search query
 
   const handleForYouClick = () => {
     setSelectedTab('posts'); // Update the selected tab to 'posts'
   };
   const handleTrendingClick = () => {
     setSelectedTab('trendy'); // Update the selected tab to 'trendy'
+  };
+  const handleSearch = (event) => { // will automatically take & set the value of the search bar
+    setQuery(event.target.value);
   };
   
   return (
@@ -274,7 +277,8 @@ const Home = ({userId}) => {
                 
               </ul>
               <div className="sign-out">
-                <button onClick={handleLogout}>Sign Out</button> {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
+                {!userId ? <button onClick={() => document.location.href = '/login'}>Sign In</button> : <button onClick={handleLogout}>Sign Out</button>} 
+                {/**We will need to ensure that user gets logged out when this button is clicked, this is a placeholder for now*/}
                {/*} <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> <button>Sign Out</button> */}
               </div>
             </div>
@@ -285,11 +289,17 @@ const Home = ({userId}) => {
             {/* <FetchPosts /> */}
             {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'}  userId={userId} />}
             {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} userId={userId} />} 
+            {query !== '' && <FetchPosts className="search" type={'search'} query={query} />}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
             <div className="search-bar">
-                <input type="text" placeholder="Search..." />
+                <input 
+                type="text" 
+                placeholder="Search keywords!" 
+                value={query}
+                onChange={handleSearch}
+                />
               </div>
               <h2>Talk to Elon!</h2>
               <ElonGPT/>

@@ -50,8 +50,6 @@ const Upload = ({ userId }) => {
         console.error('Failed to get user:', error);
       }
     };
-
-    // Call the async function
     fetchUser();
   }, [userId]); // Only re-run the effect if userId changes  
   
@@ -108,26 +106,33 @@ const Upload = ({ userId }) => {
         alert('Error saving post or making connection: ' + error.message);
       }
     }
-    // update user's cash amount
-    try{
-      const response = await axios.post('http://localhost:4000/api/update-user', uniquePost, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    console.log(user)
+    if(textOverflow > 0 && user.cash > 0){
+      // update user's cash amount
+      try{
+        const response = await axios.post('http://localhost:4000/api/update-user', uniquePost, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      if (response.status === 201) {
-        console.log('User updated successfully!', response);
+        if (response.status === 201) {
+          console.log('User updated successfully!', response);
+        }
+        else if(response.status === 400){
+          alert('Bad Request: ' + response.data.error);
+        }
+        else {
+          alert('Error updating user: ' + response.data.error);
+        }
+        }catch(error){
+          alert('Error updating user or making connection: ' + error.message);
+        }
       }
-      else if(response.status === 400){
-        alert('Bad Request: ' + response.data.error);
-      }
-      else {
-        alert('Error updating user: ' + response.data.error);
-      }
-      }catch(error){
-        alert('Error updating user or making connection: ' + error.message);
-      }
+    else if(textOverflow > 0 && user.cash <= 0){
+      alert('You are out of cash! Please add more to your account.');
+      document.location.href = '/Payment';
+    }
   };
 
   if(userId === undefined){
