@@ -60,7 +60,7 @@ async function UpdatePostCounter(postId, type){
     throw error;
   }
 }
-function FetchPosts({type, userId, query}) {
+function FetchPosts({ type, userId }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
   const [showCommentPopup, setShowCommentPopup] = useState(false);
@@ -100,9 +100,9 @@ function FetchPosts({type, userId, query}) {
   // Conditional rendering based on loading state
   if (loading) {
     return <h1>Loading...</h1>;
-  } else {
+  } 
+  else {
     return (
-      
     <div className="container" style={{ marginTop:"-20px", backgroundColor: "white", paddingRight: "70px", margin: "-32px"}}>
       <div className="row" >
         {posts.map((post, index) => (
@@ -114,12 +114,13 @@ function FetchPosts({type, userId, query}) {
                 {/* <div className="post-image">
                 {post.imageId && <img src="" alt="Image"/>}
               </div> */}
-                <p className="card-text">{post.hashTags}</p>
+                {!post.hashTags ? null : (<p className="card-text">{post.hashTags.map(tag => `${tag} `)}</p>)}
                 <Row>
-                  <Col xl='10'> {/* Likes, Posts, Reviews, Comments */}
+                  {/* Likes, Posts, Reviews, Comments */}
+                  <Col xl='10'> 
                     <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faThumbsUp} />{post.likes}</button>&nbsp;&nbsp;
                     <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}><FontAwesomeIcon icon={faThumbsDown} />{post.dislikes}</button>&nbsp;&nbsp;
-                    <button className="comment" onClick={() => handleCommentButtonClick(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
+                    {/* <button className="comment" onClick={() => handleCommentButtonClick(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp; */}
                     <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
                     <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
                   </Col>
@@ -289,7 +290,6 @@ const Home = ({userId}) => {
             {/* <FetchPosts /> */}
             {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'}  userId={userId} />}
             {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} userId={userId} />} 
-            {query !== '' && <FetchPosts className="search" type={'search'} query={query} />}
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
