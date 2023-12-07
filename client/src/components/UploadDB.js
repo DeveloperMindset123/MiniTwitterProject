@@ -20,6 +20,7 @@ export class Post {
         this.dislikes = 0;
         this.reports = 0;
         this.views = 0;
+        this.comments = {};
     }
 }    
         
