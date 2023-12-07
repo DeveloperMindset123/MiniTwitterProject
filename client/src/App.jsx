@@ -5,12 +5,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import Landing from './Landing';
 import Upload from './Upload';
-import User from './User';
+import User from './UserPage';
 import Auth from './components/Auth';
 import Payment from './Payment';
 import Cookies from 'js-cookie'; // or use document.cookie
 import axios from 'axios';
-
+import UserPage from './UserPage';
 const App = () => {
   // fetch user session
   const [user, setUser] = useState('');
@@ -34,6 +34,7 @@ const App = () => {
             <Route path='/User' element={<User userId={user}/>} />
             <Route path='/Auth' element={<Auth userId={user}/>} /> 
             <Route path='/Payment' element={<Payment userId={user}/>} />
+            <Route path='/User' element={<User userId={user}/>} />
       </Routes>
     </BrowserRouter>
   );
