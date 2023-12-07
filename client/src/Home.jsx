@@ -56,9 +56,10 @@ async function UpdatePostCounter(postId, type){
     throw error;
   }
 }
-function FetchPosts(type) {
+function FetchPosts({type, userId}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  console.log('FetchPosts page has userId:', userId);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -81,7 +82,7 @@ function FetchPosts(type) {
         setLoading(false); // Set loading to false after fetching data
       }
     }
-
+// console.log(userId)
     fetchData();
   }, [posts]);
   // Conditional rendering based on loading state
@@ -98,9 +99,9 @@ function FetchPosts(type) {
               <div className="card-body">
                 <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
                 <h5 className="card-title">{post.bodyText}</h5>
-                <div className="post-image">
+                {/* <div className="post-image">
                 {post.imageId && <img src="" alt="Image"/>}
-              </div>
+              </div> */}
                 <p className="card-text">{post.hashTags}</p>
                 <Row>
                   <Col xl='10'> {/* Likes, Posts, Reviews, Comments */}
@@ -111,8 +112,14 @@ function FetchPosts(type) {
                     <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
                   </Col>
                   <Col> {/* Delete and Edit */}
-                    <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
-                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
+                  {userId == post.userId && (
+                    <div>
+                      <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                      <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
+                    </div>
+                  )}
+                    {/* <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button>  */}
                     {/* add condition to only allow user who posted and SU to change */}
                   </Col>
                 </Row>
@@ -209,6 +216,8 @@ const Home = ({userId}) => {
   const handleTrendingClick = () => {
     setSelectedTab('trendy'); // Update the selected tab to 'trendy'
   };
+
+  
   return (
     <div> 
       <div className="home-container">
@@ -230,8 +239,8 @@ const Home = ({userId}) => {
               <div className="slogan"><img className = 'logo'src="/logo.jpeg" alt="Log" /></div>
                 <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li>
+                {/* <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li> */}
+                {/* <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li> */}
                 <li><a href="#"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
@@ -256,7 +265,7 @@ const Home = ({userId}) => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload userId={userId}/>
-            <FetchPosts type={'posts'} />
+            <FetchPosts type={'posts'} userId={userId} />
             {/* <FetchPosts /> */}
             {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'} />}
             {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} />} 
