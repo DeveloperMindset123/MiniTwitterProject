@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { User } from './UploadDB';
 let newUser = new User();
+import { useNavigate } from 'react-router-dom';
 
 // create user's session cookie
 function setCookie(name, value, daysToExpire) {
@@ -17,6 +18,7 @@ function setCookie(name, value, daysToExpire) {
 }
 function deleteCookie(name) { setCookie(name, "", -1); }
 export default function Auth(props) { //login
+    const navigate = useNavigate();
     let [authMode, setAuthMode] = useState("signin");
     const [isCorporateUser, setIsCorporateUser] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +35,7 @@ export default function Auth(props) { //login
 
     const handleSignIn = (event) => {
         event.preventDefault();
+        let userId = '';
 
         new Promise((resolve, reject) => {
         axios.get('http://localhost:4000/api/check-user', {
@@ -42,11 +45,14 @@ export default function Auth(props) { //login
             }
         }).then(response => {
             setCookie('username', response.data.id, 36500); // Setting it for 100 years
+            userId = response.data.id;
+
             resolve(response);
             }).catch(error => reject(error));
         }).then(res => {
             console.log(res.data.message);
-            document.location.href = '/';
+            
+            navigate('/');
         }).catch(err => {
             alert(err.response.data.message)
             console.error(err);
@@ -372,6 +378,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
              .catch(error => reject(error));
         }).then(res => {
             console.log(res);
+            alert("Thank you for creating an account! A super user will approve your account soon!\n Please make an initial payment to start using the app!!")
             document.location.href = '/';
         }).catch(err => {
             console.error(err);
@@ -525,7 +532,8 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
             .catch(error => reject(error));
         }).then(res => {
             console.log(res);
-            document.location.href = '/';
+            alert("Thank you for creating an account! A super user will approve your account soon!\n Please make an initial payment to start using the app!!")
+            document.location.href = '/payment';
         }).catch(err => {
             console.error(err);
         });
