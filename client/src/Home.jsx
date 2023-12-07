@@ -285,27 +285,15 @@ const Home = ({userId}) => {
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
               <ul>
-<<<<<<< HEAD
-              <div className="slogan">Connect More</div>
-                <li><a href="#Home"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
+              <div className="slogan"><img className = 'logo'src="/logo.jpeg" alt="Log" /></div>
+                <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
                 <li><a href="#Notifications"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
-                <li><a href="#Community"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li>
-                <li><a href="#Booksmarks"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li>
+                {/* <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li> */}
+                {/* <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li> */}
                 <li><a href="#Profile"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
                 <li><a href="#Settings"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#Lists"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>  {/**This can be changed to a expandable button instead to display additional information */}
-=======
-              <div className="slogan"><img className = 'logo'src="/logo.jpeg" alt="Log" /></div>
-                <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
-                {/* <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li> */}
-                {/* <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li> */}
-                <li><a href="#"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
-                <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
->>>>>>> 6a797b00f42d748f57bff0452c7443b465e80ec3
                 <li><Button onClick={() => setShowUpload(!showUpload)} variant="dark" className="btn-lg">
                   <FontAwesomeIcon icon={faPlus} className="icon" />
                    New Post

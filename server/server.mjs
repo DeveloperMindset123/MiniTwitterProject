@@ -194,7 +194,7 @@ app.get('/api/fetch-user', async (req, res) => {
       return res.status(404).json({ message: 'User not found!' });
     }
     console.log("Got User at Fetch-User: ", userId);
-
+    res.cookie('username', userId, {httpOnly: true});  //added this line to see if it fixes the login issue
     return res.status(200).json(user);
   } catch (err) {
     console.error('Error getting user', err);

@@ -599,8 +599,4 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
             </Modal.Body>
         </Modal>
     );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6a797b00f42d748f57bff0452c7443b465e80ec3

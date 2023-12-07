@@ -29,6 +29,7 @@
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
+    "mdb-react-ui-kit": "^7.0.0",
     "moment-timezone": "^0.5.43",
     "mongodb": "^6.2.0",
     "mongoose": "^7.6.3",
