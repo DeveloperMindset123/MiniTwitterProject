@@ -106,34 +106,50 @@ function FetchPosts({ type, userId }) {
     <div className="container" style={{ marginTop:"-20px", backgroundColor: "white", paddingRight: "70px", margin: "-32px"}}>
       <div className="row" >
         {posts.map((post, index) => (
-          <div className="post-container " key={index}>
-            <div className="card">
-              <div className="card-body">
-                <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
-                <h5 className="card-title">{post.bodyText}</h5>
-                {/* <div className="post-image">
-                {post.imageId && <img src="" alt="Image"/>}
-              </div> */}
-                {!post.hashTags ? null : (<p className="card-text">{post.hashTags.map(tag => `${tag} `)}</p>)}
-                <Row>
-                  {/* Likes, Posts, Reviews, Comments */}
-                  <Col xl='10'> 
-                    <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faThumbsUp} />{post.likes}</button>&nbsp;&nbsp;
-                    <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}><FontAwesomeIcon icon={faThumbsDown} />{post.dislikes}</button>&nbsp;&nbsp;
-                    {/* <button className="comment" onClick={() => handleCommentButtonClick(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp; */}
-                    <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
-                    <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
-                  </Col>
-                  <Col> {/* Delete and Edit */}
-                  {userId == post.userId && (
-                    <div>
-                      <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
-                      <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
-                    </div>
-                  )}
-                  </Col>
-                </Row>
-                <p className='timestamp'>{moment(post.time).format('MMMM Do YYYY, h:mm:ss a')}</p>
+        <div className="post-container card mb-3" key={index}>
+          <div className="card-body">
+            <div className="top-section">
+              <div className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faUser} className="avatar-icon mr-2" />
+                <div>
+                  <p className="mb-1">@{post.userId}</p>
+                  <p className="text-muted timestamp mb-2">{moment(post.time).fromNow()}</p>
+                  </div>
+                  </div>
+                  <h5 className="card-title">{post.bodyText}</h5>
+                  <div className="hashtags">
+                    {!post.hashTags ? null : (
+                    <p className="card-text">
+                      {post.hashTags.map(tag => <span key={tag} className="badge badge-primary mr-1">{tag}</span>)}
+                      </p>
+                      )}
+                </div>
+              </div>
+              <div className="bottom-section d-flex justify-content-between align-items-center">
+                <div className="interaction-buttons">
+                  <button className="btn btn-outline-primary btn-sm mr-2" onClick={() => UpdatePostCounter(post._id, 'like')}>
+                    <FontAwesomeIcon icon={faThumbsUp} /> {post.likes}
+                  </button>
+                  <button className="btn btn-outline-primary btn-sm mr-2" onClick={() => UpdatePostCounter(post._id, 'dislike')}>
+                    <FontAwesomeIcon icon={faThumbsDown} /> {post.dislikes}
+                  </button>
+                  <button className="btn btn-outline-primary btn-sm mr-2" onClick={() => UpdatePostCounter(post._id, 'report')}>
+                    <FontAwesomeIcon icon={faFlag} /> {post.reports}
+                  </button>
+                  <button className="btn btn-outline-primary btn-sm" onClick={() => UpdatePostCounter(post._id, 'view')}>
+                    <FontAwesomeIcon icon={faEye} /> {post.views}
+                  </button>
+                </div>
+                {userId === post.userId && (
+                <div className="edit-delete-buttons">
+                  <button className="btn btn-outline-danger btn-sm mr-2" onClick={() => Delete(post._id)}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                  <button className="btn btn-outline-primary btn-sm" onClick={() => Edit(post._id)}>
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                </div>
+              )}
               </div>
             </div>
           </div>
