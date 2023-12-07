@@ -147,7 +147,7 @@ const Upload = ({ userId }) => {
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
             <Button size="md" variant="dark" type="submit" disabled={!formValid} className='savePostButton'>
-              {!user.corpo ? <div>Save Post</div> : <div>Save New Ad/Job Posting</div>}
+              {!user.corpo ? <div>{!user.corpo ? <div>Save Post</div> : <div>Save New Ad/Job Posting</div>}</div> : <div>Save New Ad/Job Posting</div>}
             </Button>
           </Col>
         </Row>
