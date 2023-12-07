@@ -32,10 +32,11 @@ const Upload = ({ userId }) => {
   const [textOverflow, setTextOverFlow] = useState('');
   const [hashOverflow, setHashOverFlow] = useState(false);
   const [chargeRate, setChargeRate] = useState(1);
-  
+  const [user, setUser] = useState({});
+
   // check who the user is so we can charge them accordingly
   GetUser({userId}).then((user) => {
-    console.log(user);
+    setUser(user);
     if (user && !user.corpo) {
       setChargeRate(0.1);
     }
@@ -146,7 +147,7 @@ const Upload = ({ userId }) => {
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
             <Button size="md" variant="dark" type="submit" disabled={!formValid} className='savePostButton'>
-              Save Post
+              {!user.corpo ? <div>Save Post</div> : <div>Save New Ad/Job Posting</div>}
             </Button>
           </Col>
         </Row>
