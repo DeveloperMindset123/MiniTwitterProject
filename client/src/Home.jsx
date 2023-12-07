@@ -104,8 +104,8 @@ function FetchPosts({type, userId}) {
   } else {
     return (
       
-    <div className="container" style={{ marginTop:"-20px"}}>
-      <div className="row">
+    <div className="container" style={{ marginTop:"-20px", backgroundColor: "white", paddingRight: "70px", margin: "-32px"}}>
+      <div className="row" >
         {posts.map((post, index) => (
           <div className="post-container " key={index}>
             <div className="card">
@@ -257,6 +257,7 @@ const Home = ({userId}) => {
 };
   const [showUpload, setShowUpload] = useState(false)
   const [selectedTab, setSelectedTab] = useState('posts'); // State to manage selected tab
+
   const handleForYouClick = () => {
     setSelectedTab('posts'); // Update the selected tab to 'posts'
   };

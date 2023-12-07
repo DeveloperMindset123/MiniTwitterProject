@@ -99,7 +99,7 @@ function Landing() {
             </Row>
             <Row className="login-buttons">
               {/**Div containing the login option for github */}
-              <Button className="github-button" variant="outline-dark" size="lg" href="http://localhost:4000/auth/github">
+              <Button className="github-button" variant="outline-light" size="lg" href="http://localhost:4000/auth/github">
               <FontAwesomeIcon icon={faGithub} size="lg" />
                 <span style={{margin: '10px'}}>Sign in with Github</span>
               </Button>

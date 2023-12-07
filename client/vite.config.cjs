@@ -17,4 +17,8 @@ app.listen(port, () => {
 export default defineConfig({
   plugins: [react()],
   // base: '/MiniTwitterProject/',
+  server: {
+    port: 5173,  //this will specify the port number that we are working with
+    open: '/Landing'  //this will specify the default page to be http://localhost:5173/Landing instead of http://localhost:5173
+  }
 })
