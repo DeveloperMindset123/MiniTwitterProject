@@ -106,11 +106,19 @@ function FetchPosts({ type, userId }) {
           <div className="post-container " key={index}>
             <div className="card">
               <div className="card-body">
-                <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
+              {
+                !post.userName 
+                    ? <>
+                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
+                        UserID: {post.userId}
+                      </>
+                    : <>
+                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
+                        UserName: {post.userName}
+                      </>
+              }
                 <h5 className="card-title">{post.bodyText}</h5>
-                {/* <div className="post-image">
-                {post.imageId && <img src="" alt="Image"/>}
-              </div> */}
+
                 {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
                 {!post.hashTags ? null : (<p className="card-text">{post.hashTags.map(tag => `${tag} `)}</p>)}
                 <Row>
