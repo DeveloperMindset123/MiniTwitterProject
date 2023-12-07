@@ -131,9 +131,6 @@ function FetchPosts({type, userId}) {
                       <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
                     </div>
                   )}
-                    {/* <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
-                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button>  */}
-                    {/* add condition to only allow user who posted and SU to change */}
                   </Col>
                 </Row>
                 <p className='timestamp'>{moment(post.time).format('MMMM Do YYYY, h:mm:ss a')}</p>
