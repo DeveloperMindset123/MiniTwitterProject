@@ -277,10 +277,10 @@ const Home = ({userId}) => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload userId={userId}/>
-            <FetchPosts type={'posts'} userId={userId} />
+            {/*<FetchPosts type={'posts'} userId={userId} />*/}
             {/* <FetchPosts /> */}
-            {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'} />}
-            {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} />} 
+            {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'}  userId={userId} />}
+            {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} userId={userId} />} 
           </Col>
           <Col lg={3}> {/* AI Chat Bot */}
             <div className="chat-bot">
