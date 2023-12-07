@@ -15,7 +15,14 @@ import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag,
   faEye, faHome, faBell, faUsers, faBookmark, faUser, faCog, faList, faEllipsisH, faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import '../src/styles/Home.css';
 import moment from 'moment-timezone';
+import CommentPopup from './CommentPopup.jsx';
 
+function setCookie(name, value, daysToExpire) {
+  var date = new Date();
+  date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+  document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
+}
+function deleteCookie(name) { setCookie(name, "", -1); }
 
 async function Delete(_id) {
   const isConfirmed = window.confirm('Are you want to Delete this Post?');
@@ -53,13 +60,23 @@ async function UpdatePostCounter(postId, type){
     throw error;
   }
 }
-function FetchPosts(type) {
+function FetchPosts({type, userId}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  const [showCommentPopup, setShowCommentPopup] = useState(false);
+ const [selectedPostId, setSelectedPostId] = useState(null);
+
+
+ const handleCommentButtonClick = (postId) => {
+   setShowCommentPopup(true);
+   setSelectedPostId(postId);
+ };
+
+  // console.log('FetchPosts page has userId:', userId);
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`http://localhost:4000/api/fetch-${type.type}`, {
+        const response = await axios.get(`http://localhost:4000/api/fetch-${type}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -78,7 +95,7 @@ function FetchPosts(type) {
         setLoading(false); // Set loading to false after fetching data
       }
     }
-
+// console.log(userId)
     fetchData();
   }, [posts]);
   // Conditional rendering based on loading state
@@ -95,21 +112,27 @@ function FetchPosts(type) {
               <div className="card-body">
                 <FontAwesomeIcon icon={faUser} className="avatar-icon" /> User ID: {post.userId}
                 <h5 className="card-title">{post.bodyText}</h5>
-                <div className="post-image">
+                {/* <div className="post-image">
                 {post.imageId && <img src="" alt="Image"/>}
-              </div>
+              </div> */}
                 <p className="card-text">{post.hashTags}</p>
                 <Row>
                   <Col xl='10'> {/* Likes, Posts, Reviews, Comments */}
                     <button className="like" onClick={() => UpdatePostCounter(post._id, 'like')}><FontAwesomeIcon icon={faThumbsUp} />{post.likes}</button>&nbsp;&nbsp;
                     <button className="dislike" onClick={() => UpdatePostCounter(post._id, 'dislike')}><FontAwesomeIcon icon={faThumbsDown} />{post.dislikes}</button>&nbsp;&nbsp;
-                    <button className="comment" onClick={() => UpdatePostCounter(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
+                    <button className="comment" onClick={() => handleCommentButtonClick(post._id, 'comment')}><FontAwesomeIcon icon={faComment} />{post.comments}</button>&nbsp;&nbsp;
                     <button className="report" onClick={() => UpdatePostCounter(post._id, 'report')}> <FontAwesomeIcon icon={faFlag} />{post.reports}</button> &nbsp;&nbsp;
                     <button className="view" onClick ={() => UpdatePostCounter(post._id, 'view')}><FontAwesomeIcon icon={faEye} />{post.views}</button>
                   </Col>
                   <Col> {/* Delete and Edit */}
-                    <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
-                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
+                  {userId == post.userId && (
+                    <div>
+                      <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                      <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button> 
+                    </div>
+                  )}
+                    {/* <button className="edit" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faPen}/></button>
+                    <button className="delete" onClick={() => Delete(post._id)}> <FontAwesomeIcon icon={faTrashAlt} /></button>  */}
                     {/* add condition to only allow user who posted and SU to change */}
                   </Col>
                 </Row>
@@ -119,11 +142,16 @@ function FetchPosts(type) {
           </div>
         ))}
       </div>
+      {showCommentPopup && (
+       <CommentPopup
+         postId={selectedPostId}
+         onClose={() => setShowCommentPopup(false)}
+       />
+     )}
     </div>
   );
 }
 }
-
 function ElonGPT() {
   const [userInput, setUserInput] = useState('');
   const [conversation, setConversation] = useState([]);
@@ -189,25 +217,44 @@ function ElonGPT() {
     </div>
   );
 }
+async function GetUser({userId}) {
+  const [user, setUser] = useState([]);
+  try{
+    const response = await axios.get(`http://localhost:4000/api/fetch-user/${userId}`);
+    if(response.status === 200){
+      const data = response.data
+      setUser(data)
+    } else {
+      console.error('Error fetching user');
+    }
+  } catch (error) {
+      console.error('Error fetching user', error);
+    }
+  return user;
+}
+async function UpdateUser({userId, money}) {
+  const apiUrl = 'http://localhost:4000/api/update-user';
+  const fullUrl = `${apiUrl}/${encodeURIComponent(userId)}/${encodeURIComponent(money)}`;
+
+  try {
+    const response = await axios.post(fullUrl);
+    console.log('User updated successfully!', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
 
 const Home = ({userId}) => {
-  const handleLogout = async () => {  //this function will handle logout, this same function can be used for other methods of authentication
+  const handleLogout = async () => {
     try {
-        const response = await axios.get("http://localhost:4000/auth/logout"); //get the information about the user that is logged out from this link of the server
-        console.log(response.data);
-        navigate("/landing"); //navigate the user back to the Landing page, note, here the path was not found, leading to an error, because intially I had "navigate("/Landing");", no such routes exist
+        deleteCookie("username");
+        document.location.href = '/landing';
     } catch (error) {
         console.error("Logout failed:", error);
     }
 };
-
-  //define the path to redirect user back to landing page upon logging out
-  let navigate = useNavigate();
-  const routeChange = () => {  
-    //here, we will implement the logic to redirect user back to the login page
-    let path = '/Landing';  //this will redirect user back to the landing page, backend functionalities hasn't been fully implemented yet
-    navigate(path); //redirect the user to the path specified
-  }
   const [showUpload, setShowUpload] = useState(false)
   const [selectedTab, setSelectedTab] = useState('posts'); // State to manage selected tab
   const handleForYouClick = () => {
@@ -216,13 +263,17 @@ const Home = ({userId}) => {
   const handleTrendingClick = () => {
     setSelectedTab('trendy'); // Update the selected tab to 'trendy'
   };
+
+
+
+  
   return (
     <div> 
       <div className="home-container">
         {/* Trending bar */}
         <Row className='trending-tab'> 
           <Col className='trending-col'>
-              <button className='trending-item' onClick={handleForYouClick}>
+              <button className='trending-item' onClick={handleForYouClick} >
                 For you
               </button>
               <button className='trending-item ' onClick={handleTrendingClick}>
@@ -234,6 +285,7 @@ const Home = ({userId}) => {
           <Col lg={2}> {/* Sidebar */}
             <div className="sidebar">
               <ul>
+<<<<<<< HEAD
               <div className="slogan">Connect More</div>
                 <li><a href="#Home"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
                 <li><a href="#Notifications"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
@@ -243,6 +295,17 @@ const Home = ({userId}) => {
                 <li><a href="#Settings"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
                 <li><a href="#Lists"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
                 <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>  {/**This can be changed to a expandable button instead to display additional information */}
+=======
+              <div className="slogan"><img className = 'logo'src="/logo.jpeg" alt="Log" /></div>
+                <li><a href="#"><FontAwesomeIcon icon={faHome} className="icon" /> Home</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faBell} className="icon" /> Notifications</a></li>
+                {/* <li><a href="#"><FontAwesomeIcon icon={faUsers} className="icon" /> Community</a></li> */}
+                {/* <li><a href="#"><FontAwesomeIcon icon={faBookmark} className="icon" /> Bookmarks</a></li> */}
+                <li><a href="#"><FontAwesomeIcon icon={faUser} className="icon" /> Profile</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faCog} className="icon" /> Settings</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faList} className="icon" /> Lists</a></li>
+                <li><a href="#"><FontAwesomeIcon icon={faEllipsisH} className="icon" /> More</a></li>
+>>>>>>> 6a797b00f42d748f57bff0452c7443b465e80ec3
                 <li><Button onClick={() => setShowUpload(!showUpload)} variant="dark" className="btn-lg">
                   <FontAwesomeIcon icon={faPlus} className="icon" />
                    New Post
@@ -263,7 +326,7 @@ const Home = ({userId}) => {
           </Col>
           <Col lg={7}> {/* Content */}
             <Upload userId={userId}/>
-            <FetchPosts type={'posts'} />
+            <FetchPosts type={'posts'} userId={userId} />
             {/* <FetchPosts /> */}
             {selectedTab === 'posts' && <FetchPosts className="posts" type={'posts'} />}
             {selectedTab === 'trendy' && <FetchPosts className="trendy" type={'trendy'} />} 

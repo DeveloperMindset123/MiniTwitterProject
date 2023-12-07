@@ -13,6 +13,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { User } from './UploadDB';
 let newUser = new User();
+import { useNavigate } from 'react-router-dom';
 
 // create user's session cookie
 function setCookie(name, value, daysToExpire) {
@@ -20,8 +21,9 @@ function setCookie(name, value, daysToExpire) {
   date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
   document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
 }
-
+function deleteCookie(name) { setCookie(name, "", -1); }
 export default function Auth(props) { //login
+    const navigate = useNavigate();
     let [authMode, setAuthMode] = useState("signin");
     const [isCorporateUser, setIsCorporateUser] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +41,7 @@ export default function Auth(props) { //login
 
     const handleSignIn = (event) => {
         event.preventDefault();
+        let userId = '';
 
         new Promise((resolve, reject) => {
         axios.get('http://localhost:4000/api/check-user', {
@@ -48,12 +51,16 @@ export default function Auth(props) { //login
             }
         }).then(response => {
             setCookie('username', response.data.id, 36500); // Setting it for 100 years
+            userId = response.data.id;
+
             resolve(response);
             }).catch(error => reject(error));
         }).then(res => {
             console.log(res.data.message);
-            document.location.href = '/';
+            
+            navigate('/');
         }).catch(err => {
+            alert(err.response.data.message)
             console.error(err);
         });
     }
@@ -70,7 +77,7 @@ export default function Auth(props) { //login
             newUser.normal = false;
         }
 
-        console.log("New User Updated:" + newUser)
+        console.log("New User Updated:" + newUser);
 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
         isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
@@ -236,6 +243,7 @@ export default function Auth(props) { //login
     )
 }
 
+// if corpo checked
 function Corporate({ isModalOpen, setIsModalOpen }) {
     const [isCustomerTargetModalOpen, setIsCustomerTargetModalOpen] = useState(false);
     const [companyName, setCompanyName] = useState('');
@@ -340,7 +348,7 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
 
     );
 }
-
+// after corpo info 
 function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
 
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -389,11 +397,13 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
                 resolve(response);
                 })
              .catch(error => reject(error));
-    }).then(res => {
-        console.log(res);
-    }).catch(err => {
-        console.error(err);
-    });
+        }).then(res => {
+            console.log(res);
+            alert("Thank you for creating an account! A super user will approve your account soon!\n Please make an initial payment to start using the app!!")
+            document.location.href = '/';
+        }).catch(err => {
+            console.error(err);
+        });
     }
    
     return (
@@ -424,15 +434,15 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
         </Modal>
     );
 }
-
+// if ordinary user
 function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUserOpen}) {
     const closeSelectionModal = () => {
         setIsSelectionModalOpen(false);
     };
 
-
     const OnClickContinueHandler = () =>{
         if(selectedInterests.length >= 3){
+            newUser.interests = selectedInterests;
             setIsTrendyUserOpen(true)
             closeSelectionModal()
         }else{
@@ -506,37 +516,50 @@ function Selection({isSelectionModalOpen,setIsSelectionModalOpen,setIsTrendyUser
         
       </div>
     );
-  }
-
+}
+// after ordinary user
 function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
-   
     const closePopup = () => {
         setIsTrendyUserOpen(false);
     }
 
-
+    // shit this should be dynamic
     const [users, setUsers] = useState([
-        { id: 1, name: 'User 1', isFollowing: false },
-        { id: 2, name: 'User 2', isFollowing: false },
-        { id: 3, name: 'User 3', isFollowing: false },
-        { id: 4, name: 'User 4', isFollowing: false },
-        { id: 5, name: 'User 5', isFollowing: false },
+        { id: 1, name: 'LordFarquaad', isFollowing: false },
+        { id: 2, name: 'woahzuh', isFollowing: false },
+        { id: 3, name: 'notHarryOsborn', isFollowing: false },
+        { id: 4, name: 'peetah', isFollowing: false },
+        { id: 5, name: 'n0obmaster69', isFollowing: false },
       ]);
 
-      const toggleFollow = (userId) => {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user.id === userId
-              ? { ...user, isFollowing: !user.isFollowing }
-              : user
-          )
-        );
-      };
+    const toggleFollow = (userId) => {
+    setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+        user.id === userId
+            ? { ...user, isFollowing: !user.isFollowing }
+            : user
+        )
+    );
+    };
+    newUser.following = users.filter(user => user.isFollowing);
 
-
-      const doneHandler = () => {
-        closePopup()
-      }
+    const doneHandler = () => {
+        new Promise((resolve, reject) => {
+            axios.post('http://localhost:4000/api/create-user', newUser)
+            .then(response => {
+                setCookie('username', response.data.id, 36500); // Setting it for 100 years
+                resolve(response);
+                })
+            .catch(error => reject(error));
+        }).then(res => {
+            console.log(res);
+            alert("Thank you for creating an account! A super user will approve your account soon!\n Please make an initial payment to start using the app!!")
+            document.location.href = '/payment';
+        }).catch(err => {
+            console.error(err);
+        });
+    closePopup()
+    }
  
 
     
@@ -569,11 +592,15 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
                 <Button
                     className="custom-button"
                     onClick={doneHandler}    
-                        >
-                        Done
+                >
+                    Done
                 </Button>
             </div>
             </Modal.Body>
         </Modal>
     );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6a797b00f42d748f57bff0452c7443b465e80ec3
