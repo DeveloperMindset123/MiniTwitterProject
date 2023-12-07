@@ -14,39 +14,29 @@ import axios from 'axios';
 const App = () => {
   // fetch user session
   const [user, setUser] = useState('');
+
   useEffect(() => {
     const validateSession = async () => {
       const sessionCookie = Cookies.get('username');
 
-      console.log(!sessionCookie ===undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
-
-      if (sessionCookie) {
-        try {
-          const response = await axios.get('http://localhost:4000/api/fetch-user', {
-            params:{'userId': sessionCookie}
-          });
-          setUser(response.data);
-        } 
-        catch (error) {
-          console.error('Error validating session:', error);
-        }
-      }
+      console.log(!sessionCookie === undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
+      setUser(sessionCookie);
   };
     validateSession();
   }, []);
   console.log('User:',user);
-    return (
-      <BrowserRouter>
-        <Routes> 
-              <Route path='/' element={<Home userId={user._id}/>} />
-              <Route path='/Landing' element={<Landing userId={user._id}/>} />
-              <Route path='/Upload' element={<Upload userId={user._id}/>} />
-              <Route path='/User' element={<User userId={user._id}/>} />
-              <Route path='/Auth' element={<Auth userId={user._id}/>} /> 
-              <Route path='/Payment' element={<Payment userId={user._id}/>} />
-        </Routes>
-      </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes> 
+            <Route path='/' element={<Home userId={user}/>} />
+            <Route path='/Landing' element={<Landing userId={user}/>} />
+            <Route path='/Upload' element={<Upload userId={user}/>} />
+            <Route path='/User' element={<User userId={user}/>} />
+            <Route path='/Auth' element={<Auth userId={user}/>} /> 
+            <Route path='/Payment' element={<Payment userId={user}/>} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;
