@@ -65,7 +65,7 @@ export default function Auth(props) { //login
             newUser.normal = false;
         }
 
-        console.log("New User Updated:" + newUser)
+        console.log("New User Updated:" + newUser);
 
         // if the Corporate user is checked, then set corporate Modal to be opened, otherwise Selection Modal Open
         isCorporateUser? setIsModalOpen(true) :setIsSelectionModalOpen(true);
@@ -370,12 +370,12 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
                 resolve(response);
                 })
              .catch(error => reject(error));
-    }).then(res => {
-        console.log(res);
-        document.location.href = '/';
-    }).catch(err => {
-        console.error(err);
-    });
+        }).then(res => {
+            console.log(res);
+            document.location.href = '/';
+        }).catch(err => {
+            console.error(err);
+        });
     }
    
     return (
@@ -504,21 +504,33 @@ function TrendyUser({isTrendyUserOpen, setIsTrendyUserOpen}) {
         { id: 5, name: 'n0obmaster69', isFollowing: false },
       ]);
 
-      const toggleFollow = (userId) => {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user.id === userId
-              ? { ...user, isFollowing: !user.isFollowing }
-              : user
-          )
-        );
-      };
+    const toggleFollow = (userId) => {
+    setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+        user.id === userId
+            ? { ...user, isFollowing: !user.isFollowing }
+            : user
+        )
+    );
+    };
+    newUser.following = users.filter(user => user.isFollowing);
 
-
-      const doneHandler = () => {
-        
-        closePopup()
-      }
+    const doneHandler = () => {
+        new Promise((resolve, reject) => {
+            axios.post('http://localhost:4000/api/create-user', newUser)
+            .then(response => {
+                setCookie('username', response.data.id, 36500); // Setting it for 100 years
+                resolve(response);
+                })
+            .catch(error => reject(error));
+        }).then(res => {
+            console.log(res);
+            document.location.href = '/';
+        }).catch(err => {
+            console.error(err);
+        });
+    closePopup()
+    }
  
 
     

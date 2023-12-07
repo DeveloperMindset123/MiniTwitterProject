@@ -33,16 +33,18 @@ const Upload = ({ userId }) => {
   const [hashOverflow, setHashOverFlow] = useState(false);
   const [chargeRate, setChargeRate] = useState(1);
   
+  // check who the user is so we can charge them accordingly
   GetUser({userId}).then((user) => {
     console.log(user);
-    if (user && !user.oridinary) {
+    if (user && !user.corpo) {
       setChargeRate(0.1);
     }
   }).catch((error) => {
     console.error('Failed to get user:', error);
   });
 
-  useEffect(()=>{ // post button validation
+  // post button validation
+  useEffect(()=>{ 
     // sets condition to hit submit (body must be larger than 2 chars and hashtags <=3)
     setFormValid(bodyText.length > 1 && !hashOverflow);
 
