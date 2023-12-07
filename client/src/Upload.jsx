@@ -25,12 +25,6 @@ async function GetUser({userId}) {
 }
 
 const Upload = ({ userId }) => {
-  // its gotta be placed at top level to prevent crashing
-  // if(userId === undefined){
-  //   return (
-  //     <div>Loading...</div>
-  //   )
-  // }
   console.log('Upload page has userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
@@ -40,8 +34,7 @@ const Upload = ({ userId }) => {
   const [user, setUser] = useState({});
     
   useEffect(() => {
-    if (userId === undefined) {
-      // You may want to handle the undefined case differently, maybe set a loading state.
+    if (userId === undefined || userId === null || userId === '') {
       return;
     }
 
