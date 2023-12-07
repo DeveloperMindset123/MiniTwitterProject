@@ -116,8 +116,7 @@ function FetchPosts({ type, userId }) {
                         UserID: {post.userId}
                       </>
                     : <>
-                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
-                        UserName: {post.userName}
+                        <div style={{fontWeight:'bold'}}>@{post.userName}</div>
                       </>
               }
                 <h5 className="card-title">{post.bodyText}</h5>
