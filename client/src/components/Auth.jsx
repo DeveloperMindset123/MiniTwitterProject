@@ -350,9 +350,7 @@ function Corporate({ isModalOpen, setIsModalOpen }) {
 }
 // after corpo info 
 function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen}) {
-
     const [selectedInterests, setSelectedInterests] = useState([]);
-
     const interests = [
         'Influencer',
         'Gamer',
@@ -400,7 +398,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
         }).then(res => {
             console.log(res);
             alert("Thank you for creating an account! A super user will approve your account soon!\n Please make an initial payment to start using the app!!")
-            document.location.href = '/';
+            document.location.href = '/payment';
         }).catch(err => {
             console.error(err);
         });

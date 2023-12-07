@@ -119,6 +119,7 @@ function FetchPosts({ type, userId }) {
                   <h5 className="card-title">{post.bodyText}</h5>
                   <div className="hashtags">
                     {!post.hashTags ? null : (
+                {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
                     <p className="card-text">
                       {post.hashTags.map(tag => <span key={tag} className="badge badge-primary mr-1">{tag}</span>)}
                       </p>
