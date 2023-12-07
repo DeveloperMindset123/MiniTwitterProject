@@ -13,7 +13,8 @@ import { faThumbsUp, faThumbsDown, faComment, faPen,faTrashAlt, faFlag,
 import '../src/styles/Home.css';
 import moment from 'moment-timezone';
 import CommentPopup from './CommentPopup.jsx';
-import { GetUser, UpdateUser } from './components/UploadDB.js';import { GetUser, UpdateUser } from './components/UploadDB.js';
+// import { GetUser, UpdateUser } from './components/UploadDB.js';
+import { GetUser, UpdateUser } from './components/UploadDB.js';
 function setCookie(name, value, daysToExpire) {
   var date = new Date();
   date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
