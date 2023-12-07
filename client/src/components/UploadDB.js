@@ -7,10 +7,10 @@ function convertTimeZone(date, targetTimeZone) {
 }
 const DATE = convertTimeZone(new Date(), 'America/New_York');
 
-
 export class Post {
-    constructor(userId, bodyText, hashTags, videoId = null, imageId = null) {
+    constructor(userId, userName, bodyText, hashTags, isAd = false, videoId = null, imageId = null) {
         this.userId = userId;
+        this.userName = userName;
         this.bodyText = bodyText;
         this.hashTags = hashTags;
         this.videoId = videoId;
@@ -21,6 +21,7 @@ export class Post {
         this.reports = 0;
         this.views = 0;
         this.comments = {};
+        this.ad = isAd;
     }
 }    
         

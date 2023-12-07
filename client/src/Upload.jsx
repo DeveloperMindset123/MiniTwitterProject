@@ -32,6 +32,7 @@ const Upload = ({ userId }) => {
   const [hashOverflow, setHashOverFlow] = useState(false);
   const [chargeRate, setChargeRate] = useState(1);
   const [user, setUser] = useState({});
+  const [isAd, setIsAd] = useState(false);
   
   useEffect(() => {
     if (userId === undefined || userId === null || userId === '') {
@@ -79,7 +80,7 @@ const Upload = ({ userId }) => {
     event.preventDefault();
     let hashTags = bodyText.match(/#\w+/g);
 
-    const uniquePost = new Post(userId, bodyText, hashTags);
+    const uniquePost = new Post(userId, user.userName, bodyText, hashTags, isAd);
 
     try {// make post
       const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
@@ -105,7 +106,8 @@ const Upload = ({ userId }) => {
         alert('Error saving post or making connection: ' + error.message);
       }
     }
-    console.log(user)
+    setIsAd(false);
+    // console.log(user)
     if(textOverflow > 0 && user.cash > 0){
       // update user's cash amount
       try{
@@ -141,10 +143,22 @@ const Upload = ({ userId }) => {
   return (
     <div className='form-container'>
       <Form onSubmit={handleSubmit}>
-        <Row  className='Group-Form'>
+        <Row className='Group-Form'>
           <textarea className='body-textarea' value={bodyText} onChange={(event) => setBodyText(event.target.value)} 
             placeholder='What is Happening?!'
           />
+          {/* Checkbox for indicating an advertisement */}
+          <div className="ad-checkbox">
+            <input 
+              type="checkbox" 
+              id="isAd" 
+              name="isAd" 
+              checked={isAd} 
+              onChange={(e) => setIsAd(e.target.checked)} 
+            />
+            <label htmlFor="isAd">This is an advertisement</label>
+          </div>
+          
         </Row>
 
         {textOverflow > 0 && (
@@ -152,6 +166,12 @@ const Upload = ({ userId }) => {
             You are {textOverflow} words overlimit! You will be charged ${parseFloat((textOverflow)*chargeRate).toFixed(2)}
           </div>
         )}
+        {isAd 
+          ? (user.corpo 
+              ? <div>You will be charged 10 cents per click!</div> 
+              : <div>You cannot post an ad or job posting! You will be fined $10 if you continue!</div>)
+          : null
+        }
 
         <Row className='Group-Form'>
           <Col>
@@ -162,7 +182,7 @@ const Upload = ({ userId }) => {
             <FontAwesomeIcon icon={faFilm} size="sm" />
             </Button>
             <Button size="md" variant="dark" type="submit" disabled={!formValid} className='savePostButton'>
-              {!user.corpo ? <div>Save Post</div> : <div>Save New Ad/Job Posting</div>}
+              {!user.corpo ? <div>Save Post</div> : <div>Post New Ad/Job Posting</div>}
             </Button>
           </Col>
         </Row>
