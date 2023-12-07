@@ -18,7 +18,6 @@ const App = () => {
   useEffect(() => {
     const validateSession = async () => {
       const sessionCookie = Cookies.get('username');
-
       console.log(!sessionCookie === undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
       setUser(sessionCookie);
   };
