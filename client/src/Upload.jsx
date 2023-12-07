@@ -10,13 +10,37 @@ import { faFilm } from '@fortawesome/free-solid-svg-icons';
 import {Post} from './components/UploadDB.js';
 import '../src/styles/Upload.css'
 
+async function GetUser({userId}) {
+  try{
+    const response = await axios.get('http://localhost:4000/api/fetch-user/', {params: {userId}});
+    if(response.status === 200){
+      return response.data;
+    } else {
+      console.error('Error fetching user');
+    }
+  } catch (error) {
+      console.error('Error fetching user', error);
+      return null;
+    }
+}
+
 
 const Upload = ({ userId }) => {
   console.log('Upload page has userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
   const [textOverflow, setTextOverFlow] = useState('');
-  const [hashOverflow, setHashOverFlow] = useState(false)
+  const [hashOverflow, setHashOverFlow] = useState(false);
+  const [chargeRate, setChargeRate] = useState(1);
+  
+  GetUser({userId}).then((user) => {
+    console.log(user);
+    if (user && !user.oridinary) {
+      setChargeRate(0.1);
+    }
+  }).catch((error) => {
+    console.error('Failed to get user:', error);
+  });
 
   useEffect(()=>{ // post button validation
     // sets condition to hit submit (body must be larger than 2 chars and hashtags <=3)
@@ -46,8 +70,7 @@ const Upload = ({ userId }) => {
 
     const uniquePost = new Post(userId, bodyText, hashTags);
 
-    try {
-      // make post
+    try {// make post
       const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
         headers: {
           'Content-Type': 'application/json',
@@ -64,17 +87,33 @@ const Upload = ({ userId }) => {
       else {
         alert('Error saving new post: ' + response.data.error);
       }
-
-      // charge account if overflow
-      // first GET the user -> create new updated user with money reducted
-      // need to set up user session first
-      } catch (err) {
-      if(err.response.status === 403){
-        alert(err.response.data.message);
+      } catch (error) {
+      if(error.status === 403){
+        alert(error.data.message);
       } else{
-        alert('Error saving post or making connection: ' + err.message);
+        alert('Error saving post or making connection: ' + error.message);
       }
     }
+    // update user's cash amount
+    try{
+      const response = await axios.post('http://localhost:4000/api/update-user', uniquePost, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 201) {
+        console.log('User updated successfully!', response);
+      }
+      else if(response.status === 400){
+        alert('Bad Request: ' + response.data.error);
+      }
+      else {
+        alert('Error updating user: ' + response.data.error);
+      }
+      }catch(error){
+        alert('Error updating user or making connection: ' + error.message);
+      }
   };
 
   if(userId === undefined){
@@ -92,7 +131,7 @@ const Upload = ({ userId }) => {
 
         {textOverflow > 0 && (
           <div> {/* for Common User */}
-            You are {textOverflow} words overlimit! You will be charged ${(textOverflow)*1}
+            You are {textOverflow} words overlimit! You will be charged ${parseFloat((textOverflow)*chargeRate).toFixed(2)}
           </div>
         )}
 

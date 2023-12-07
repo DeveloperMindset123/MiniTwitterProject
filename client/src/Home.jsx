@@ -59,7 +59,7 @@ async function UpdatePostCounter(postId, type){
 function FetchPosts({type, userId}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
-  console.log('FetchPosts page has userId:', userId);
+  // console.log('FetchPosts page has userId:', userId);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -198,12 +198,40 @@ function ElonGPT() {
     </div>
   );
 }
+async function GetUser({userId}) {
+  const [user, setUser] = useState([]);
+  try{
+    const response = await axios.get(`http://localhost:4000/api/fetch-user/${userId}`);
+    if(response.status === 200){
+      const data = response.data
+      setUser(data)
+    } else {
+      console.error('Error fetching user');
+    }
+  } catch (error) {
+      console.error('Error fetching user', error);
+    }
+  return user;
+}
+async function UpdateUser({userId, money}) {
+  const apiUrl = 'http://localhost:4000/api/update-user';
+  const fullUrl = `${apiUrl}/${encodeURIComponent(userId)}/${encodeURIComponent(money)}`;
+
+  try {
+    const response = await axios.post(fullUrl);
+    console.log('User updated successfully!', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
 
 const Home = ({userId}) => {
   const handleLogout = async () => {
     try {
         deleteCookie("username");
-        navigate("/landing");
+        document.location.href = '/landing';
     } catch (error) {
         console.error("Logout failed:", error);
     }
@@ -216,6 +244,8 @@ const Home = ({userId}) => {
   const handleTrendingClick = () => {
     setSelectedTab('trendy'); // Update the selected tab to 'trendy'
   };
+
+
 
   
   return (

@@ -372,6 +372,7 @@ function CustomerTarget({isCustomerTargetModalOpen, setIsCustomerTargetModalOpen
              .catch(error => reject(error));
     }).then(res => {
         console.log(res);
+        document.location.href = '/';
     }).catch(err => {
         console.error(err);
     });

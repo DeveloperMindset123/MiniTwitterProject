@@ -189,7 +189,11 @@ app.get('/api/fetch-user', async (req, res) => {
   }
   try {
     const user = await GetUser(userId);
-    console.log("Got User: ", userId);
+    if (!user) {
+      console.error('User not found!');
+      return res.status(404).json({ message: 'User not found!' });
+    }
+    console.log("Got User at Fetch-User: ", userId);
 
     return res.status(200).json(user);
   } catch (err) {
