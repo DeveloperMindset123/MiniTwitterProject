@@ -111,6 +111,7 @@ function FetchPosts({ type, userId }) {
                 {/* <div className="post-image">
                 {post.imageId && <img src="" alt="Image"/>}
               </div> */}
+                {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
                 {!post.hashTags ? null : (<p className="card-text">{post.hashTags.map(tag => `${tag} `)}</p>)}
                 <Row>
                   {/* Likes, Posts, Reviews, Comments */}
