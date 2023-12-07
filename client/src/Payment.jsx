@@ -3,45 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { Modal, Button, Form } from 'react-bootstrap'; // Import Bootstrap components
 import axios from 'axios';
 import { User } from './components/UploadDB';
-
-async function GetUser({userId}) {
-  try{
-    const response = await axios.get('http://localhost:4000/api/fetch-user/', {params: {userId}});
-    if(response.status === 200){
-      return response.data;
-    } else {
-      console.error('Error fetching user');
-    }
-  } catch (error) {
-      console.error('Error fetching user', error);
-      return null;
-    }
-}
-async function UpdateUser({oldUser, newUser}) {
-  try{
-    const response = await axios.post('http://localhost:4000/api/update-user/', {oldUser, newUser});
-    if(response.status === 200){
-      return response.data;
-    } else {
-      console.error('Error updating user');
-    }
-  } catch (error) {
-      console.error('Error updating user', error);
-      return null;
-    }
-}
+import { GetUser, UpdateUser } from './components/UploadDB';
 
 const Payment = ({ userId, amount }) => {
-  if(!userId){
-    alert("Please login to make a payment")
-    document.location.href = '/landing';
-  }
   console.log('Payment page has userId:', userId);
   const [cardHolder, setCardHolder] = useState("")
   const [cardNumber, setCardNumber] = useState("")
   const [expirationDate, setExpirationDate] = useState("")
   const [cvv, setCvv] = useState("");
   const [cash, setCash] = useState(0);
+  const [username, setUsername] = useState(userId)
 
   // handle all the different fields
   const handleCardNumberChange = (e) =>{
@@ -68,7 +39,6 @@ const Payment = ({ userId, amount }) => {
   const handleCashChange = (e) => {
     setCash(e.target.value)
   }
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -80,9 +50,11 @@ const Payment = ({ userId, amount }) => {
             throw new Error('No user found');
           }
           //  update cash amount
-          const updatedUser = user.cash + cash;
-          // update user with new cash amount
-          return UpdateUser({ oldUser: user, newUser: updatedUser });
+          const updatedUser = user;
+          user.cash += cash;
+          console.log('User:', updatedUser.cash);
+         // update user with new cash amount
+          return UpdateUser({ 'oldUser': user.userName, 'newUser': updatedUser });
         })
         .then(updatedUserData => {
           console.log('User updated successfully:', updatedUserData);
@@ -103,10 +75,20 @@ const Payment = ({ userId, amount }) => {
 
   };
 
+  // i just wanted to see the user's name
+  GetUser({ userId })
+        .then(user => {
+          if (!user) {
+            throw new Error('No user found');
+          }
+          setUsername(user.userName);
+        })
+
   return (
     <div className="payment-form-container"> {/* You might want to add some custom styling */}
       <div className="payment-form-header">
         <h2>Payment Information</h2>
+        <h3>Payment for userId: {username}</h3>
       </div>
       <div className="payment-form-body">
         {/* Payment form */}

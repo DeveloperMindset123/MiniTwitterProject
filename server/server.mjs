@@ -217,16 +217,20 @@ app.get('/api/fetch-posts-user', async (req, res) => {
 //api for updating user
 app.post('/api/update-user', async (req, res) => {
   const userName = req.body.userName;
-  const newUser = req.body.changedUser;
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
-  try {
-    await UpdateUser(userName, newUser);
+  const newUser = req.body.newUser;
 
-    res.status(201).json({ message: 'User updated successfully!' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error saving updated user:', err });
+  if(userName && newUser){
+    // console.log(userName, newUser)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers','Content-Type');
+    try {
+      await UpdateUser(userName, newUser);
+
+      res.status(201).json({ message: 'User updated successfully!' });
+    } catch (err) {
+      res.status(500).json({ message: 'Error saving updated user:', err });
+    }
   }
 });
 //api for deleting users (takes in object userName)
