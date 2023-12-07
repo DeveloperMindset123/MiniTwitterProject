@@ -16,7 +16,7 @@ import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';  //note: initially the import statement was incorrect
 import Row from 'react-bootstrap/Row';
 import { ThemeContext, themes } from "./components/ThemeContext";  //import the two functions defined in ThemeContext
-import { MDBSwitch } from 'mdb-react-ui-kit';
+// import { MDBSwitch } from 'mdb-react-ui-kit';
 import ThemeContextWrapper from "./components/ThemeContextWrapper";
 import ToggleDark from './components/ToggleDark';
 import '../src/styles/Landing.css'; //NOTE 2: STYLESHEET MUST BE PLACED AFTER BOOTSTRAP TO RENDER CORRECTLY
