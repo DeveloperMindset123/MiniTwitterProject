@@ -106,19 +106,22 @@ function FetchPosts({ type, userId }) {
     <div className="container" style={{ marginTop:"-20px", backgroundColor: "white", paddingRight: "70px", margin: "-32px"}}>
       <div className="row" >
         {posts.map((post, index) => (
-        <div className="post-container card mb-3" key={index}>
-          <div className="card-body">
-            <div className="top-section">
-              <div className="d-flex align-items-center">
-                <FontAwesomeIcon icon={faUser} className="avatar-icon mr-2" />
-                <div>
-                  <p className="mb-1">@{post.userId}</p>
-                  <p className="text-muted timestamp mb-2">{moment(post.time).fromNow()}</p>
-                  </div>
-                  </div>
-                  <h5 className="card-title">{post.bodyText}</h5>
-                  <div className="hashtags">
-                    {!post.hashTags ? null : (
+          <div className="post-container " key={index}>
+            <div className="card">
+              <div className="card-body">
+              {
+                !post.userName 
+                    ? <>
+                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
+                        UserID: {post.userId}
+                      </>
+                    : <>
+                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
+                        UserName: {post.userName}
+                      </>
+              }
+                <h5 className="card-title">{post.bodyText}</h5>
+
                 {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
                     <p className="card-text">
                       {post.hashTags.map(tag => <span key={tag} className="badge badge-primary mr-1">{tag}</span>)}

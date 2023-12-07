@@ -81,7 +81,9 @@ const Upload = ({ userId }) => {
     event.preventDefault();
     let hashTags = bodyText.match(/#\w+/g);
 
-    const uniquePost = new Post(userId, bodyText, hashTags, isAd);
+
+
+    const uniquePost = new Post(userId, user.userName, bodyText, hashTags, isAd);
 
     try {// make post
       const response = await axios.post('http://localhost:4000/api/save-new-post', uniquePost, {
