@@ -63,7 +63,7 @@ function FetchPosts({type, userId}) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`http://localhost:4000/api/fetch-${type.type}`, {
+        const response = await axios.get(`http://localhost:4000/api/fetch-${type}`, {
           headers: {
             'Content-Type': 'application/json',
           },
