@@ -14,49 +14,37 @@ import axios from 'axios';
 const App = () => {
   // fetch user session
   const [user, setUser] = useState('');  //if I set this to null the page will just continue to load
+
   useEffect(() => {
     const validateSession = async () => {
       const sessionCookie = Cookies.get('username');
 
-      console.log(!sessionCookie ===undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
-
-      if (sessionCookie) {
-        try {
-          // Fetch user data after setting the session cookie
-          const response = await axios.get('http://localhost:4000/api/fetch-user', {
-            params:{'userId': sessionCookie},
-            withCredentials: true,  //added this line
-          });
-          setUser(response.data);
-        } 
-        catch (error) {
-          console.error('Error validating session:', error);
-        }
-      }
+      console.log(!sessionCookie === undefined || !sessionCookie == '' ? 'No session cookie found.' : `Session cookie: ${sessionCookie}`);
+      setUser(sessionCookie);
   };
     validateSession();
   }, []);
 
   console.log('User:',user);
-    return (
-      <BrowserRouter>
+  return (
+    <BrowserRouter>
       {
         user !== null ? (
-        <Routes> 
-              <Route path='/' element={<Home userId={user._id}/>} />
-              <Route path='/Landing' element={<Landing userId={user._id}/>} />
-              <Route path='/Upload' element={<Upload userId={user._id}/>} />
-              <Route path='/User' element={<User userId={user._id}/>} />
-              <Route path='/Auth' element={<Auth userId={user._id}/>} /> 
-              <Route path='/Payment' element={<Payment userId={user._id}/>} />
-        </Routes>
+      <Routes> 
+            <Route path='/' element={<Home userId={user}/>} />
+            <Route path='/Landing' element={<Landing userId={user}/>} />
+            <Route path='/Upload' element={<Upload userId={user}/>} />
+            <Route path='/User' element={<User userId={user}/>} />
+            <Route path='/Auth' element={<Auth userId={user}/>} /> 
+            <Route path='/Payment' element={<Payment userId={user}/>} />
+      </Routes>
         ) : (
           //Render a laoding indicator
           <div>Loading...</div>
         )
       } 
-      </BrowserRouter>
-    );
+    </BrowserRouter>
+  );
 };
 
 export default App;

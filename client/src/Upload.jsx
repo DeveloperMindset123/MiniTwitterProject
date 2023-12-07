@@ -26,11 +26,11 @@ async function GetUser({userId}) {
 
 const Upload = ({ userId }) => {
   // its gotta be placed at top level to prevent crashing
-  if(userId === undefined){
-    return (
-      <div>Loading...</div>
-    )
-  }
+  // if(userId === undefined){
+  //   return (
+  //     <div>Loading...</div>
+  //   )
+  // }
   console.log('Upload page has userId:', userId);
   const [bodyText, setBodyText] = useState('');
   const [formValid, setFormValid] = useState('');
@@ -38,18 +38,30 @@ const Upload = ({ userId }) => {
   const [hashOverflow, setHashOverFlow] = useState(false);
   const [chargeRate, setChargeRate] = useState(1);
   const [user, setUser] = useState({});
-  
-  // check who the user is so we can charge them accordingly
-  GetUser({userId}).then((user) => {
-    setUser(user);
-    // console.log(user);
-    if (user && !user.corpo) {
-      setChargeRate(0.1);
+    
+  useEffect(() => {
+    if (userId === undefined) {
+      // You may want to handle the undefined case differently, maybe set a loading state.
+      return;
     }
-  }).catch((error) => {
-    console.error('Failed to get user:', error);
-  });
 
+    const fetchUser = async () => {
+      try {
+        const user = await GetUser({ userId });
+        setUser(user);
+        // console.log(user);
+    if (user && !user.corpo) {
+          setChargeRate(0.1);
+        }
+      } catch (error) {
+        console.error('Failed to get user:', error);
+      }
+    };
+
+    // Call the async function
+    fetchUser();
+  }, [userId]); // Only re-run the effect if userId changes  
+  
   // post button validation
   useEffect(()=>{ 
     // sets condition to hit submit (body must be larger than 2 chars and hashtags <=3)
