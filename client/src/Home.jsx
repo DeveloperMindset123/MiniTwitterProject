@@ -106,27 +106,23 @@ function FetchPosts({ type, userId }) {
     <div className="container" style={{ marginTop:"-20px", backgroundColor: "white", paddingRight: "70px", margin: "-32px"}}>
       <div className="row" >
         {posts.map((post, index) => (
-          <div className="post-container " key={index}>
+          <div className="post-container" key={index}>
             <div className="card">
               <div className="card-body">
-              {
-                !post.userName 
-                    ? <>
-                        <FontAwesomeIcon icon={faUser} className="avatar-icon" />
-                        UserID: {post.userId}
-                      </>
-                    : <>
-                        <div style={{fontWeight:'bold'}}>@{post.userName}</div>
-                      </>
+              {!post.userName 
+                ? <>
+                    <FontAwesomeIcon icon={faUser} className="avatar-icon" />
+                    UserID: {post.userId}
+                  </>
+                : <><div style={{fontWeight:'bold'}}>@{post.userName}</div></>
               }
-                <h5 className="card-title">{post.bodyText}</h5>
+              <h5 className="card-title">{post.bodyText}</h5>
 
-                {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
-                    <p className="card-text">
-                      {post.hashTags.map(tag => <span key={tag} className="badge badge-primary mr-1">{tag}</span>)}
-                      </p>
-                      )}
-                </div>
+              {!post.ad ? <div style={{ fontStyle: 'italic', color: 'gray' }}>Not an Advertisement or Job Posting!</div> : <div style={ {fontWeight: 'bold', color: 'red'} }>This post is a paid advertisement or job posting!</div>}
+              <p className="card-text">
+                {post.hashTags?.map(tag => <span key={tag} className="badge badge-primary mr-1">{tag}</span>) || null}
+              </p>
+              </div>
               </div>
               <div className="bottom-section d-flex justify-content-between align-items-center">
                 <div className="interaction-buttons">
@@ -155,15 +151,8 @@ function FetchPosts({ type, userId }) {
               )}
               </div>
             </div>
-          </div>
         ))}
       </div>
-      {showCommentPopup && (
-       <CommentPopup
-         postId={selectedPostId}
-         onClose={() => setShowCommentPopup(false)}
-       />
-     )}
     </div>
   );
 }
